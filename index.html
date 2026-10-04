@@ -29,7 +29,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 .wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:grid;gap:28px}
 .bills{display:grid;gap:12px;min-width:0;align-content:start}
 .bills-in{display:grid;gap:12px;align-content:start}
-.bills .intro{margin:0}
+.bills .intro{margin:0;max-width:70ch}
 .bill{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:14px;display:grid;gap:8px}
 .bill h3{margin:0;font-size:16.5px;line-height:1.3}
 .bill p{margin:0;font-size:14.5px}
@@ -43,11 +43,16 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 .bill .path b{color:var(--ink);font-weight:600}
 .bill .now{font-weight:600}
 .bill .try{color:var(--muted);font-size:13.5px}
-@media (min-width:1360px){
-  .wrap{max-width:1460px;grid-template-columns:minmax(0,1fr) 300px;column-gap:28px}
-  .wrap>*{grid-column:1}
-  .wrap>.bills{grid-column:2;grid-row:1 / span 7}
-}
+.bills{display:none}
+body.view-bills .wrap>*:not(.bills){display:none}
+body.view-bills .bills{display:grid}
+.bills-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px;align-items:start}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--steel);text-decoration:none;font-size:16px;justify-self:start}
+.back:hover{text-decoration:underline}
+.billslink{justify-self:start;text-decoration:none}
+.bill a.try{color:var(--steel);font-weight:600;text-decoration:none;font-size:14.5px}
+.bill a.try:hover{text-decoration:underline}
+.propbox .more{font-size:14.5px;color:var(--steel);font-weight:600;text-decoration:none}
 .hero{display:grid;gap:8px;border-bottom:1px solid var(--line);padding-bottom:20px}
 .eyebrow{font-size:14px;font-weight:600;color:var(--muted)}
 h1{font-weight:700;font-size:clamp(30px,5vw,44px);line-height:1.1;margin:0;text-wrap:balance;max-width:20ch}
@@ -298,6 +303,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
     <p class="sub">Let's find out.</p>
     <p class="lede">Enter a few numbers and see your monthly pension, VSF, banked variable and escalation, side by side for 20, 22½ and 25 years. A ballpark guess is fine to start.</p>
     <p class="hint disc">Unofficial tool. Not affiliated with the FDNY or the NYC Fire Pension Fund. Your actual numbers may vary.</p>
+    <a class="btn ghost billslink" href="#bills">Bills in Albany: status and info &rarr;</a>
   </header>
 
   <div class="grid">
@@ -345,6 +351,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
 
       <div class="bonusbox propbox">
         <h3>Proposed bills, not yet law</h3>
+        <a class="more" href="#bills">What these bills do and where they stand &rarr;</a>
         <span class="flabel" id="escLbl">Full escalation at</span>
         <div class="opts" role="group" aria-labelledby="escLbl" id="escOpts">
           <button type="button" data-f="25" aria-pressed="true">25 years<small>Current law</small></button>
@@ -393,10 +400,13 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
     </div>
   </div>
 
-  <aside class="bills" aria-labelledby="billsTitle">
+  <section class="bills" aria-labelledby="billsTitle">
    <div class="bills-in">
-    <h2 id="billsTitle">Bills in Albany</h2>
+    <a class="back" href="#calculator">&larr; Back to the pension calculator</a>
+    <div class="eyebrow">FDNY Tier 3 pension</div>
+    <h1 id="billsTitle">Bills in Albany</h1>
     <p class="hint intro">Proposed changes to Tier 3 FDNY pensions and where each one stands. A bill becomes law only after it passes the Senate and the Assembly and the governor signs it. Status last checked Oct. 4, 2026.</p>
+    <div class="bills-list">
     <article class="bill">
       <h3>Full escalation at 23 years</h3>
       <p class="ids"><a href="https://www.nysenate.gov/legislation/bills/2025/S9204">S9204</a> / <a href="https://www.nysenate.gov/legislation/bills/2025/A11269">A11269</a></p>
@@ -404,7 +414,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
       <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
       <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Assembly: Governmental Employees. Introduced Feb. 13, 2026.</p>
-      <p class="try">Try it in the calculator: Full escalation at 23 years.</p>
+      <a class="try" href="#calculator" data-f="23">Try it in the calculator &rarr;</a>
     </article>
     <article class="bill">
       <h3>Full escalation at 20 years</h3>
@@ -413,7 +423,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
       <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
       <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Introduced Feb. 13, 2026.</p>
-      <p class="try">Try it in the calculator: Full escalation at 20 years.</p>
+      <a class="try" href="#calculator" data-f="20">Try it in the calculator &rarr;</a>
     </article>
     <article class="bill">
       <h3>Longevity bonus in steps</h3>
@@ -422,7 +432,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
       <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
       <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Assembly: Governmental Employees. Introduced Feb. 27, 2026.</p>
-      <p class="try">This is the calculator&rsquo;s default bonus.</p>
+      <p><a class="try" href="#calculator" data-v="steps">Try it in the calculator &rarr;</a> <span class="try">(the default)</span></p>
     </article>
     <article class="bill">
       <h3>Longevity bonus, +1% a year</h3>
@@ -431,7 +441,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
       <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
       <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Introduced Feb. 13, 2026.</p>
-      <p class="try">Try it in the calculator: Longevity bonus, +1% a year.</p>
+      <a class="try" href="#calculator" data-v="yearly">Try it in the calculator &rarr;</a>
     </article>
     <article class="bill law">
       <h3>50% at 20 years</h3>
@@ -440,10 +450,12 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
       <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; <b>Passed Senate</b> &rarr; <b>Passed Assembly</b> &rarr; <b>Signed by governor</b></p>
       <p><span class="now">Law.</span> Chapter 692 of the Laws of 2025, signed Dec. 19, 2025. The calculator uses it.</p>
-      
     </article>
+    </div>
+    <p class="hint">Unofficial summary. Not affiliated with the FDNY or the NYC Fire Pension Fund. Read the full bills on nysenate.gov, and confirm anything that affects your retirement with the Fund.</p>
+    <a class="back" href="#calculator">&larr; Back to the pension calculator</a>
    </div>
-  </aside>
+  </section>
 
   <section class="panel fasw" id="fasw" hidden aria-labelledby="fasTitle">
     <div class="fasw-top">
@@ -954,6 +966,24 @@ $('srcType').addEventListener('click',()=>setSource('type'));
 $('srcWs').addEventListener('click',()=>{setSource('ws');if($('fasw').hidden)openFas()});
 ['fas','ss','grow','cpi','topPay','bonusOn'].forEach(id=>$(id).addEventListener('input',render));
 $('svc').addEventListener('input',render);
+/* Bills in Albany opens as its own view at #bills; the calculator is everything else. */
+let tryJump=false,calcY=0;const CALC_TITLE=document.title;
+function showView(){
+  const bills=location.hash==='#bills',was=document.body.classList.contains('view-bills');
+  if(bills&&!was) calcY=scrollY;
+  document.body.classList.toggle('view-bills',bills);
+  document.title=bills?'Bills in Albany · FDNY Tier 3 pension':CALC_TITLE;
+  if(bills) scrollTo(0,0);
+  else if(tryJump){tryJump=false;document.querySelector('.propbox').scrollIntoView({block:'start'})}
+  else if(was) scrollTo(0,calcY);
+}
+addEventListener('hashchange',showView);
+document.querySelectorAll('.bill a.try').forEach(a=>a.addEventListener('click',()=>{
+  if(a.dataset.f) escFull=+a.dataset.f;
+  if(a.dataset.v){bonusVer=a.dataset.v;$('bonusOn').checked=true}
+  tryJump=true;render();
+}));
+showView();
 $('escOpts').addEventListener('click',e=>{const b=e.target.closest('button[data-f]');if(!b)return;escFull=+b.dataset.f;render()});
 $('bonusOpts').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;bonusVer=b.dataset.v;if(!$('bonusOn').checked)$('bonusOn').checked=true;render()});
 ['fas','ss','topPay'].forEach(id=>$(id).addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?n.toLocaleString('en-US'):''}));
