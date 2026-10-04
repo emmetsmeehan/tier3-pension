@@ -140,6 +140,12 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--steel);outline-offs
 .opts button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .opts button[aria-pressed="true"] small{color:var(--bg)}
 .propbox h3{margin:0;font-size:16px}
+.disbox{border:2px solid var(--line);border-radius:4px;padding:12px 14px;display:grid;gap:6px;cursor:pointer;background:var(--surface)}
+.disbox:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface))}
+.disbox .chk{font-size:19px;font-weight:700}
+.disbox .chk input{width:26px;height:26px;accent-color:var(--accent)}
+body.dis .propbox,body.dis #ssField,body.dis #cmpBox,body.dis #swipe,body.dis .chartbox{display:none}
+.disnote{margin:0;font-size:14.5px;color:var(--muted)}
 .chk{display:flex;gap:8px;align-items:center;font-weight:600;font-size:15.5px;cursor:pointer}
 .chk input{width:18px;height:18px;accent-color:var(--sage)}
 .bonus-on{color:var(--sage);font-weight:600}
@@ -339,8 +345,13 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
         </div>
       </div>
 
+      <label class="disbox" for="disOn">
+        <span class="chk"><input type="checkbox" id="disOn"> 3/4s (Disabled)</span>
+        <span class="hint">Accident disability: 75% of your final average salary at any length of service, generally tax-free. No escalation, VSF or Social Security offset.</span>
+      </label>
+
       <div class="field">
-        <div class="svc"><label for="svc">Years of service when you retire</label><div class="svcval"><b id="svcOut">22 years</b><span id="svcMo">6 months</span></div></div>
+        <div class="svc"><label for="svc" id="svcLbl">Years of service when you retire</label><div class="svcval"><b id="svcOut">22 years</b><span id="svcMo">6 months</span></div></div>
         <div class="hint" id="svcDate"></div>
         <div class="slider" id="slider">
           <input type="range" id="svc" min="240" max="420" step="1" value="270" aria-describedby="svcDate">
@@ -371,7 +382,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
         <div class="hint">Top-step base salary from the UFA (Aug. 2024) and UFOA (July 2025) pay schedules. Type over it if yours differs.</div>
       </div>
 
-      <div class="field">
+      <div class="field" id="ssField">
         <label for="ss">Estimated Social Security at 62</label>
         <div class="inp"><span>$</span><input id="ss" inputmode="numeric" value="2,400"><span>/mo</span></div>
         <div class="hint">From ssa.gov/myaccount. Half of this comes off the pension at 62.</div>
@@ -395,7 +406,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
 
     <div class="results" aria-live="polite">
       <section class="headline" id="head"></section>
-      <div class="tablebox"><table id="cmp"></table></div>
+      <div class="tablebox" id="cmpBox"><table id="cmp"></table></div>
       <p class="swipe" id="swipe">Swipe the table to see Your plan →</p>
     </div>
   </div>
@@ -516,6 +527,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <details><summary>Why doesn't my pension percentage go up after 20 years?</summary><p>Tier 3 pays 50% of your final average salary at 20 years and stays at 50% however long you work. Extra years still help in three ways: a higher final average salary, a better escalation rate, and one banked VSF payment for each year past 20.</p></details>
       <details><summary>What is final average salary?</summary><p>The average of your best 3 calendar years in a row, overtime included. A year only counts up to 110% of the average of the two years before it. The FAS calculator above works yours out from your yearly earnings.</p></details>
       <details><summary>Why does everyone talk about 25 years?</summary><p>If you start collecting at 25 years, your whole pension rises with inflation every year, up to 3%. Start earlier and that rate is cut by 1/36 for each month you are short, so at 22 years or less there is none. Two bills in Albany would move full escalation to 23 years (S9204) or 20 years (S9203). Neither is law yet; see Bills in Albany.</p></details>
+      <details><summary>What if I go out on a 3/4s disability?</summary><p>An accident disability pension pays 75% of your final average salary at any length of service, and it is generally not taxed. It has no escalation, no VSF or banked variable, and no Social Security offset at 62. After 5 years retired you get the COLA on the first $18,000, at any age. It must be approved by the Pension Fund's Medical Board and Board of Trustees. Check the 3/4s (Disabled) box in the calculator to see your numbers.</p></details>
       <details><summary>What happens to my pension at 62?</summary><p>It drops by half of your Social Security benefit. Enter your own estimate from ssa.gov to see the effect on your numbers.</p></details>
       <details><summary>Is the 25-year longevity bonus real?</summary><p>Not yet. There are two versions in Albany, both still in committee. S9306/A10438 adds 5% of your rank's top pay at 25 years, 10% at 30 and 15% at 35. S9202/A10392 adds 5% at 25 plus 1% for each year after, up to 15% at 35. You can pick either one in the calculator, or uncheck the box to see your numbers without it.</p></details>
       <details><summary>What are the VSF and the banked variable?</summary><p>The Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. For each year you work past 20, one payment is banked and paid to you as a lump sum when you retire.</p></details>
@@ -552,7 +564,8 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
     <p><strong>Escalation:</strong> the lesser of CPI or 3%, applied to the whole pension each April and compounding every year. Full escalation requires retiring at 25 years or more. The rate is reduced 1/36 for each month short of 25 years, so retiring at 22 years or earlier gets none. This calculator assumes payments start when you retire. Proposed bills would move full escalation to 23 years, with partial escalation after 20 (S9204/A11269), or to 20 years (S9203); you can try either in the calculator.</p>
     <p><strong>COLA:</strong> without full escalation, the pension gets the greater of escalation or the city COLA: half of CPI (1% to 3%) on the first $18,000 only, starting at age 62 after 5 years retired, or age 55 after 10 years retired. COLA reduces the VSF until 62.</p>
     <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF, $12,000 a year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement (rollover-eligible).</p>
-    <p><strong>Not included:</strong> salary earned during extra years worked, retirement options that reduce the pension for a survivor, taxes (service pensions are federally taxable, exempt from NYS/NYC tax), disability pensions, and Tier 2 rules.</p>
+    <p><strong>3/4s disability:</strong> an accident disability retirement pays 75% of final average salary, with no minimum service. It is generally not taxable. There is no escalation, no VSF or banked variable, no longevity bonus, and no Social Security offset. The COLA (half of CPI, 1% to 3%, on the first $18,000) starts after 5 years retired, regardless of age. Source: the Fire Pension Fund's Tier 3 Enhanced Summary Plan Description.</p>
+    <p><strong>Not included:</strong> salary earned during extra years worked, retirement options that reduce the pension for a survivor, taxes (service pensions are federally taxable, exempt from NYS/NYC tax), ordinary (non-line-of-duty) disability, and Tier 2 rules.</p>
     <p><strong>Disclaimer:</strong> this is an unofficial planning tool. It is not affiliated with or endorsed by the FDNY or the NYC Fire Pension Fund, and your actual numbers may vary. Your benefit is set by the NYC Fire Pension Fund (929-436-0099). Confirm with the Fund before making retirement decisions.</p>
   </section>
 </div>
@@ -603,19 +616,30 @@ $('ranks').addEventListener('click',e=>{const b=e.target.closest('button');if(!b
 setRank('LT');
 
 /* ---- service slider, 20 to 35 years. Whole-year milestones on the top row; 22 and 22½ sit side by side on the low row. ---- */
-const SVC_SPAN=180;
+let SVC_MIN=240,SVC_SPAN=180;
 const STOPS=[{m:240},{m:264,low:true,side:'nr'},{m:270,low:true,side:'nl'},{m:300},{m:360},{m:420}];
-(function(){
-  const sl=$('slider');
-  STOPS.forEach(s=>{
-    const pct=(s.m-240)/SVC_SPAN, el=document.createElement('div');
+/* On a 3/4s disability the slider runs from 1 year; stops every 5 years, alternating rows so they fit on a phone. */
+const DIS_STOPS=[{m:60},{m:120,low:true},{m:180},{m:240,low:true},{m:300},{m:360,low:true},{m:420}];
+function buildStops(list){
+  const sl=$('slider');sl.querySelectorAll('.stop').forEach(e=>e.remove());
+  list.forEach(s=>{
+    const pct=(s.m-SVC_MIN)/SVC_SPAN, el=document.createElement('div');
     el.className='stop'+(s.low?' low':'')+(pct===0?' l':pct===1?' r':s.side?' '+s.side:'');
     el.style.left=`calc(var(--thumb)/2 + (100% - var(--thumb)) * ${pct})`;
     el.innerHTML=`<button type="button" data-m="${s.m}" aria-pressed="false">${fmtSvc(s.m)}<small>YRS</small></button>`;
     sl.appendChild(el);
   });
-  sl.addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(!b)return;$('svc').value=b.dataset.m;render()});
-})();
+}
+buildStops(STOPS);
+$('slider').addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(!b)return;$('svc').value=b.dataset.m;render()});
+function setDisability(on){
+  document.body.classList.toggle('dis',on);
+  SVC_MIN=on?12:240;SVC_SPAN=420-SVC_MIN;
+  const sv=$('svc');sv.min=SVC_MIN;if(+sv.value<SVC_MIN) sv.value=SVC_MIN;
+  buildStops(on?DIS_STOPS:STOPS);
+  $('svcLbl').textContent=on?'Years of service when you go out':'Years of service when you retire';
+  render();
+}
 
 function dates(){const dob=getDate('dob'),appt=getDate('ap');return {dob,appt,age:yrsBetween(dob,appt)}}
 
@@ -649,7 +673,7 @@ function fasFromEarnings(retDate,p){
 function params(){
   const d=dates();const typed=num($('fas').value);
   return {fas:typed||EX_FAS,fasExample:!typed,age:d.age,dob:d.dob,appt:d.appt,ss:num($('ss').value),
-    bonusOn:$('bonusOn').checked,bonusVer,escFull,topPay:num($('topPay').value),
+    dis:$('disOn').checked,bonusOn:$('bonusOn').checked,bonusVer,escFull,topPay:num($('topPay').value),
     grow:num($('grow').value)/100,cpi:num($('cpi').value)/100,vsf:VSF};
 }
 
@@ -658,33 +682,36 @@ function scenario(months,p){
   const retDate=addM(p.appt,months);
   let fas;
   if(source==='ws'){const r=fasFromEarnings(retDate,p);fas=r.best?r.best.fas:0}
-  else fas=p.fas*Math.pow(1+p.grow,S-20);
+  else fas=p.fas*Math.pow(1+p.grow,Math.max(0,S-20));
   const baseFas=fas;
   /* S9306/A10438: 5% at 25 years, 10% at 30, 15% at 35, no increase in between.
      S9202/A10392: 5% at 25 plus 1% for each year past 25, capped at 15% at 35. */
-  const bonusPct=!p.bonusOn||S<25-1e-9?0:p.bonusVer==='yearly'?Math.min(0.15,0.05+0.01*Math.floor(S-25+1e-9)):S>=35-1e-9?0.15:S>=30-1e-9?0.10:0.05;
+  const bonusPct=p.dis||!p.bonusOn||S<25-1e-9?0:p.bonusVer==='yearly'?Math.min(0.15,0.05+0.01*Math.floor(S-25+1e-9)):S>=35-1e-9?0.15:S>=30-1e-9?0.10:0.05;
   const bonusAdd=bonusPct*p.topPay;
   fas+=bonusAdd;
-  const base=0.5*fas;
+  /* 3/4s accident disability (Tier 3 Enhanced SPD): 75% of FAS, no escalation, no VSF or banked variable,
+     no Social Security offset, COLA after 5 years retired at any age. */
+  const base=(p.dis?0.75:0.5)*fas;
   const retAge=p.age+S;
   /* Full escalation from p.escFull years (25 under current law); 1/36 less for each month short. */
   const before=Math.max(0,Math.round((p.escFull-S)*12));
-  const frac=before>=36?0:(36-before)/36;
+  const frac=p.dis||before>=36?0:(36-before)/36;
   const escRate=frac*Math.min(p.cpi,0.03);
   let colaRate=Math.ceil(p.cpi*100/2*10-1e-9)/10/100; colaRate=Math.min(0.03,Math.max(0.01,colaRate));
-  const offset=0.5*p.ss*12;
-  const drop=p.vsf*Math.floor(months-240)/12;
+  const vsf=p.dis?0:p.vsf;
+  const offset=p.dis?0:0.5*p.ss*12;
+  const drop=vsf*Math.max(0,Math.floor(months-240))/12;
   const rows=[]; let pen=base, colaTot=0, offApplied=false, life=drop;
   for(let t=0;;t++){
     const age=retAge+t; if(age>90.0001) break;
     if(t>=1){
       const yr=t;
-      const colaOk=(age>=62&&yr>=5)||(age>=55&&yr>=10);
+      const colaOk=p.dis?yr>=5:(age>=62&&yr>=5)||(age>=55&&yr>=10);
       const incE=pen*escRate, incC=colaOk?Math.min(pen,18000)*colaRate:0;
       if(incC>incE){pen+=incC;colaTot+=incC}else pen+=incE;
     }
     if(age>=62&&!offApplied){pen=Math.max(0,pen-offset);offApplied=true}
-    const pay=pen, v=age<62?Math.max(0,p.vsf-colaTot):p.vsf;
+    const pay=pen, v=age<62?Math.max(0,vsf-colaTot):vsf;
     if(age<85+1e-9) life+=pay+v;
     rows.push({age,pay,v});
   }
@@ -706,7 +733,7 @@ function render(){
 
   $('svcOut').textContent=plural(Math.floor(m/12),'year');
   $('svcMo').textContent=plural(m%12,'month');
-  $('fill').style.width=`calc((100% - var(--thumb)) * ${(m-240)/SVC_SPAN})`;
+  $('fill').style.width=`calc((100% - var(--thumb)) * ${(m-SVC_MIN)/SVC_SPAN})`;
   $('slider').querySelectorAll('.stop').forEach(el=>{const b=el.querySelector('button');const on=+b.dataset.m===m;b.setAttribute('aria-pressed',on);el.classList.toggle('on',on)});
   $('escOpts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.f===escFull));
   $('bonusOpts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===bonusVer));
@@ -716,7 +743,7 @@ function render(){
   $('ranks').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===tp));
 
   const you=scenario(m,p);
-  $('svcDate').textContent='Retire '+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1);
+  $('svcDate').textContent=(p.dis?'Go out ':'Retire ')+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1);
 
   if(source==='ws'){$('fas').value=you.fas?Math.round(you.baseFas).toLocaleString('en-US'):'';$('fas').disabled=true;$('fasHint').textContent='Calculated from your yearly earnings for each retirement date.'}
   else{$('fas').disabled=false;$('fasHint').textContent='Average of your highest 3 years of pay, including overtime.'}
@@ -726,6 +753,27 @@ function render(){
   const ex=(source==='type'&&p.fasExample)?'<p class="example">Using an example FAS of $150,000. Type your own estimate to make this yours.</p>':'';
   const noFas=!you.fas?'<p class="warn">No FAS yet. Enter at least 3 years of earnings in the FAS calculator.</p>':'';
   const at62=you.at(62);
+  if(p.dis){
+    const c5=you.at(you.retAge+5),a85=you.at(85);
+    $('head').innerHTML=`
+    <div class="eyebrow">3/4s disability · go out ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
+    <div class="big">
+      <div><div class="n">${usd(you.base/12)}</div><div class="u">per month (${usd(you.base)}/yr), 75% of final average salary</div></div>
+      <div><span class="pill none">No escalation</span></div>
+    </div>
+    ${tier2}${ex}${warn}${noFas}
+    <div class="stats">
+      <div class="stat"><span class="k">Final avg salary</span><span class="v">${usd(you.fas)}</span><span class="s">${source==='ws'?'From your earnings':'Pension = 75%'}</span></div>
+      <div class="stat"><span class="k">Taxes</span><span class="v">Generally none</span><span class="s">Accident disability pensions are generally not taxed</span></div>
+      <div class="stat"><span class="k">COLA</span><span class="v">${c5&&c5.pay>you.base?'+'+usd(c5.pay-you.base)+'/yr':'–'}</span><span class="s">First raise after 5 years retired; on the first $18,000 only</span></div>
+      <div class="stat"><span class="k">Pension at 62</span><span class="v">${at62&&at62.pay>0?usd(at62.pay):'–'}</span><span class="s">No Social Security offset</span></div>
+      <div class="stat"><span class="k">Pension at 85</span><span class="v">${a85&&a85.pay>0?usd(a85.pay):'–'}</span><span class="s">With COLA at ${(p.cpi*100).toFixed(1)}% CPI</span></div>
+      <div class="stat"><span class="k">VSF</span><span class="v">None</span><span class="s">Not paid on a disability pension</span></div>
+    </div>
+    <p class="disnote">A 3/4s pension needs approval from the Pension Fund's Medical Board and Board of Trustees. Health insurance continues regardless of years of service. Total collected through age 85: ${usd(you.life)}.</p>`;
+    renderWorksheet(p,m);
+    return;
+  }
   $('head').innerHTML=`
     <div class="eyebrow">Your plan · retire ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
     <div class="big">
@@ -966,6 +1014,7 @@ $('srcType').addEventListener('click',()=>setSource('type'));
 $('srcWs').addEventListener('click',()=>{setSource('ws');if($('fasw').hidden)openFas()});
 ['fas','ss','grow','cpi','topPay','bonusOn'].forEach(id=>$(id).addEventListener('input',render));
 $('svc').addEventListener('input',render);
+$('disOn').addEventListener('change',e=>setDisability(e.target.checked));
 /* Bills in Albany opens as its own view at #bills; the calculator is everything else. */
 let tryJump=false,calcY=0;const CALC_TITLE=document.title;
 function showView(){
