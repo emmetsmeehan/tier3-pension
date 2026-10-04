@@ -49,10 +49,10 @@ h2{font-weight:700;font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
 .inp:focus-within{border-color:var(--steel);box-shadow:0 0 0 2px color-mix(in srgb,var(--steel) 30%,transparent)}
 .inp input:disabled{color:var(--muted)}
 .dsel{display:grid;grid-template-columns:1.5fr .9fr 1.1fr;gap:8px}
-.dsel select{font:500 16px var(--body);color:var(--ink);background-color:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 32px 10px 10px;min-width:0;width:100%;-webkit-appearance:none;appearance:none;cursor:pointer;
-  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 2px),transparent calc(50% + 2px)),linear-gradient(135deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 2px),transparent calc(50% + 2px));
-  background-size:8px 8px,8px 8px;background-position:calc(100% - 22px) 50%,calc(100% - 14px) 50%;background-repeat:no-repeat}
-@media (max-width:360px){.dsel select{padding:10px 24px 10px 8px;background-size:6px 6px,6px 6px;background-position:calc(100% - 16px) 50%,calc(100% - 10px) 50%}}
+.dsel>span{position:relative;min-width:0}
+.dsel>span::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.dsel select{font:500 16px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 32px 10px 10px;min-width:0;width:100%;-webkit-appearance:none;appearance:none;cursor:pointer}
+@media (max-width:360px){.dsel select{padding:10px 24px 10px 8px}.dsel>span::after{right:10px}}
 .dsel select:focus-visible{outline:2px solid var(--steel);outline-offset:1px}
 .tierbox{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border:2px solid var(--accent);border-radius:4px;padding:10px 12px;display:grid;gap:2px}
 .tierbox b{font-size:17px;color:var(--accent)}
@@ -182,11 +182,18 @@ thead th{font-weight:700;font-size:15px;vertical-align:bottom}
 .chartbox svg{width:100%;height:auto;display:block}
 .esc-lede{margin:0;max-width:70ch;color:var(--muted)}
 .esc-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.esc{border-radius:4px;padding:12px 14px;background:var(--soft);display:grid;gap:4px}
+.esc{border-radius:4px;padding:12px 14px;background:var(--soft);display:grid;gap:4px;align-content:start}
 .esc .t{font-weight:700;font-size:16px}
 .esc .flow{font-size:16px;font-variant-numeric:tabular-nums}
 .esc .s{font-size:13.5px;color:var(--muted)}
-.esc .g{font-weight:700;font-size:22px;color:var(--c);line-height:1.1}
+.esc .g{font-weight:700;font-size:19px;color:var(--c);line-height:1.2}
+.esc .nums{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-variant-numeric:tabular-nums}
+.esc .nums span{display:grid;font-size:13.5px;color:var(--muted)}
+.esc .nums b{font-size:18px;color:var(--ink)}
+.esc .rate{display:flex;align-items:baseline;gap:6px;border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.esc .rate b{font-size:26px;line-height:1;font-variant-numeric:tabular-nums}
+.esc .rate span{font-size:14px;color:var(--muted)}
+.esc ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted)}
 .chartwrap{position:relative}
 .tip{position:absolute;top:8px;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:13.5px;box-shadow:0 4px 14px color-mix(in srgb,var(--ink) 15%,transparent);display:grid;gap:3px;min-width:180px}
@@ -254,14 +261,14 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <div class="field">
         <span class="flabel" id="dobLbl">Date of birth</span>
         <div class="dsel" role="group" aria-labelledby="dobLbl">
-          <select id="dobM" aria-label="Birth month"></select><select id="dobD" aria-label="Birth day"></select><select id="dobY" aria-label="Birth year"></select>
+          <span><select id="dobM" aria-label="Birth month"></select></span><span><select id="dobD" aria-label="Birth day"></select></span><span><select id="dobY" aria-label="Birth year"></select></span>
         </div>
       </div>
 
       <div class="field">
         <span class="flabel" id="apptLbl">Appointment date</span>
         <div class="dsel" role="group" aria-labelledby="apptLbl">
-          <select id="apM" aria-label="Appointment month"></select><select id="apD" aria-label="Appointment day"></select><select id="apY" aria-label="Appointment year"></select>
+          <span><select id="apM" aria-label="Appointment month"></select></span><span><select id="apD" aria-label="Appointment day"></select></span><span><select id="apY" aria-label="Appointment year"></select></span>
         </div>
         <div class="tierbox" id="tierWarn" role="alert" hidden><b>You're in Tier 2</b><span>Members appointed before July 1, 2009 are generally Tier 2, which has different pension rules. This calculator is for Tier 3 only, so these numbers won't match your pension.</span></div>
       </div>
@@ -522,7 +529,7 @@ function scenario(months,p){
     rows.push({age,pay,v});
   }
   const at=a=>rows.find(x=>x.age>=a-1e-9)||null;
-  return {months,S,fas,baseFas,bonusPct,bonusAdd,base,retDate,retAge,frac,escRate,offset,drop,rows,at,life};
+  return {months,S,fas,baseFas,bonusPct,bonusAdd,base,retDate,retAge,frac,colaRate,escRate,offset,drop,rows,at,life};
 }
 
 function escPill(f){
@@ -603,13 +610,22 @@ function renderEscalation(cols,p){
   const cpi=(Math.min(p.cpi,0.03)*100).toFixed(1);
   const f=s=>s.rows.find(r=>r.pay>0);
   $('escLede').textContent=`At 25 years your whole pension grows with inflation, up to 3% a year, compounding for life. Retire earlier and it barely moves, apart from a small COLA on the first $18,000 later on. At ${cpi}% inflation the gap widens every year you're retired.`;
+  const pct=r=>String(+(r*100).toFixed(2));
   $('escCards').innerHTML=cols.filter(c=>!c.you).map(c=>{
     const s=c.s,a=f(s),e=s.at(85);if(!a||!e) return '';
-    const g=e.pay-a.pay;
-    return `<div class="esc" style="--c:var(${c.c})"><span class="t">Retire at ${c.name}</span>
-      <span class="flow">${usd(a.pay)} → ${usd(e.pay)}</span>
-      <span class="g">${g>=0?'+':''}${usd(g)}/yr</span>
-      <span class="s">First-year pension vs. pension at 85, after the Social Security offset. Escalation ${(s.escRate*100).toFixed(2)}%/yr.</span></div>`}).join('');
+    const g=e.pay-a.pay, short=Math.max(0,Math.round((25-s.S)*12));
+    const lead=Math.abs(g)<1?'Pays about the same at 85 as in year one':`Pays ${usd(Math.abs(g))} a year ${g>0?'more':'less'} at 85 than in year one`;
+    const why=[];
+    if(s.frac>=1) why.push(`<b>Full escalation.</b> The whole pension rises ${pct(s.escRate)}% every year, and each raise builds on the last.`);
+    else if(s.frac>0) why.push(`<b>Partial escalation.</b> Retiring ${short} months short of 25 years keeps ${36-short}/36 of the full rate, so the pension rises only ${pct(s.escRate)}% a year.`);
+    else why.push(`<b>No escalation.</b> Retiring 3 or more years short of 25 years gets none.`);
+    if(s.frac<1) why.push(`<b>Small COLA later.</b> From about age ${Math.ceil(Math.min(Math.max(62,s.retAge+5),Math.max(55,s.retAge+10)))}, a COLA on the first $18,000 only adds about ${usd(18000*s.colaRate)} a year${s.frac>0?' when it beats escalation':''}.`);
+    if(s.offset>0) why.push(`<b>Social Security offset.</b> At 62, ${usd(s.offset)} a year comes off.`);
+    return `<div class="esc" style="--c:var(${c.c})"><span class="t">Retire at ${c.name.replace('yrs','years')}</span>
+      <div class="nums"><span>First year<b>${usd(a.pay)}</b></span><span>At age 85<b>${usd(e.pay)}</b></span></div>
+      <span class="g">${lead}</span>
+      <div class="rate"><b>${pct(s.escRate)}%</b><span>escalation a year</span></div>
+      <ul>${why.map(w=>`<li>${w}</li>`).join('')}</ul></div>`}).join('');
   drawChart(cols);
 }
 function drawChart(cols){
