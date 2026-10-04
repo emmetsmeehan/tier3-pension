@@ -65,7 +65,7 @@ The rate schedule PDFs are not in this repository. When a new contract or schedu
 
 ## Open items
 
-- **Question box.** Built on the branch, not yet live: a "Questions or suggestions" section after the FAQ that posts to Web3Forms (`ASK_KEY` near the end of the script). It goes live once the owner supplies the access key from web3forms.com tied to the address he wants questions sent to. The FAQ answer about nothing being sent was updated to mention the box.
+- **Question box.** Live: a "Questions or suggestions" section after the FAQ posts to Web3Forms (`ASK_KEY` near the end of the script; the key is public by design). Messages go to the address the owner registered with Web3Forms. The FAQ answer about nothing being sent mentions the box.
 - **Domain name.** He wants a cleaner address than the github.io one. Not bought yet.
 - **Credit.** Whether the page names him or stays anonymous is undecided. Do not add his name to the page until he says so.
 - **Phone check.** The live site has not been checked on an actual phone since the move to GitHub Pages.
