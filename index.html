@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FDNY Tier 3 Pension Calculator</title>
+<meta name="description" content="Unofficial calculator for FDNY Tier 3 pensions. See your monthly pension, VSF, banked variable and escalation at 20, 22½ and 25 years.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+html{color-scheme:light}
+body{margin:0}
+img{max-width:100%}
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#18212b; --muted:#5b6876; --line:#d9dfe5;
+  --accent:#b3261e; --steel:#2f5d8a; --gold:#a8730f; --sage:#3f7d5a; --orange:#c2620a; --soft:#eef2f6;
+  --display:"Source Sans 3","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Source Sans 3","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161c; --surface:#18202a; --ink:#e6ebf0; --muted:#97a4b2; --line:#2b3643;
+  --accent:#e0574d; --steel:#6fa3d6; --gold:#d9a441; --sage:#6dbb8d; --orange:#f0913d; --soft:#1e2833; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161c; --surface:#18202a; --ink:#e6ebf0; --muted:#97a4b2; --line:#2b3643;
+  --accent:#e0574d; --steel:#6fa3d6; --gold:#d9a441; --sage:#6dbb8d; --orange:#f0913d; --soft:#1e2833; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:grid;gap:28px}
+.hero{display:grid;gap:8px;border-bottom:1px solid var(--line);padding-bottom:20px}
+.eyebrow{font-size:14px;font-weight:600;color:var(--muted)}
+h1{font-weight:700;font-size:clamp(30px,5vw,44px);line-height:1.1;margin:0;text-wrap:balance;max-width:20ch}
+.hero .sub{font-weight:600;font-size:clamp(19px,2.6vw,23px);color:var(--accent);margin:0}
+.hero .lede{color:var(--muted);max-width:64ch;margin:0}
+.hero .disc{margin:4px 0 0;max-width:64ch}
+.grid{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:880px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:20px;display:grid;gap:20px;min-width:0}
+h2{font-weight:700;font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
+.field{display:grid;gap:7px}
+.field>label,.flabel{font-weight:600;font-size:15.5px}
+.hint{font-size:13.5px;color:var(--muted)}
+.inp{display:flex;align-items:center;border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden}
+.inp span{padding:0 10px;color:var(--muted);font-size:15px}
+.inp input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:var(--ink);font:600 16px var(--body);padding:10px 10px 10px 0}
+.inp input.pl{padding-left:10px}
+.inp input::placeholder{color:var(--muted);opacity:.55}
+.inp input:focus{outline:none}
+.inp:focus-within{border-color:var(--steel);box-shadow:0 0 0 2px color-mix(in srgb,var(--steel) 30%,transparent)}
+.inp input:disabled{color:var(--muted)}
+.dsel{display:grid;grid-template-columns:1.5fr .9fr 1.1fr;gap:8px}
+.dsel select{font:500 16px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 8px;min-width:0;width:100%}
+.dsel select:focus-visible{outline:2px solid var(--steel);outline-offset:1px}
+.tierbox{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border:2px solid var(--accent);border-radius:4px;padding:10px 12px;display:grid;gap:2px}
+.tierbox b{font-size:17px;color:var(--accent)}
+.tierbox span{font-size:13.5px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:var(--bg);color:var(--ink);font:600 14.5px var(--body);padding:10px 6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+.btn{border:0;border-radius:4px;padding:11px 16px;font:600 15.5px var(--body);cursor:pointer;background:var(--sage);color:var(--surface)}
+.btn.red{background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:600}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.findout{border:1px dashed var(--line);border-radius:4px;padding:12px;display:grid;gap:10px;background:var(--soft)}
+.findout p{margin:0;font-size:15px}
+
+/* service slider with positioned stops */
+.svc{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.svc b{font-size:24px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.slider{--thumb:26px;position:relative;padding-bottom:104px}
+.slider input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:var(--thumb);background:transparent;margin:0;cursor:pointer;position:relative;z-index:2}
+.slider input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+.slider input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+.slider input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:var(--thumb);height:var(--thumb);border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 1px 4px color-mix(in srgb,var(--ink) 35%,transparent);margin-top:calc((6px - var(--thumb))/2)}
+.slider input[type=range]::-moz-range-thumb{width:calc(var(--thumb) - 6px);height:calc(var(--thumb) - 6px);border-radius:50%;background:var(--accent);border:3px solid var(--surface)}
+.slider input[type=range]:focus-visible{outline:2px solid var(--steel);outline-offset:4px;border-radius:4px}
+.fill{position:absolute;left:calc(var(--thumb)/2);top:calc(var(--thumb)/2 - 3px);height:6px;border-radius:3px;background:var(--accent);z-index:1;pointer-events:none}
+.stop{position:absolute;top:calc(var(--thumb) + 2px);display:grid;justify-items:center;transform:translateX(-50%)}
+.stop.l{transform:translateX(-14px);justify-items:start}
+.stop.r{transform:translateX(calc(-100% + 14px));justify-items:end}
+.stop::before{content:"";width:2px;background:var(--line);height:10px;border-radius:1px}
+.stop.low::before{height:56px}
+.stop.l::before{margin-left:13px}
+.stop.r::before{margin-right:13px}
+.stop.nl{transform:translateX(-3px);justify-items:start}
+.stop.nl::before{margin-left:2px}
+.stop.nl button{border-top-left-radius:2px}
+.stop.nr{transform:translateX(calc(-100% + 3px));justify-items:end}
+.stop.nr::before{margin-right:2px}
+.stop.nr button{border-top-right-radius:2px}
+.stop button{min-width:50px;height:44px;padding:0 10px;border-radius:4px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 17px var(--body);cursor:pointer;line-height:1}
+.stop button small{display:block;font:600 10px var(--body);color:var(--muted)}
+.stop button:hover{border-color:var(--accent)}
+.stop button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.stop button[aria-pressed="true"] small{color:var(--surface);opacity:.85}
+.stop.on::before{background:var(--accent)}
+
+/* rank buttons */
+.ranks{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ranks button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px;padding:8px 4px;font:700 15px var(--body);cursor:pointer;display:grid;gap:1px}
+.ranks button small{font:400 12.5px var(--body);color:var(--muted)}
+.ranks button[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:var(--surface)}
+.ranks button[aria-pressed="true"] small{color:var(--surface)}
+.bonusbox{border:1px solid var(--line);border-radius:4px;padding:14px;display:grid;gap:10px}
+.chk{display:flex;gap:8px;align-items:center;font-weight:600;font-size:15.5px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--sage)}
+.bonus-on{color:var(--sage);font-weight:600}
+details summary{cursor:pointer;font-weight:600;font-size:15.5px}
+details[open] summary{margin-bottom:12px}
+details .stack{display:grid;gap:14px}
+
+/* results */
+.results{display:grid;gap:20px;min-width:0}
+.headline{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:20px;display:grid;gap:14px}
+.big{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline}
+.big .n{font-weight:700;font-size:clamp(38px,6vw,52px);line-height:1;font-variant-numeric:tabular-nums}
+.big .u{color:var(--muted);font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--soft);border-radius:4px;padding:10px 12px;display:grid;gap:2px;align-content:start}
+.stat .k{font-size:13.5px;color:var(--muted)}
+.stat .v{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat .s{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;font:600 13.5px var(--body);padding:2px 8px;border-radius:4px;border:1px solid currentColor;white-space:nowrap}
+.pill.none{color:var(--accent)} .pill.part{color:var(--gold)} .pill.full{color:var(--sage)}
+.example{font-size:14px;color:var(--gold);margin:0}
+.warn{font-size:14px;color:var(--accent);margin:0}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+#cmp{min-width:600px}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);font-size:15px}
+th:first-child,td:first-child{text-align:left}
+thead th{font-weight:700;font-size:15px;vertical-align:bottom}
+#cmp td:first-child{color:var(--muted)}
+#cmp tr:last-child td{border-bottom:0;font-weight:600;color:var(--ink)}
+.tablebox th:first-child,.tablebox td:first-child{position:sticky;left:0;z-index:1;background:var(--surface)}
+.you{background:color-mix(in srgb,var(--accent) 8%,var(--surface))}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:baseline}
+.swipe{display:none;font-size:13.5px;color:var(--muted);margin:-12px 0 0;text-align:right}
+
+/* FAS worksheet */
+.fasw-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:start}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.rules li{background:var(--soft);border-radius:4px;padding:10px 12px;font-size:14.5px}
+.rules b{display:block;font-size:15.5px;font-weight:700}
+.dates{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.date{border:1px solid var(--line);border-radius:4px;padding:8px 12px;display:grid;gap:1px}
+.date .k{font-size:13.5px;color:var(--muted)}
+.date .v{font-size:16px;font-weight:600}
+.date .s{font-size:13px;color:var(--muted)}
+.ws-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,320px);gap:20px;align-items:start}
+@media (max-width:880px){.ws-grid{grid-template-columns:minmax(0,1fr)}}
+.ws-summary{border:1px solid var(--line);border-radius:4px;padding:16px;display:grid;gap:12px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:880px){.ws-summary{position:static;order:-1}}
+.ws-summary .n{font-weight:700;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
+.legendrow{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:var(--muted)}
+#ws{min-width:520px}
+#ws td{padding:6px 10px;vertical-align:middle}
+#ws td:first-child{font-weight:500}
+#ws .tag{display:block;font:400 12.5px var(--body);color:var(--muted)}
+#ws .inp{max-width:160px;margin-left:auto}
+#ws .inp input{font-size:16px;padding:6px 8px 6px 0;text-align:right}
+#ws tr.proby td{background:color-mix(in srgb,var(--orange) 13%,var(--surface))}
+#ws tr.proby td:first-child{box-shadow:inset 3px 0 0 var(--orange)}
+#ws tr.win td{background:color-mix(in srgb,var(--sage) 18%,var(--surface));border-bottom-color:color-mix(in srgb,var(--sage) 35%,transparent)}
+#ws tr.win td:first-child{box-shadow:inset 3px 0 0 var(--sage);font-weight:700}
+#ws tr.win td:last-child{font-weight:600;color:var(--sage)}
+#ws tr.proj .inp input{font-style:italic}
+#ws tr.after td{opacity:.45}
+.badge{display:inline-block;margin-left:8px;font:600 12px var(--body);color:var(--surface);border-radius:3px;padding:1px 6px;vertical-align:middle;white-space:nowrap}
+.badge.best{background:var(--sage)}
+.badge.proby{background:var(--orange)}
+.cut{color:var(--gold);font-size:13px;display:block}
+
+/* escalation chart */
+.chartbox{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:20px;display:grid;gap:14px}
+.chartbox svg{width:100%;height:auto;display:block}
+.esc-lede{margin:0;max-width:70ch;color:var(--muted)}
+.esc-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.esc{border-radius:4px;padding:12px 14px;background:var(--soft);display:grid;gap:4px}
+.esc .t{font-weight:700;font-size:16px}
+.esc .flow{font-size:16px;font-variant-numeric:tabular-nums}
+.esc .s{font-size:13.5px;color:var(--muted)}
+.esc .g{font-weight:700;font-size:22px;color:var(--c);line-height:1.1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted)}
+.chartwrap{position:relative}
+.tip{position:absolute;top:8px;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:13.5px;box-shadow:0 4px 14px color-mix(in srgb,var(--ink) 15%,transparent);display:grid;gap:3px;min-width:180px}
+.tip[hidden]{display:none}
+.tip b{font-size:15px}
+.tip .r{display:flex;justify-content:space-between;gap:12px}
+.tip .r span:first-child{color:var(--muted)}
+
+.faq{display:grid;gap:14px;max-width:80ch;min-width:0}
+.faq-list{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line);padding:12px 0}
+.faq summary{font-size:16px;padding-left:1.25em;text-indent:-1.25em}
+.faq details[open] summary{margin-bottom:6px}
+.faq p{margin:0 0 0 1.25em;color:var(--muted);font-size:15px;max-width:70ch}
+summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-radius:2px}
+
+.notes{display:grid;gap:8px;font-size:14.5px;color:var(--muted);max-width:80ch}
+.notes p{margin:0}
+.notes strong{color:var(--ink)}
+
+@media (max-width:560px){
+  .wrap{gap:20px;padding-block:20px 40px}
+  .panel{padding:16px}
+  .headline{padding:16px}
+  .stats{grid-template-columns:1fr 1fr;gap:8px}
+  .stat .v{font-size:16.5px}
+  th,td{padding:8px 5px;font-size:13px}
+  thead th{font-size:13px}
+  #cmp{min-width:0;table-layout:fixed}
+  #cmp th:first-child,#cmp td:first-child{width:27%}
+  #cmp.wide{min-width:470px}
+  .swipe.on{display:block}
+  #cmp td{word-break:break-word}
+  #ws{min-width:0;table-layout:fixed}
+  #ws th:first-child,#ws td:first-child{width:27%}
+  #ws th:nth-child(2),#ws td:nth-child(2){width:38%}
+  #ws th:nth-child(3),#ws td:nth-child(3){display:none}
+  #ws .inp{max-width:none}
+  #ws .inp span{padding:0 6px}
+  #ws td:last-child{white-space:nowrap;font-size:13px}
+  #ws .cut{white-space:normal}
+  .badge{margin-left:0;margin-top:2px}
+  .rules{grid-template-columns:1fr}
+  .dates{grid-template-columns:1fr 1fr}
+  .dates .date:last-child:nth-child(odd){grid-column:1/-1}
+  .chartbox{padding:14px}
+  .stop button{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">FDNY Tier 3 pension · appointed on/after July 1, 2009</div>
+    <h1>How much will you get paid in retirement?</h1>
+    <p class="sub">Let's find out.</p>
+    <p class="lede">Enter a few numbers and see your monthly pension, VSF, banked variable and escalation, side by side for 20, 22½ and 25 years. A ballpark guess is fine to start.</p>
+    <p class="hint disc">Unofficial tool. Not affiliated with the FDNY or the NYC Fire Pension Fund. Your actual numbers may vary.</p>
+  </header>
+
+  <div class="grid">
+    <form class="panel" id="form" autocomplete="off">
+      <h2>Your numbers</h2>
+
+      <div class="field">
+        <span class="flabel" id="dobLbl">Date of birth</span>
+        <div class="dsel" role="group" aria-labelledby="dobLbl">
+          <select id="dobM" aria-label="Birth month"></select><select id="dobD" aria-label="Birth day"></select><select id="dobY" aria-label="Birth year"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="flabel" id="apptLbl">Appointment date</span>
+        <div class="dsel" role="group" aria-labelledby="apptLbl">
+          <select id="apM" aria-label="Appointment month"></select><select id="apD" aria-label="Appointment day"></select><select id="apY" aria-label="Appointment year"></select>
+        </div>
+        <div class="tierbox" id="tierWarn" role="alert" hidden><b>You're in Tier 2</b><span>Members appointed before July 1, 2009 are generally Tier 2, which has different pension rules. This calculator is for Tier 3 only, so these numbers won't match your pension.</span></div>
+      </div>
+
+      <div class="field">
+        <span class="flabel" id="srcLbl">Final average salary</span>
+        <div class="seg" role="group" aria-labelledby="srcLbl">
+          <button type="button" id="srcType" aria-pressed="true">Type in your estimate</button>
+          <button type="button" id="srcWs" aria-pressed="false">From my earnings</button>
+        </div>
+        <div class="inp"><span>$</span><input id="fas" inputmode="numeric" placeholder="150,000" aria-labelledby="srcLbl"></div>
+        <div class="hint" id="fasHint">Average of your highest 3 years of pay, including overtime.</div>
+        <div class="findout">
+          <p><strong>No idea what your final average salary will be?</strong> Let's find out. Enter what you've earned each year and we'll do the math.</p>
+          <div><button type="button" class="btn" id="openFas">Calculate my FAS</button></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="svc"><label for="svc">Years of service when you retire</label><b id="svcOut">22½</b></div>
+        <div class="hint" id="svcDate"></div>
+        <div class="slider" id="slider">
+          <input type="range" id="svc" min="240" max="420" step="1" value="270" aria-describedby="svcDate">
+          <div class="fill" id="fill"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="flabel" id="whenLbl">Start collecting</span>
+        <div class="seg" role="group" aria-labelledby="whenLbl">
+          <button type="button" id="nowBtn" aria-pressed="true">When I retire</button>
+          <button type="button" id="defBtn" aria-pressed="false">At my 25-year mark</button>
+        </div>
+        <div class="hint">Deferring to the 25-year date gets full escalation, but no pension checks or health coverage until then.</div>
+      </div>
+
+      <div class="bonusbox">
+        <label class="chk" for="bonusOn"><input type="checkbox" id="bonusOn" checked> Include the 25-year longevity bonus</label>
+        <div class="hint">Proposed bill, not yet law. 5% of your rank's top base pay is added to your FAS at 25 years, 10% at 30 and 15% at 35.</div>
+        <span class="flabel" id="rankLbl">Your rank at retirement</span>
+        <div class="ranks" role="group" aria-labelledby="rankLbl" id="ranks"></div>
+        <div class="inp"><span>$</span><input id="topPay" inputmode="numeric" aria-label="Top base pay for your rank"></div>
+        <div class="hint">Top-step base salary from the UFA (Aug. 2024) and UFOA (July 2025) pay schedules. Type over it if yours differs.</div>
+      </div>
+
+      <div class="field">
+        <label for="ss">Estimated Social Security at 62</label>
+        <div class="inp"><span>$</span><input id="ss" inputmode="numeric" value="2,400"><span>/mo</span></div>
+        <div class="hint">From ssa.gov/myaccount. Half of this comes off the pension at 62.</div>
+      </div>
+
+      <details>
+        <summary>Assumptions</summary>
+        <div class="stack">
+          <div class="field">
+            <label for="grow">Pay growth per year</label>
+            <div class="inp"><input class="pl" id="grow" inputmode="decimal" value="2.5"><span>%</span></div>
+            <div class="hint">Raises, OT and longevity. Lifts a typed-in FAS for each year past 20, and fills in future years on the FAS worksheet.</div>
+          </div>
+          <div class="field">
+            <label for="cpi">Inflation (CPI) per year</label>
+            <div class="inp"><input class="pl" id="cpi" inputmode="decimal" value="3"><span>%</span></div>
+          </div>
+          <div class="field">
+            <label for="vsf">Variable Supplements Fund</label>
+            <div class="inp"><span>$</span><input id="vsf" inputmode="numeric" value="12,000"><span>/yr</span></div>
+          </div>
+        </div>
+      </details>
+    </form>
+
+    <div class="results" aria-live="polite">
+      <section class="headline" id="head"></section>
+      <div class="tablebox"><table id="cmp"></table></div>
+      <p class="swipe" id="swipe">Swipe the table to see Your plan →</p>
+    </div>
+  </div>
+
+  <section class="panel fasw" id="fasw" hidden aria-labelledby="fasTitle">
+    <div class="fasw-top">
+      <div style="display:grid;gap:4px">
+        <div class="eyebrow">FAS calculator</div>
+        <h2 id="fasTitle">What is my final average salary?</h2>
+      </div>
+      <button type="button" class="btn ghost" id="closeFas">Close FAS calculator</button>
+    </div>
+    <p class="hint" style="font-size:14px;max-width:72ch;margin:0">Enter your pensionable earnings for each calendar year. Your W-2 Box 5 (Medicare wages) is a good starting point, minus non-pensionable pay like uniform allowance. Future years are filled in at your pay growth assumption; type over any of them.</p>
+    <ul class="rules">
+      <li><b>Best 3 in a row</b>Your FAS is the highest average of any 3 consecutive calendar years.</li>
+      <li><b>10% anti-spiking cap</b>A year can count for at most 110% of the average of the 2 years before it. Anything above that is cut.</li>
+      <li><b>Full years only</b>This worksheet uses complete calendar years before the year you retire. The Fund may also use the 36 months right before your retirement date.</li>
+    </ul>
+    <div class="dates" id="dates"></div>
+    <div class="legendrow"><span><span class="sw" style="background:var(--orange)"></span>Proby years (first 5 years, still stepping up in pay)</span><span><span class="sw" style="background:var(--sage)"></span>Best 3 years, used for your FAS</span><span><span class="sw" style="background:var(--gold)"></span>Pay over the 10% cap</span></div>
+    <div class="ws-grid">
+      <div class="tablebox"><table id="ws"></table></div>
+      <aside class="ws-summary" id="wsSum"></aside>
+    </div>
+  </section>
+
+  <section class="chartbox" aria-labelledby="escTitle">
+    <div style="display:grid;gap:6px">
+      <div class="eyebrow">Why 25 years matters</div>
+      <h2 id="escTitle">The power of escalation</h2>
+      <p class="esc-lede" id="escLede"></p>
+    </div>
+    <div class="esc-cards" id="escCards"></div>
+    <div class="legend" id="legend"></div>
+    <div class="chartwrap" id="chartwrap"><div id="chart"></div><div class="tip" id="tip" hidden></div></div>
+    <div class="hint">Yearly pension plus VSF by age. Hover or tap the chart to compare. The dip at 62 is the Social Security offset.</div>
+  </section>
+
+  <section class="faq" aria-labelledby="faqTitle">
+    <div style="display:grid;gap:6px">
+      <h2 id="faqTitle">Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <details><summary>Who is this for?</summary><p>FDNY uniformed members in Tier 3, which means anyone appointed on or after July 1, 2009. If you were appointed before that, you are generally in Tier 2, which has different rules.</p></details>
+      <details><summary>Why doesn't my pension percentage go up after 20 years?</summary><p>Tier 3 pays 50% of your final average salary at 20 years and stays at 50% however long you work. Extra years still help in three ways: a higher final average salary, a better escalation rate, and one banked VSF payment for each year past 20.</p></details>
+      <details><summary>What is final average salary?</summary><p>The average of your best 3 calendar years in a row, overtime included. A year only counts up to 110% of the average of the two years before it. The FAS calculator above works yours out from your yearly earnings.</p></details>
+      <details><summary>Why does everyone talk about 25 years?</summary><p>If you start collecting at 25 years, your whole pension rises with inflation every year, up to 3%. Start earlier and that rate is cut by 1/36 for each month you are short, so at 22 years or less there is none. You can also retire earlier and wait until your 25-year date to start collecting.</p></details>
+      <details><summary>What happens to my pension at 62?</summary><p>It drops by half of your Social Security benefit. Enter your own estimate from ssa.gov to see the effect on your numbers.</p></details>
+      <details><summary>Is the 25-year longevity bonus real?</summary><p>Not yet. It is a bill in Albany (A10438/S9306) that has not passed. Uncheck the box in the calculator to see your numbers without it.</p></details>
+      <details><summary>What are the VSF and the banked variable?</summary><p>The Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. For each year you work past 20, one payment is banked and paid to you as a lump sum when you retire.</p></details>
+      <details><summary>Is anything I type saved or sent anywhere?</summary><p>No. The math runs in your browser, and this page does not store or send what you enter.</p></details>
+      <details><summary>Is this official?</summary><p>No. It is an unofficial planning tool and is not affiliated with the FDNY or the NYC Fire Pension Fund. For an official estimate, call the Fund at 929-436-0099.</p></details>
+    </div>
+  </section>
+
+  <section class="notes">
+    <h2>How it's calculated</h2>
+    <p><strong>Pension:</strong> 50% of final average salary at 20+ years of service, under S4727 (Chapter 692 of the Laws of 2025, signed Dec. 19, 2025). Tier 3 is capped at 50%, so the percentage does not grow past 20 years.</p>
+    <p><strong>25-year longevity bonus:</strong> for members retiring with 25+ years, 5% of the top base pay for their rank is added to final average salary, rising to 10% at 30 years and 15% at 35. The years in between stay at the lower step. For Tier 3 it is added straight to FAS and is not limited by the 10% anti-spiking cap. This is a proposed bill (A10438/S9306). It was still in committee as of October 2026 and is not law, so the terms may change. Rank pay is the top-step annual base salary from the UFA schedule effective Aug. 1, 2024 (firefighter) and the UFOA schedule effective July 31, 2025 (lieutenant, captain, battalion chief), with no longevity, night differential or overtime. The bill says “highest grade of pay” without defining it, so the figure used could end up higher than base salary.</p>
+    <p><strong>FAS:</strong> average of the highest 3 consecutive years. Any year that exceeds the average of the prior two years by more than 10% counts only up to that 110% line. Unpaid leave (e.g. suspension) inside the FAS period is swapped for earlier time; the worksheet doesn't model that.</p>
+    <p><strong>Escalation:</strong> the lesser of CPI or 3%, applied to the whole pension each April and compounding every year. Full escalation requires collecting at the 25-year mark. The rate is reduced 1/36 for each month payment starts before then, so collecting at 22 years or earlier gets none.</p>
+    <p><strong>COLA:</strong> without full escalation, the pension gets the greater of escalation or the city COLA: half of CPI (1% to 3%) on the first $18,000 only, starting at age 62 after 5 years retired, or age 55 after 10 years retired. COLA reduces the VSF until 62.</p>
+    <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF each year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement (rollover-eligible). This calculator starts the VSF when pension payments start.</p>
+    <p><strong>Not included:</strong> salary earned during extra years worked, retirement options that reduce the pension for a survivor, taxes (service pensions are federally taxable, exempt from NYS/NYC tax), disability pensions, and Tier 2 rules.</p>
+    <p><strong>Disclaimer:</strong> this is an unofficial planning tool. It is not affiliated with or endorsed by the FDNY or the NYC Fire Pension Fund, and your actual numbers may vary. Your benefit is set by the NYC Fire Pension Fund (929-436-0099). Confirm with the Fund before making retirement decisions.</p>
+  </section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const num=v=>{const n=parseFloat(String(v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0};
+const usd=n=>(n<0?'-':'')+'$'+Math.round(Math.abs(n)).toLocaleString('en-US');
+const k=n=>'$'+(Math.round(n/1000)).toLocaleString('en-US')+'k';
+const fmtSvc=m=>{const y=Math.floor(m/12),mo=m%12;return mo===6?y+'½':(y+(mo?' yrs '+mo+' mo':''))};
+const addM=(d,m)=>new Date(d.getFullYear(),d.getMonth()+m,d.getDate());
+const yrsBetween=(a,b)=>(b-a)/(365.2425*864e5);
+const fmtD=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const fmtMY=d=>d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+const NOW_Y=new Date().getFullYear();
+const EX_FAS=150000;
+let deferred=false, source='type';
+
+/* Top-step annual base salary by rank: UFA schedule eff. Aug 1, 2024 (FF); UFOA schedule eff. Jul 31, 2025 (LT, CAPT, BC). */
+const RANKS=[{id:'FF',pay:109352},{id:'LT',pay:140212},{id:'CAPT',pay:160941},{id:'BC',pay:209563}];
+
+/* Example earnings for the sample member (appointed Jul 2012, promoted in 2024). */
+const earn={2012:38000,2013:58000,2014:74000,2015:89000,2016:99000,2017:112000,2018:119000,2019:126000,2020:133000,2021:139000,2022:146000,2023:153000,2024:182000,2025:176000};
+
+/* ---- date pickers: month, day, year chosen together ---- */
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function setupDate(pre,y0,y1,def){
+  const m=$(pre+'M'),d=$(pre+'D'),y=$(pre+'Y');
+  m.innerHTML=MONTHS.map((n,i)=>`<option value="${i}">${n}</option>`).join('');
+  let ys='';for(let v=y1;v>=y0;v--) ys+=`<option value="${v}">${v}</option>`; y.innerHTML=ys;
+  m.value=def.getMonth(); y.value=def.getFullYear();
+  const days=keep=>{const n=new Date(+y.value,+m.value+1,0).getDate();
+    d.innerHTML=Array.from({length:n},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');d.value=Math.min(keep,n)};
+  days(def.getDate());
+  m.addEventListener('change',()=>{days(+d.value);render()}); y.addEventListener('change',()=>{days(+d.value);render()}); d.addEventListener('change',render);
+}
+const getDate=pre=>new Date(+$(pre+'Y').value,+$(pre+'M').value,+$(pre+'D').value);
+setupDate('dob',1945,NOW_Y-18,new Date(1989,3,22));
+setupDate('ap',1985,NOW_Y,new Date(2012,6,23));
+
+/* ---- rank buttons ---- */
+$('ranks').innerHTML=RANKS.map(r=>`<button type="button" data-r="${r.id}" aria-pressed="false">${r.id}<small>${k(r.pay)}</small></button>`).join('');
+function setRank(id){const r=RANKS.find(x=>x.id===id);if(r)$('topPay').value=r.pay.toLocaleString('en-US')}
+$('ranks').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;setRank(b.dataset.r);render()});
+setRank('LT');
+
+/* ---- service slider, 20 to 35 years. Whole-year milestones on the top row; 22 and 22½ sit side by side on the low row. ---- */
+const SVC_SPAN=180;
+const STOPS=[{m:240},{m:264,low:true,side:'nr'},{m:270,low:true,side:'nl'},{m:300},{m:360},{m:420}];
+(function(){
+  const sl=$('slider');
+  STOPS.forEach(s=>{
+    const pct=(s.m-240)/SVC_SPAN, el=document.createElement('div');
+    el.className='stop'+(s.low?' low':'')+(pct===0?' l':pct===1?' r':s.side?' '+s.side:'');
+    el.style.left=`calc(var(--thumb)/2 + (100% - var(--thumb)) * ${pct})`;
+    el.innerHTML=`<button type="button" data-m="${s.m}" aria-pressed="false">${fmtSvc(s.m)}<small>YRS</small></button>`;
+    sl.appendChild(el);
+  });
+  sl.addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(!b)return;$('svc').value=b.dataset.m;render()});
+})();
+
+function dates(){const dob=getDate('dob'),appt=getDate('ap');return {dob,appt,age:yrsBetween(dob,appt)}}
+
+function yearValues(apptY,lastY,grow){
+  const vals={},kind={};let lastTyped=null;
+  for(let y=apptY;y<=lastY;y++){
+    if(earn[y]>0){vals[y]=earn[y];kind[y]='typed';lastTyped=y}
+    else if(lastTyped!==null&&y>=NOW_Y){vals[y]=earn[lastTyped]*Math.pow(1+grow,y-lastTyped);kind[y]='proj'}
+    else{vals[y]=0;kind[y]='empty'}
+  }
+  return {vals,kind};
+}
+function fasFromEarnings(retDate,p){
+  const apptY=p.appt.getFullYear(), lastY=retDate.getFullYear()-1;
+  const {vals,kind}=yearValues(apptY,lastY,p.grow);
+  const rows=[];
+  for(let y=apptY;y<=lastY;y++){
+    const v=vals[y];let limit=null,counted=v;
+    if(y-2>=apptY&&vals[y-1]>0&&vals[y-2]>0){limit=1.1*(vals[y-1]+vals[y-2])/2;counted=Math.min(v,limit)}
+    rows.push({y,v,limit,counted,kind:kind[y]});
+  }
+  let best=null;
+  for(let i=0;i+2<rows.length;i++){
+    const w=rows.slice(i,i+3); if(w.some(r=>!(r.v>0))) continue;
+    const avg=(w[0].counted+w[1].counted+w[2].counted)/3;
+    if(!best||avg>best.fas) best={fas:avg,start:w[0].y,end:w[2].y,cut:w.reduce((s,r)=>s+(r.v-r.counted),0)};
+  }
+  return {rows,best,lastY};
+}
+
+function params(){
+  const d=dates();const typed=num($('fas').value);
+  return {fas:typed||EX_FAS,fasExample:!typed,age:d.age,dob:d.dob,appt:d.appt,ss:num($('ss').value),
+    bonusOn:$('bonusOn').checked,topPay:num($('topPay').value),
+    grow:num($('grow').value)/100,cpi:num($('cpi').value)/100,vsf:num($('vsf').value)};
+}
+
+function scenario(months,defer,p){
+  const S=months/12;
+  const retDate=addM(p.appt,months);
+  let fas;
+  if(source==='ws'){const r=fasFromEarnings(retDate,p);fas=r.best?r.best.fas:0}
+  else fas=p.fas*Math.pow(1+p.grow,S-20);
+  const baseFas=fas;
+  /* A10438/S9306: 5% at 25 years, 10% at 30, 15% at 35. Steps, no per-year increase in between. */
+  const bonusPct=!p.bonusOn?0:S>=35-1e-9?0.15:S>=30-1e-9?0.10:S>=25-1e-9?0.05:0;
+  const bonusAdd=bonusPct*p.topPay;
+  fas+=bonusAdd;
+  const base=0.5*fas;
+  const collectS=(defer&&S<25)?25:S;
+  const retAge=p.age+S, collectAge=p.age+collectS;
+  const before=Math.max(0,Math.round((25-collectS)*12));
+  const frac=before>=36?0:(36-before)/36;
+  const escRate=frac*Math.min(p.cpi,0.03);
+  let colaRate=Math.ceil(p.cpi*100/2*10-1e-9)/10/100; colaRate=Math.min(0.03,Math.max(0.01,colaRate));
+  const offset=0.5*p.ss*12;
+  const drop=p.vsf*Math.floor(months-240)/12;
+  const rows=[]; let pen=base, colaTot=0, offApplied=false, life=drop;
+  for(let t=0;;t++){
+    const age=retAge+t; if(age>90.0001) break;
+    let pay=0, v=0;
+    if(age>=collectAge-1e-9){
+      if(age-collectAge>=1-1e-9){
+        const yr=age-retAge;
+        const colaOk=(age>=62&&yr>=5)||(age>=55&&yr>=10);
+        const incE=pen*escRate, incC=colaOk?Math.min(pen,18000)*colaRate:0;
+        if(incC>incE){pen+=incC;colaTot+=incC}else pen+=incE;
+      }
+      if(age>=62&&!offApplied){pen=Math.max(0,pen-offset);offApplied=true}
+      pay=pen; v=age<62?Math.max(0,p.vsf-colaTot):p.vsf;
+    }
+    if(age<85+1e-9) life+=pay+v;
+    rows.push({age,pay,v});
+  }
+  const at=a=>rows.find(x=>x.age>=a-1e-9)||null;
+  return {months,S,fas,baseFas,bonusPct,bonusAdd,base,retDate,retAge,collectAge,frac,escRate,offset,drop,rows,at,life};
+}
+
+function escPill(f){
+  if(f<=0) return '<span class="pill none">No escalation</span>';
+  if(f>=1) return '<span class="pill full">Full escalation</span>';
+  return '<span class="pill part">'+Math.round(f*36)+'/36 escalation</span>';
+}
+const COLORS=['--steel','--gold','--sage','--accent'];
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function render(){
+  const p=params(); const m=+$('svc').value;
+  $('tierWarn').hidden=!(p.appt<new Date(2009,6,1));
+
+  $('svcOut').textContent=fmtSvc(m)+(m%12===0||m%12===6?' years':'');
+  $('fill').style.width=`calc((100% - var(--thumb)) * ${(m-240)/SVC_SPAN})`;
+  $('slider').querySelectorAll('.stop').forEach(el=>{const b=el.querySelector('button');const on=+b.dataset.m===m;b.setAttribute('aria-pressed',on);el.classList.toggle('on',on)});
+  const tp=num($('topPay').value);
+  $('ranks').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===tp));
+
+  const you=scenario(m,deferred,p);
+  $('svcDate').textContent='Retire '+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1);
+
+  if(source==='ws'){$('fas').value=you.fas?Math.round(you.baseFas).toLocaleString('en-US'):'';$('fas').disabled=true;$('fasHint').textContent='Calculated from your yearly earnings for each retirement date.'}
+  else{$('fas').disabled=false;$('fasHint').textContent='Average of your highest 3 years of pay, including overtime.'}
+
+  const warn=you.retAge>62?'<p class="warn">Retirement age would pass 62, the mandatory retirement age for FDNY uniformed members. Adjust your dates or years of service.</p>':'';
+  const tier2=p.appt<new Date(2009,6,1)?'<p class="warn"><strong>Tier 2 appointment date.</strong> These Tier 3 numbers won\'t match your pension.</p>':'';
+  const ex=(source==='type'&&p.fasExample)?'<p class="example">Using an example FAS of $150,000. Type your own estimate to make this yours.</p>':'';
+  const noFas=!you.fas?'<p class="warn">No FAS yet. Enter at least 3 years of earnings in the FAS calculator.</p>':'';
+  const gap=you.collectAge>you.retAge+0.01?`<div class="stat"><span class="k">Gap before checks</span><span class="v">${(you.collectAge-you.retAge).toFixed(1)} yrs</span><span class="s">Pension starts ${fmtMY(addM(p.appt,300))}</span></div>`:'';
+  const at62=you.at(62);
+  $('head').innerHTML=`
+    <div class="eyebrow">Your plan · retire ${fmtMY(you.retDate)} at ${fmtSvc(m)} years, age ${you.retAge.toFixed(1)}</div>
+    <div class="big">
+      <div><div class="n">${usd(you.base/12)}</div><div class="u">per month to start (${usd(you.base)}/yr)</div></div>
+      <div>${escPill(you.frac)}</div>
+    </div>
+    ${tier2}${ex}${warn}${noFas}
+    <div class="stats">
+      <div class="stat"><span class="k">Final avg salary</span><span class="v">${usd(you.fas)}</span><span class="s">${you.bonusAdd>0?'Includes longevity bonus':(source==='ws'?'From your earnings':'Pension = 50%')}</span></div>
+      ${you.bonusAdd>0?`<div class="stat"><span class="k">25-yr longevity bonus</span><span class="v bonus-on">+${usd(you.bonusAdd/2)}/yr</span><span class="s">${Math.round(you.bonusPct*100)}% of top pay added to FAS</span></div>`:''}
+      <div class="stat"><span class="k">VSF</span><span class="v">${usd(p.vsf)}/yr</span><span class="s">Paid each December/January</span></div>
+      <div class="stat"><span class="k">Banked variable</span><span class="v">${usd(you.drop)}</span><span class="s">Lump sum at retirement</span></div>
+      <div class="stat"><span class="k">Escalation</span><span class="v">${(you.escRate*100).toFixed(2)}%/yr</span><span class="s">At ${(p.cpi*100).toFixed(1)}% CPI</span></div>
+      <div class="stat"><span class="k">Pension at 62</span><span class="v">${at62&&at62.pay>0?usd(at62.pay):'–'}</span><span class="s">After ${usd(you.offset)}/yr SS offset</span></div>
+      ${gap}
+    </div>`;
+
+  const sc=[scenario(240,false,p),scenario(270,false,p),scenario(300,false,p)];
+  const isBench=[240,270,300].includes(m)&&!deferred;
+  const cols=sc.map((s,i)=>({s,name:['20 yrs','22½ yrs','25 yrs'][i],c:COLORS[i]}));
+  if(!isBench) cols.push({s:you,name:'Your plan',c:COLORS[3],you:true});
+  const val=(s,a)=>{const r=s.at(a);return r&&r.pay>0?usd(r.pay):'–'};
+  const line=(lab,f)=>`<tr><td>${lab}</td>${cols.map(c=>`<td class="${c.you?'you':''}">${f(c.s)}</td>`).join('')}</tr>`;
+  $('cmp').classList.toggle('wide',cols.length>3);$('swipe').classList.toggle('on',cols.length>3);
+  $('cmp').innerHTML=`<thead><tr><th>Retire at</th>${cols.map(c=>`<th class="${c.you?'you':''}"><span class="sw" style="background:var(${c.c})"></span>${c.name}</th>`).join('')}</tr></thead><tbody>
+    ${line('Retirement date',s=>fmtMY(s.retDate))}
+    ${line('Age at retirement',s=>s.retAge.toFixed(1))}
+    ${line('Final avg salary (before bonus)',s=>usd(s.baseFas))}
+    ${line('25-year longevity bonus',s=>s.bonusAdd>0?`<span class="bonus-on">+${usd(s.bonusAdd)} FAS (${Math.round(s.bonusPct*100)}%)<br>+${usd(s.bonusAdd/2)}/yr pension</span>`:(p.bonusOn?'Needs 25 yrs':'Off'))}
+    ${line('FAS used for pension',s=>usd(s.fas))}
+    ${line('Pension, first year',s=>usd(s.base))}
+    ${line('Monthly, first year',s=>usd(s.base/12))}
+    ${line('Escalation rate',s=>(s.escRate*100).toFixed(2)+'%')}
+    ${line('Banked variable lump sum',s=>usd(s.drop))}
+    ${line('Pension at 55',s=>val(s,55))}
+    ${line('Pension at 62 (after offset)',s=>val(s,62))}
+    ${line('Pension at 75',s=>val(s,75))}
+    ${line('Total collected through age 85',s=>usd(s.life))}
+  </tbody>`;
+  renderEscalation(cols,p);
+  renderWorksheet(p,m);
+}
+
+/* ---------- escalation chart ---------- */
+let chartState=null;
+function renderEscalation(cols,p){
+  const cpi=(Math.min(p.cpi,0.03)*100).toFixed(1);
+  const f=s=>s.rows.find(r=>r.pay>0);
+  $('escLede').textContent=`At 25 years your whole pension grows with inflation, up to 3% a year, compounding for life. Retire earlier and it barely moves, apart from a small COLA on the first $18,000 later on. At ${cpi}% inflation the gap widens every year you're retired.`;
+  $('escCards').innerHTML=cols.filter(c=>!c.you).map(c=>{
+    const s=c.s,a=f(s),e=s.at(85);if(!a||!e) return '';
+    const g=e.pay-a.pay;
+    return `<div class="esc" style="--c:var(${c.c})"><span class="t">Retire at ${c.name}</span>
+      <span class="flow">${usd(a.pay)} → ${usd(e.pay)}</span>
+      <span class="g">${g>=0?'+':''}${usd(g)}/yr</span>
+      <span class="s">First-year pension vs. pension at 85, after the Social Security offset. Escalation ${(s.escRate*100).toFixed(2)}%/yr.</span></div>`}).join('');
+  drawChart(cols);
+}
+function drawChart(cols){
+  const cw=$('chartwrap').clientWidth||720;
+  const W=Math.max(300,Math.min(1000,cw)),narrow=W<520,H=narrow?280:340,L=narrow?46:60,R=narrow?48:64,T=18,B=36;
+  const minA=Math.floor(Math.min(...cols.map(c=>c.s.retAge))), maxA=90;
+  let maxY=0; cols.forEach(c=>c.s.rows.forEach(r=>{maxY=Math.max(maxY,r.pay+r.v)}));
+  const step=maxY>200000?50000:maxY>80000?25000:10000;
+  const top=Math.ceil(maxY*1.05/step)*step||step;
+  const x=a=>L+(a-minA)/(maxA-minA)*(W-L-R), y=v=>T+(1-v/top)*(H-T-B);
+  const ink=cssv('--muted'), ln=cssv('--line'), fg=cssv('--ink');
+  let g='';
+  for(let v=0;v<=top;v+=step){g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="${ln}" stroke-width="${v?1:1.5}"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" fill="${ink}" font-size="11" font-family="Source Sans 3,Segoe UI,Arial,sans-serif">${k(v)}</text>`}
+  for(let a=Math.ceil(minA/5)*5;a<=maxA;a+=(narrow?10:5)){g+=`<text x="${x(a)}" y="${H-14}" text-anchor="middle" fill="${ink}" font-size="11" font-family="Source Sans 3,Segoe UI,Arial,sans-serif">${a}</text>`}
+  g+=`<text x="${W-R}" y="${H-1}" text-anchor="end" fill="${ink}" font-size="11">Age</text>`;
+  if(62>minA) g+=`<line x1="${x(62)}" x2="${x(62)}" y1="${T}" y2="${H-B}" stroke="${ink}" stroke-dasharray="2 4" opacity=".7"/><text x="${x(62)+5}" y="${H-B-6}" fill="${ink}" font-size="11">62 · SS offset</text>`;
+  const seg=(rows,i)=>i<rows.length-1?x(rows[i+1].age):x(maxA);
+  const path=s=>s.rows.map((r,i)=>(i?'L':'M')+x(r.age).toFixed(1)+' '+y(r.pay+r.v).toFixed(1)+' H'+seg(s.rows,i).toFixed(1)).join(' ');
+  // shade the escalation gap between the 25-year and 20-year lines
+  const r20=cols[0].s.rows,r25=cols[2].s.rows;
+  if(r25.length&&r20.length){
+    const a0=r25[0].age;
+    let d=r25.map((r,i)=>(i?'L':'M')+x(r.age).toFixed(1)+' '+y(r.pay+r.v).toFixed(1)+' H'+seg(r25,i).toFixed(1)).join(' ');
+    const back=r20.map((r,i)=>({r,x0:x(Math.max(r.age,a0)),x1:seg(r20,i)})).filter(o=>o.x1>x(a0)).reverse();
+    back.forEach(o=>{d+=` L${o.x1.toFixed(1)} ${y(o.r.pay+o.r.v).toFixed(1)} H${o.x0.toFixed(1)}`});
+    g+=`<path d="${d} Z" fill="${cssv('--sage')}" fill-opacity=".15" stroke="none"/>`;
+  }
+  cols.forEach(c=>{g+=`<path d="${path(c.s)}" fill="none" stroke="${cssv(c.c)}" stroke-width="${c.you?3:2.5}" stroke-linejoin="round" ${c.you?'stroke-dasharray="7 5"':''}/>`});
+  const ends=cols.map(c=>{const r=c.s.rows[c.s.rows.length-1];return {c,v:r?r.pay+r.v:0,yy:r?y(r.pay+r.v):0}}).sort((a,b)=>a.yy-b.yy);
+  for(let i=1;i<ends.length;i++) if(ends[i].yy-ends[i-1].yy<14) ends[i].yy=ends[i-1].yy+14;
+  ends.forEach(e=>{g+=`<text x="${W-R+6}" y="${e.yy+4}" fill="${cssv(e.c.c)}" font-size="${narrow?11:12}" font-weight="600" font-family="Source Sans 3,Segoe UI,Arial,sans-serif">${k(e.v)}</text>`});
+  g+=`<line id="hx" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="${fg}" stroke-width="1" visibility="hidden"/><g id="hd"></g>`;
+  g+=`<rect id="hit" x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" style="cursor:crosshair"/>`;
+  $('chart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Yearly pension plus VSF by age for each retirement scenario">${g}</svg>`;
+  $('legend').innerHTML=cols.map(c=>`<span><span class="sw" style="background:var(${c.c})"></span>${c.name}</span>`).join('')+`<span><span class="sw" style="background:var(--sage);opacity:.35"></span>Escalation gap, 25 vs 20 years</span>`;
+  chartState={cols,x,y,minA,maxA,W};
+  const svg=$('chart').querySelector('svg'), hit=$('hit');
+  const move=e=>{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());
+    showTip(Math.floor(Math.max(minA,Math.min(maxA,minA+(q.x-L)/(W-L-R)*(maxA-minA)))))};
+  hit.addEventListener('pointermove',move);hit.addEventListener('pointerdown',move);
+  $('chartwrap').addEventListener('pointerleave',hideTip);
+}
+function valAt(s,age){let r=null;for(const x of s.rows){if(x.age<=age+0.999)r=x}return r}
+function showTip(age){
+  const {cols,x,y,W}=chartState;
+  const ax=x(age+0.5);
+  const hx=$('hx');hx.setAttribute('x1',ax);hx.setAttribute('x2',ax);hx.setAttribute('visibility','visible');
+  let dots='',rows='';
+  cols.forEach(c=>{const r=valAt(c.s,age);const tot=r?r.pay+r.v:0;
+    if(r&&tot>0) dots+=`<circle cx="${ax}" cy="${y(tot)}" r="4.5" fill="${cssv(c.c)}" stroke="${cssv('--surface')}" stroke-width="2"/>`;
+    rows+=`<div class="r"><span><span class="sw" style="background:var(${c.c})"></span>${c.name}</span><span>${r&&tot>0?usd(tot):'not retired'}</span></div>`});
+  $('hd').innerHTML=dots;
+  const tip=$('tip');tip.innerHTML=`<b>Age ${age}</b>${rows}<div class="hint">Pension + VSF for the year</div>`;tip.hidden=false;
+  const box=$('chartwrap').getBoundingClientRect(),px=ax/W*box.width,tw=tip.offsetWidth;
+  tip.style.left=(px+12+tw>box.width?Math.max(0,px-12-tw):px+12)+'px';
+}
+function hideTip(){$('tip').hidden=true;$('hx')?.setAttribute('visibility','hidden');if($('hd'))$('hd').innerHTML=''}
+
+/* ---------- FAS worksheet ---------- */
+let wsKey='';
+function renderWorksheet(p,m){
+  const retDate=addM(p.appt,m);
+  const apptY=p.appt.getFullYear();
+  const showTo=Math.max(retDate.getFullYear(),addM(p.appt,300).getFullYear());
+  const d=(lab,date)=>`<div class="date"><span class="k">${lab}</span><span class="v">${fmtD(date)}</span><span class="s">Age ${yrsBetween(p.dob,date).toFixed(1)}</span></div>`;
+  const mand=new Date(p.dob.getFullYear()+62,p.dob.getMonth(),p.dob.getDate());
+  $('dates').innerHTML=d('20 years',addM(p.appt,240))+d('22 years',addM(p.appt,264))+d('25 years · full escalation',addM(p.appt,300))+d('Your plan',retDate)+`<div class="date"><span class="k">Mandatory retirement</span><span class="v">${fmtD(mand)}</span><span class="s">Age 62</span></div>`;
+
+  const key=apptY+'-'+showTo;
+  if(key!==wsKey){
+    wsKey=key;
+    let h='<thead><tr><th>Year</th><th>Earnings</th><th>10% cap</th><th>Counts</th></tr></thead><tbody>';
+    for(let y=apptY;y<=showTo;y++){
+      h+=`<tr id="r-${y}"><td><span class="yr">${y}</span><span class="bslot"></span><span class="tag" id="t-${y}"></span></td>
+        <td><div class="inp"><span>$</span><input id="e-${y}" data-y="${y}" inputmode="numeric" aria-label="Earnings for ${y}"></div></td>
+        <td id="l-${y}"></td><td id="c-${y}"></td></tr>`;
+    }
+    $('ws').innerHTML=h+'</tbody>';
+    $('ws').querySelectorAll('input').forEach(inp=>{
+      const y=+inp.dataset.y;
+      if(earn[y]) inp.value=Math.round(earn[y]).toLocaleString('en-US');
+      inp.addEventListener('input',()=>{const n=num(inp.value);if(n>0)earn[y]=n;else delete earn[y];render()});
+      inp.addEventListener('blur',()=>{const n=num(inp.value);inp.value=n?Math.round(n).toLocaleString('en-US'):''});
+    });
+  }
+
+  const res=fasFromEarnings(retDate,p);
+  const full=fasFromEarnings(new Date(showTo+2,0,1),p);
+  for(let y=apptY;y<=showTo;y++){
+    const r=full.rows.find(x=>x.y===y);
+    const row=$('r-'+y), inp=$('e-'+y);
+    const used=res.best&&y>=res.best.start&&y<=res.best.end&&y<=res.lastY;
+    const proby=y-apptY<5;
+    const after=y>res.lastY;
+    row.className=(used?'win ':'')+(proby&&!used?'proby ':'')+(r&&r.kind==='proj'?'proj ':'')+(after?'after':'');
+    row.querySelector('.bslot').innerHTML=used?'<span class="badge best">Best 3</span>':(proby?'<span class="badge proby">Proby yr</span>':'');
+    let tag='';
+    if(y===apptY) tag='Appointed '+fmtMY(p.appt);
+    else if(y===retDate.getFullYear()) tag='Retirement year, not counted';
+    else if(after) tag='After retirement';
+    else if(r&&r.kind==='proj') tag='Projected';
+    else if(y===NOW_Y) tag='This year, enter a full-year estimate';
+    $('t-'+y).textContent=tag;
+    if(document.activeElement!==inp) inp.placeholder=r&&r.kind==='proj'?Math.round(r.v).toLocaleString('en-US'):'';
+    $('l-'+y).textContent=r&&r.limit?usd(r.limit):'–';
+    const cut=r&&r.v>r.counted+0.5;
+    $('c-'+y).innerHTML=r&&r.v>0?usd(r.counted)+(cut?`<span class="cut">${usd(r.v-r.counted)} over cap</span>`:''):'–';
+  }
+
+  const b=res.best;
+  $('wsSum').innerHTML=b?`
+    <div class="eyebrow">Your FAS if you retire ${fmtMY(retDate)}</div>
+    <div class="n">${usd(b.fas)}</div>
+    <div><span class="badge best" style="margin:0">Best 3 years · ${b.start}–${b.end}</span></div>
+    <div class="hint">Average of the green rows${b.cut>0?`. The 10% cap cut ${usd(b.cut)} from those years, lowering your FAS by ${usd(b.cut/3)}.`:'. No earnings cut by the 10% cap.'}</div>
+    <div class="stat"><span class="k">Pension at 50%</span><span class="v">${usd(b.fas/2)}/yr</span><span class="s">${usd(b.fas/24)} per month</span></div>
+    <div class="btnrow">
+      ${source==='ws'?'<button type="button" class="btn ghost" id="useType">Switch back to my estimate</button>':'<button type="button" class="btn red" id="useWs">Use this FAS in the calculator</button>'}
+      <button type="button" class="btn ghost" id="clearEx">Clear all earnings</button>
+    </div>
+    <div class="hint">Projected years use ${(p.grow*100).toFixed(1)}% growth from your last entered year. The example earnings are a sample member; clear them and enter yours.</div>`
+  :`<div class="eyebrow">Your FAS</div><p class="hint" style="margin:0">Enter at least 3 consecutive full calendar years of earnings before your retirement year.</p>
+    <div class="btnrow"><button type="button" class="btn ghost" id="clearEx">Clear all earnings</button></div>`;
+  $('useWs')?.addEventListener('click',()=>setSource('ws',true));
+  $('useType')?.addEventListener('click',()=>setSource('type'));
+  $('clearEx').addEventListener('click',()=>{for(const y in earn) delete earn[y];$('ws').querySelectorAll('input').forEach(i=>i.value='');render()});
+}
+
+/* ---------- wiring ---------- */
+const smooth=()=>matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
+function openFas(){$('fasw').hidden=false;$('openFas').textContent='Close FAS calculator';render();$('fasw').scrollIntoView({behavior:smooth(),block:'start'})}
+function closeFas(){$('fasw').hidden=true;$('openFas').textContent='Calculate my FAS'}
+$('openFas').addEventListener('click',()=>$('fasw').hidden?openFas():closeFas());
+$('closeFas').addEventListener('click',()=>{closeFas();$('form').scrollIntoView({behavior:smooth(),block:'start'})});
+function setSource(s,jump){source=s;$('srcType').setAttribute('aria-pressed',s==='type');$('srcWs').setAttribute('aria-pressed',s==='ws');
+  if(s==='type') $('fas').value='';
+  render();
+  if(jump) document.querySelector('.grid').scrollIntoView({behavior:smooth(),block:'start'});
+}
+$('srcType').addEventListener('click',()=>setSource('type'));
+$('srcWs').addEventListener('click',()=>{setSource('ws');if($('fasw').hidden)openFas()});
+['fas','ss','grow','cpi','vsf','topPay','bonusOn'].forEach(id=>$(id).addEventListener('input',render));
+$('svc').addEventListener('input',render);
+function setDef(v){deferred=v;$('nowBtn').setAttribute('aria-pressed',!v);$('defBtn').setAttribute('aria-pressed',v);render()}
+$('nowBtn').addEventListener('click',()=>setDef(false));
+$('defBtn').addEventListener('click',()=>setDef(true));
+['fas','ss','vsf','topPay'].forEach(id=>$(id).addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?n.toLocaleString('en-US'):''}));
+$('form').addEventListener('submit',e=>e.preventDefault());
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',render);
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+let rz,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(render,150)});
+render();
+</script>
+</body>
+</html>
