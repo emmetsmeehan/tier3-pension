@@ -304,6 +304,43 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .warn{font-size:15.5px;color:var(--accent);font-weight:600}
 .example{font-size:15.5px;color:var(--gold);font-weight:600}
 .billnote{font-size:15px;border-radius:var(--r-sm);padding:8px 12px;background:color-mix(in srgb,var(--gold) 12%,var(--surface));color:var(--ink)}
+.k2{font-weight:700;font-size:17px;margin-top:2px}
+.sub2{font-size:17px;color:var(--muted);margin-top:-6px}
+.sub2 b{color:var(--ink)}
+.brk{border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.brow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line)}
+.brow:first-child{border-top:0}
+.brow .bl{display:grid;gap:1px;min-width:0}
+.brow b{font-size:17px}
+.brow small{font-size:14px;color:var(--muted);line-height:1.3}
+.brow .amt{display:grid;justify-items:end;text-align:right;white-space:nowrap}
+.brow .amt b{font-size:19px}
+.brow.tot{background:var(--soft)}
+.brow.tot b{font-size:20px;font-weight:800}
+.incl{display:flex;gap:8px;align-items:flex-start;padding:0 14px 12px;font-size:14.5px;color:var(--sage)}
+.incl svg{width:18px;height:18px;flex:none;margin-top:2px;stroke-width:3}
+.incl span{color:var(--ink)}
+.lump{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;border-radius:var(--r);padding:14px 16px;background:color-mix(in srgb,var(--shine) 14%,var(--surface));border:1.5px solid color-mix(in srgb,var(--shine) 55%,transparent)}
+.lump .li{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--shine),var(--gold));color:#fff}
+.lump div{display:grid;gap:1px}
+.lump span{font-size:15px;font-weight:600;color:var(--muted)}
+.lump b{font-size:26px;font-weight:800;line-height:1.1}
+.lump small{font-size:14px;color:var(--muted)}
+.growbox{border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.growbtn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;background:var(--surface);border:0;padding:12px 14px;cursor:pointer;min-height:56px}
+.growbtn b{display:block;font-size:17px}
+.growbtn small{font-size:14px;color:var(--muted)}
+.growbtn .chev{flex:none;width:10px;height:10px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s}
+.growbtn[aria-expanded="true"] .chev{transform:rotate(225deg) translate(-2px,-2px)}
+.growtbl{max-height:300px;overflow:auto;border-top:1px solid var(--line)}
+.growtbl table{width:100%;border-collapse:collapse;font-size:15px}
+.growtbl th{position:sticky;top:0;background:var(--soft);font-size:13px;color:var(--muted);font-weight:600;text-align:right;padding:8px 10px}
+.growtbl th:first-child,.growtbl td:first-child{text-align:left}
+.growtbl td{padding:5px 10px;border-top:1px solid var(--line);text-align:right;font-weight:600;white-space:nowrap}
+.growtbl .ag{color:var(--muted);font-weight:400}
+.growtbl td.offn{white-space:normal;text-align:left;font-size:13.5px;font-weight:600;color:var(--accent)}
+.growtbl td small{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
+.growtbl tr.offrow td{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
 .goal{display:grid;gap:12px}
 .goal .gh{display:flex;gap:10px;align-items:center}
 .goal .gh .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--steel) 14%,var(--surface));color:var(--steel)}
@@ -373,6 +410,7 @@ body.has-pbar .app{padding-bottom:110px}
   .ws th{padding:10px 8px}
   .stop button{font-size:16px}
 }
+@media (max-width:360px){#cmp th,#cmp td{font-size:12px;padding:7px 3px}#cmp th:first-child,#cmp td:first-child{width:25%}.growtbl td,.growtbl th{padding-left:7px;padding-right:7px}}
 </style>
 </head>
 <body>
@@ -1076,19 +1114,29 @@ function renderP(){
       </div>
       <p class="hint">Needs approval from the Pension Fund's Medical Board and Board of Trustees. No VSF on a disability pension. Health insurance continues regardless of years.</p>`;
   } else {
+    const totY=you.base+VSF,inf=num(p.cpi);
+    const growT=you.frac>=1?`Your pension grows ${(you.escRate*100).toFixed(1).replace(/\.0$/,'')}% a year`:you.frac>0?`Your pension grows ${(you.escRate*100).toFixed(2).replace(/0$/,'')}% a year`:'Your pension won’t grow with inflation';
+    const growS=you.frac>=1?`Full escalation, assuming ${inf}% inflation.`:you.frac>0?`${Math.round(you.frac*36)}/36 of full escalation, assuming ${inf}% inflation.`:'No escalation. Only a small COLA on the first $18,000 later on.';
+    const ry=you.retDate.getFullYear();
+    const trows=you.rows.filter(r=>r.age<=85.0001).map((r,t)=>{const a=Math.floor(r.age+1e-9),off=a>=62&&Math.floor(r.age-1+1e-9)<62&&you.offset>0;
+      return `<tr${off?' class="offrow"':''}><td>${ry+t} <span class="ag">· ${a}</span></td><td>${usd(r.pay/12)}</td><td>${usd(r.pay+r.v)}</td></tr>`+(off?`<tr class="offrow"><td colspan="3" class="offn">At 62 the pension drops ${usd(you.offset/12)} a month for the Social Security offset</td></tr>`:'')}).join('');
     head.innerHTML=`<div class="eyebrow">Retire ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
-      <div class="bignum">${usd(you.base/12)}<span>/month</span></div>
-      <div class="hint">${usd(you.base)} a year to start · 50% of ${usd(you.fas)}</div>
-      ${escPill(you.frac)}
+      <div class="k2">Your first year of retirement</div>
+      <div class="bignum">${usd(totY)}<span>/year</span></div>
+      <div class="sub2">About <b>${usd(totY/12)} a month</b>, pension plus VSF</div>
       ${billsOnNote(c)}${tier2}${warn}
-      <div class="stats">
-        <div class="stat"><span class="k">Final average salary</span><span class="v">${usd(you.fas)}</span><span class="s">Best 3 years: ${you.best.start}–${you.best.end}${you.bonusAdd>0?' + longevity bonus':''}</span></div>
-        <div class="stat"><span class="k">VSF</span><span class="v">${usd(VSF)}/yr</span><span class="s">Paid every December or January</span></div>
-        <div class="stat"><span class="k">Banked variable</span><span class="v">${usd(you.drop)}</span><span class="s">Lump sum when you retire</span></div>
-        <div class="stat"><span class="k">Escalation</span><span class="v">${(you.escRate*100).toFixed(2).replace(/\.00$/,'')}%/yr</span><span class="s">At ${num(p.cpi)}% inflation</span></div>
-        ${you.bonusAdd>0?`<div class="stat"><span class="k">Longevity bonus</span><span class="v bonus-on">+${usd(you.bonusAdd/2)}/yr</span><span class="s">${Math.round(you.bonusPct*100)}% of your rank’s top pay</span></div>`:''}
-        <div class="stat"><span class="k">At 62</span><span class="v">${at62&&at62.pay>0?usd(at62.pay/12)+'/mo':'–'}</span><span class="s">After the ${usd(you.offset/12)}/mo Social Security offset</span></div>
+      <div class="brk">
+        <div class="brow"><div class="bl"><b>Pension</b><small>50% of your ${usd(you.fas)} final average salary</small></div><div class="amt"><b>${usd(you.base/12)}/mo</b><small>${usd(you.base)}/yr</small></div></div>
+        ${you.bonusAdd>0?`<div class="incl">${ICON.check}<span>Includes the <b>longevity bonus</b>: +${usd(you.bonusAdd/2)} a year (${Math.round(you.bonusPct*100)}% of your rank’s top pay added to your salary)</span></div>`:''}
+        <div class="brow"><div class="bl"><b>VSF</b><small>One payment every December or January</small></div><div class="amt"><b>${usd(VSF)}/yr</b><small>about ${usd(VSF/12)}/mo</small></div></div>
+        <div class="brow tot"><div class="bl"><b>Total</b></div><div class="amt"><b>${usd(totY/12)}/mo</b><small>${usd(totY)}/yr</small></div></div>
+      </div>
+      ${you.drop>0?`<div class="lump"><span class="li">${ICON.up}</span><div><span>Plus, the day you retire</span><b>${usd(you.drop)} lump sum</b><small>Your banked variable: one $12,000 VSF payment for each full year past 20.</small></div></div>`:''}
+      <div class="growbox">
+        <button type="button" class="growbtn" id="growBtn" aria-expanded="${growOpen}"><span><b>${growT}</b><small>${growS} Tap to see each year.</small></span><span class="chev"></span></button>
+        <div class="growtbl"${growOpen?'':' hidden'}><table><thead><tr><th>Year · age</th><th>Pension/mo</th><th>With VSF/yr</th></tr></thead><tbody>${trows}</tbody></table></div>
       </div>`;
+    $('growBtn').addEventListener('click',()=>{growOpen=!growOpen;renderP()});
   }
   renderGoal(c,m,you);
   updateBar(you,m);
@@ -1323,11 +1371,11 @@ $('shotFile').addEventListener('change',async e=>{
 });
 
 /* ---------- sticky result bar on phones ---------- */
-let headVisible=false;
+let headVisible=false,growOpen=false;
 new IntersectionObserver(es=>{es.forEach(e=>{headVisible=e.isIntersecting});updateBar()}).observe($('head'));
 let barData=null;
 function updateBar(you,m){
-  if(you!==undefined) barData=you?{n:usd(you.base/12)+'/month',s:(ST.p.dis?'3/4s · ':'Retire ')+fmtMY(you.retDate)+' · '+fmtSvcLong(m)}:null;
+  if(you!==undefined) barData=you?{n:usd((you.base+(ST.p.dis?0:VSF))/12)+'/month',s:(ST.p.dis?'3/4s · ':'Retire ')+fmtMY(you.retDate)+' · '+fmtSvcLong(m)}:null;
   const show=barData&&!headVisible&&current==='personal';
   $('pbar').classList.toggle('off',!show);document.body.classList.toggle('has-pbar',current==='personal');
   if(barData){$('pbarN').textContent=barData.n;$('pbarS').textContent=barData.s}
