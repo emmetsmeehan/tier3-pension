@@ -49,7 +49,10 @@ h2{font-weight:700;font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
 .inp:focus-within{border-color:var(--steel);box-shadow:0 0 0 2px color-mix(in srgb,var(--steel) 30%,transparent)}
 .inp input:disabled{color:var(--muted)}
 .dsel{display:grid;grid-template-columns:1.5fr .9fr 1.1fr;gap:8px}
-.dsel select{font:500 16px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 8px;min-width:0;width:100%}
+.dsel select{font:500 16px var(--body);color:var(--ink);background-color:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 32px 10px 10px;min-width:0;width:100%;-webkit-appearance:none;appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 2px),transparent calc(50% + 2px)),linear-gradient(135deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 2px),transparent calc(50% + 2px));
+  background-size:8px 8px,8px 8px;background-position:calc(100% - 22px) 50%,calc(100% - 14px) 50%;background-repeat:no-repeat}
+@media (max-width:360px){.dsel select{padding:10px 24px 10px 8px;background-size:6px 6px,6px 6px;background-position:calc(100% - 16px) 50%,calc(100% - 10px) 50%}}
 .dsel select:focus-visible{outline:2px solid var(--steel);outline-offset:1px}
 .tierbox{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border:2px solid var(--accent);border-radius:4px;padding:10px 12px;display:grid;gap:2px}
 .tierbox b{font-size:17px;color:var(--accent)}
@@ -272,8 +275,8 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
         <div class="inp"><span>$</span><input id="fas" inputmode="numeric" placeholder="150,000" aria-labelledby="srcLbl"></div>
         <div class="hint" id="fasHint">Average of your highest 3 years of pay, including overtime.</div>
         <div class="findout">
-          <p><strong>No idea what your final average salary will be?</strong> Let's find out. Enter what you've earned each year and we'll do the math.</p>
-          <div><button type="button" class="btn" id="openFas">Calculate my FAS</button></div>
+          <p><strong>Don't know your final average salary? Let's find out.</strong><br>Enter what you've earned each year and we'll do the math.</p>
+          <div><button type="button" class="btn" id="openFas">Enter my real earnings</button></div>
         </div>
       </div>
 
@@ -738,7 +741,7 @@ function renderWorksheet(p,m){
 /* ---------- wiring ---------- */
 const smooth=()=>matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
 function openFas(){$('fasw').hidden=false;$('openFas').textContent='Close FAS calculator';render();$('fasw').scrollIntoView({behavior:smooth(),block:'start'})}
-function closeFas(){$('fasw').hidden=true;$('openFas').textContent='Calculate my FAS'}
+function closeFas(){$('fasw').hidden=true;$('openFas').textContent='Enter my real earnings'}
 $('openFas').addEventListener('click',()=>$('fasw').hidden?openFas():closeFas());
 $('closeFas').addEventListener('click',()=>{closeFas();$('form').scrollIntoView({behavior:smooth(),block:'start'})});
 function setSource(s,jump){source=s;$('srcType').setAttribute('aria-pressed',s==='type');$('srcWs').setAttribute('aria-pressed',s==='ws');
