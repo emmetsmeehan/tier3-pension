@@ -210,6 +210,17 @@ thead th{font-weight:700;font-size:15px;vertical-align:bottom}
 .faq p{margin:0 0 0 1.25em;color:var(--muted);font-size:15px;max-width:70ch}
 summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-radius:2px}
 
+.ask{display:grid;gap:12px;max-width:80ch;min-width:0}
+.ask p{margin:0}
+.ask form{display:grid;gap:14px;position:relative}
+.ask textarea{font:400 16px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px;width:100%;box-sizing:border-box;min-height:120px;resize:vertical}
+.ask textarea:focus,.ask .inp:focus-within{outline:none;border-color:var(--steel);box-shadow:0 0 0 2px color-mix(in srgb,var(--steel) 30%,transparent)}
+.ask .inp input{padding-left:10px;font-weight:400}
+.ask .hp{position:absolute;left:-9999px}
+.ask .msg{margin:0;font-size:15px}
+.ask .msg.ok{color:var(--sage)}
+.ask .msg.err{color:var(--accent)}
+.ask .btn:disabled{opacity:.6;cursor:default}
 .notes{display:grid;gap:8px;font-size:14.5px;color:var(--muted);max-width:80ch}
 .notes p{margin:0}
 .notes strong{color:var(--ink)}
@@ -381,9 +392,28 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <details><summary>What happens to my pension at 62?</summary><p>It drops by half of your Social Security benefit. Enter your own estimate from ssa.gov to see the effect on your numbers.</p></details>
       <details><summary>Is the 25-year longevity bonus real?</summary><p>Not yet. It is a bill in Albany (A10438/S9306) that has not passed. Uncheck the box in the calculator to see your numbers without it.</p></details>
       <details><summary>What are the VSF and the banked variable?</summary><p>The Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. For each year you work past 20, one payment is banked and paid to you as a lump sum when you retire.</p></details>
-      <details><summary>Is anything I type saved or sent anywhere?</summary><p>No. The math runs in your browser, and this page does not store or send what you enter.</p></details>
+      <details><summary>Is anything I type saved or sent anywhere?</summary><p>No. The math runs in your browser, and this page does not store or send the numbers you enter. The only thing ever sent is a question or suggestion you choose to submit in the box below.</p></details>
       <details><summary>Is this official?</summary><p>No. It is an unofficial planning tool and is not affiliated with the FDNY or the NYC Fire Pension Fund. For an official estimate, call the Fund at 929-436-0099.</p></details>
     </div>
+  </section>
+
+  <section class="ask" aria-labelledby="askTitle">
+    <h2 id="askTitle">Questions or suggestions</h2>
+    <p class="hint">Spotted a mistake, have a question, or want something added? Send a note. Please don't include personal details like your pension or Social Security number.</p>
+    <form id="askForm" novalidate>
+      <div class="field">
+        <label for="askMsg">Your question or suggestion</label>
+        <textarea id="askMsg" name="message" maxlength="4000" required></textarea>
+      </div>
+      <div class="field">
+        <label for="askEmail">Your email (optional)</label>
+        <div class="inp"><input id="askEmail" name="email" type="email" inputmode="email" autocomplete="email"></div>
+        <div class="hint">Only if you'd like a reply.</div>
+      </div>
+      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" aria-hidden="true">
+      <div><button type="submit" class="btn" id="askBtn">Submit</button></div>
+      <p class="msg" id="askStatus" role="status" hidden></p>
+    </form>
   </section>
 
   <section class="notes">
@@ -775,6 +805,28 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',render);
 new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 let rz,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(render,150)});
 render();
+
+/* ---- question box: sends to the owner's inbox through Web3Forms ---- */
+const ASK_KEY='0ceb209d-a4a8-4856-90d8-810e48db9ba1';
+const ASK_URL='https://api.web3forms.com/submit';
+$('askForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const st=$('askStatus'),btn=$('askBtn'),msg=$('askMsg').value.trim(),email=$('askEmail').value.trim();
+  const show=(t,cls)=>{st.textContent=t;st.className='msg '+cls;st.hidden=false};
+  if(!msg){show('Please write your question or suggestion first.','err');$('askMsg').focus();return}
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){show('That email address doesn\'t look right. Fix it or leave it blank.','err');$('askEmail').focus();return}
+  btn.disabled=true;btn.textContent='Sending…';st.hidden=true;
+  try{
+    const r=await fetch(ASK_URL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({access_key:ASK_KEY,subject:'Tier 3 calculator: new question',from_name:'Tier 3 pension calculator',message:msg,email:email||undefined,replyto:email||undefined,botcheck:e.target.botcheck.checked})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||j.success===false) throw new Error();
+    e.target.reset();
+    show('Sent. Thanks, your note is on its way.','ok');
+  }catch{
+    show('Sorry, that didn\'t send. Check your connection and try again. Your message is still in the box.','err');
+  }finally{btn.disabled=false;btn.textContent='Submit'}
+});
 </script>
 </body>
 </html>
