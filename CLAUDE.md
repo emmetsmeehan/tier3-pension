@@ -65,7 +65,7 @@ The rate schedule PDFs are not in this repository. When a new contract or schedu
 
 ## Open items
 
-- **Question box.** The owner wants a text box with a Submit button that emails him what people write. It needs a form-to-email service: he signs up with the address he wants questions sent to and supplies the form's endpoint. Then build the box on the page, with clear sent and failed states.
+- **Question box.** Built on the branch, not yet live: a "Questions or suggestions" section after the FAQ that posts to Web3Forms (`ASK_KEY` near the end of the script). It goes live once the owner supplies the access key from web3forms.com tied to the address he wants questions sent to. The FAQ answer about nothing being sent was updated to mention the box.
 - **Domain name.** He wants a cleaner address than the github.io one. Not bought yet.
 - **Credit.** Whether the page names him or stays anonymous is undecided. Do not add his name to the page until he says so.
 - **Phone check.** The live site has not been checked on an actual phone since the move to GitHub Pages.
