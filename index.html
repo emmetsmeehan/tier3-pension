@@ -195,10 +195,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .law .dot{background:linear-gradient(145deg,var(--shine),var(--gold));color:#fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--shine) 25%,transparent)}
 .law .dot svg{stroke-width:1.8}
 .law .lbl{color:var(--gold);font-size:19px}
-.confetti{position:absolute;inset:0;pointer-events:none}
-.confetti i{position:absolute;width:6px;height:10px;border-radius:2px;left:17px;top:15px;opacity:0;animation:pop 1.6s ease-out .3s forwards}
-@keyframes pop{0%{opacity:0;transform:translate(0,0) rotate(0)}20%{opacity:1}100%{opacity:1;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
-@media (prefers-reduced-motion:reduce){.now .dot::after{animation:none;opacity:0}.confetti i{animation:none;opacity:1;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){.now .dot::after{animation:none;opacity:0}}
 .billfoot{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px}
 .billfoot .read{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:16px}
 .billfoot .read a{display:inline-flex;align-items:center;gap:4px;font-weight:700;text-decoration:none}
@@ -746,11 +743,9 @@ const LAW_ESC=23,LAW_BONUS='yearly';
 const PENDING=BILLS.filter(b=>!b.law);
 
 function billCard(b){
-  const conf=['var(--accent)','var(--shine)','var(--sage)','var(--steel)','var(--orange)','var(--shine)','var(--accent)','var(--sage)'];
-  const vec=[[-26,-20,-40],[24,-24,30],[-30,8,70],[30,10,-60],[-14,-30,20],[14,-32,-30],[-34,-6,110],[34,-8,-100]];
   const steps=STEP_LABELS.map((lab,i)=>{
     let cls,icon,sub='';
-    if(b.law&&i===4){cls='done law';icon=ICON.pen+'<span class="confetti" aria-hidden="true">'+vec.map((v,j)=>`<i style="background:${conf[j]};--x:${v[0]}px;--y:${v[1]}px;--r:${v[2]}deg"></i>`).join('')+'</span>';lab='Signed into law';sub=`${b.signed} · ${b.chapter}`}
+    if(b.law&&i===4){cls='done law';icon=ICON.pen;lab='Signed into law';sub=`${b.signed} · ${b.chapter}`}
     else if(i<b.step){cls='done';icon=ICON.check;if(i===0)sub=b.intro.length>4?b.intro:'In '+b.intro;if(i===1&&b.committee)sub=b.committee;if((i===2||i===3)&&b.note)sub='As part of the state budget'}
     else if(i===b.step){cls='now';icon=ICON.clock;sub='In progress: waiting on a committee vote'}
     else {cls='todo';icon='';sub='Not yet'}
