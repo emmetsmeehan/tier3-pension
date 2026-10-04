@@ -385,7 +385,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <p class="hint" style="margin:0">This uses the Medicare Wages column: all your taxable pay, overtime included, without the Social Security cap. It is close to what the Pension Fund counts but not exact, so check each year and type over any that look off.</p>
     </div>
     <div class="dates" id="dates"></div>
-    <div class="legendrow"><span><span class="sw" style="background:var(--orange)"></span>Proby years (first 5 years, still stepping up in pay)</span><span><span class="sw" style="background:var(--sage)"></span>Best 3 years, used for your FAS</span><span><span class="sw" style="background:var(--gold)"></span>Pay over the 10% cap</span></div>
+    <div class="legendrow"><span><span class="sw" style="background:var(--orange)"></span>Not top pay yet (first 5 years, still stepping up in pay)</span><span><span class="sw" style="background:var(--sage)"></span>Best 3 years, used for your FAS</span><span><span class="sw" style="background:var(--gold)"></span>Pay over the 10% cap</span></div>
     <div class="ws-grid">
       <div class="tablebox"><table id="ws"></table></div>
       <aside class="ws-summary" id="wsSum"></aside>
@@ -775,7 +775,7 @@ function renderWorksheet(p,m){
     const proby=y-apptY<5;
     const after=y>res.lastY;
     row.className=(used?'win ':'')+(proby&&!used?'proby ':'')+(r&&r.kind==='proj'?'proj ':'')+(after?'after':'');
-    row.querySelector('.bslot').innerHTML=used?'<span class="badge best">Best 3</span>':(proby?'<span class="badge proby">Proby yr</span>':'');
+    row.querySelector('.bslot').innerHTML=used?'<span class="badge best">Best 3</span>':(proby?'<span class="badge proby">Not top pay yet</span>':'');
     let tag='';
     if(y===apptY) tag='Appointed '+fmtMY(p.appt);
     else if(y===retDate.getFullYear()) tag='Retirement year, not counted';
