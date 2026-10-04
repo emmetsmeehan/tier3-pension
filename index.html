@@ -144,6 +144,14 @@ thead th{font-weight:700;font-size:15px;vertical-align:bottom}
 .swipe{display:none;font-size:13.5px;color:var(--muted);margin:-12px 0 0;text-align:right}
 
 /* FAS worksheet */
+.imp{border:1px solid var(--line);border-radius:4px;padding:12px;background:var(--soft);display:grid;gap:10px;max-width:72ch}
+.imp h3{margin:0;font-size:16px}
+.imp ol{margin:0;padding-left:20px;display:grid;gap:4px;font-size:15px}
+.imp textarea{font:400 15px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%;box-sizing:border-box;min-height:96px;resize:vertical}
+.imp textarea:focus{outline:none;border-color:var(--steel);box-shadow:0 0 0 2px color-mix(in srgb,var(--steel) 30%,transparent)}
+.imp .msg{margin:0;font-size:14.5px}
+.imp .msg.ok{color:var(--sage)}
+.imp .msg.err{color:var(--accent)}
 .fasw-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:start}
 .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0;padding:0;list-style:none}
 .rules li{background:var(--soft);border-radius:4px;padding:10px 12px;font-size:14.5px}
@@ -360,6 +368,22 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <li><b>10% anti-spiking cap</b>A year can count for at most 110% of the average of the 2 years before it. Anything above that is cut.</li>
       <li><b>Full years only</b>This worksheet uses complete calendar years before the year you retire. The Fund may also use the 36 months right before your retirement date.</li>
     </ul>
+    <div class="imp">
+      <h3>Fill in your real earnings from NYCAPS</h3>
+      <p class="hint" style="margin:0">Easiest on a computer. What you paste stays in your browser and is never sent anywhere.</p>
+      <ol>
+        <li>Sign in to NYCAPS Employee Self Service.</li>
+        <li>Click the <b>Pay and Tax Information</b> tile.</li>
+        <li>In the menu on the left, open <b>Pay and Tax Information</b>, then click <b>Tax Summary (W-2, 1127 &amp; 1095C)</b>.</li>
+        <li>In the <b>Tax Summary for All Years</b> table, drag from the word <b>Year</b> down to the last row to highlight it, then copy it (Ctrl+C, or ⌘+C on a Mac).</li>
+        <li>Paste it in the box below and click <b>Fill in my earnings</b>.</li>
+      </ol>
+      <label for="impTxt" class="flabel">Paste your Tax Summary table here</label>
+      <textarea id="impTxt" spellcheck="false"></textarea>
+      <div class="btnrow"><button type="button" class="btn" id="impBtn">Fill in my earnings</button></div>
+      <p class="msg" id="impMsg" role="status" hidden></p>
+      <p class="hint" style="margin:0">This uses the Medicare Wages column: all your taxable pay, overtime included, without the Social Security cap. It is close to what the Pension Fund counts but not exact, so check each year and type over any that look off.</p>
+    </div>
     <div class="dates" id="dates"></div>
     <div class="legendrow"><span><span class="sw" style="background:var(--orange)"></span>Proby years (first 5 years, still stepping up in pay)</span><span><span class="sw" style="background:var(--sage)"></span>Best 3 years, used for your FAS</span><span><span class="sw" style="background:var(--gold)"></span>Pay over the 10% cap</span></div>
     <div class="ws-grid">
@@ -783,6 +807,36 @@ function renderWorksheet(p,m){
   $('useType')?.addEventListener('click',()=>setSource('type'));
   $('clearEx').addEventListener('click',()=>{for(const y in earn) delete earn[y];$('ws').querySelectorAll('input').forEach(i=>i.value='');render()});
 }
+
+/* ---------- import from the NYCAPS ESS Tax Summary table ---------- */
+/* Columns there: Year, Federal Wages, Soc Sec Wages, Medicare Wages, then taxes. A line with one number is read as "year amount". */
+function parseEarnings(text){
+  const out={},skipped=[];
+  for(const line of text.split(/\r?\n/)){
+    const m=line.match(/^\s*((?:19|20)\d\d)\b(.*)$/);if(!m) continue;
+    const y=+m[1],nums=(m[2].match(/-?\$?\d[\d,]*(?:\.\d+)?/g)||[]).map(num);
+    const v=nums.length>=3?nums[2]:nums.length===1?nums[0]:null;
+    if(v===null||!(v>0)) continue;
+    if(y>=NOW_Y){skipped.push(y);continue}
+    out[y]=v;
+  }
+  return {out,skipped};
+}
+$('impBtn').addEventListener('click',()=>{
+  const st=$('impMsg'),show=(t,cls)=>{st.textContent=t;st.className='msg '+cls;st.hidden=false};
+  const {out,skipped}=parseEarnings($('impTxt').value);
+  const ys=Object.keys(out).map(Number).sort((a,b)=>a-b);
+  if(!ys.length){show('No years found. Copy the whole table, starting from the word Year, and paste it again.','err');return}
+  const apptY=dates().appt.getFullYear(),before=ys.filter(y=>y<apptY);
+  for(const y in earn) delete earn[y];
+  ys.forEach(y=>{earn[y]=out[y]});
+  wsKey='';$('impTxt').value='';
+  let t=`Filled in ${ys.length} year${ys.length===1?'':'s'}, ${ys[0]} to ${ys[ys.length-1]}.`;
+  if(skipped.length) t+=` ${[...new Set(skipped)].join(', ')} isn't finished yet, so it is projected instead.`;
+  if(before.length) t+=` Some years are before your appointment date (${apptY}); check your dates above.`;
+  show(t,'ok');
+  setSource('ws');
+});
 
 /* ---------- wiring ---------- */
 const smooth=()=>matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
