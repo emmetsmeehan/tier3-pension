@@ -32,11 +32,11 @@ These are the rules the page implements. They are the owner's decisions; do not 
 
 - **Pension:** 50% of final average salary (FAS) at 20 or more years of service, under S4727 (Chapter 692 of the Laws of 2025, signed Dec. 19, 2025). Tier 3 is capped at 50%.
 - **FAS:** the best 3 consecutive calendar years. A year counts only up to 110% of the average of the two years before it. A typed-in FAS is grown by the pay-growth assumption for each year past 20.
-- **Escalation:** the lesser of CPI or 3%, compounding, on the whole pension. Full escalation needs collection to start at the 25-year mark. The rate drops by 1/36 for each month collection starts earlier, so 22 years or less gets none. A member can retire earlier and defer collection to the 25-year date.
+- **Escalation:** the lesser of CPI or 3%, compounding, on the whole pension. Full escalation needs collection to start at the 25-year mark. The rate drops by 1/36 for each month collection starts earlier, so 22 years or less gets none. The page assumes collection starts at retirement. It used to offer deferring collection to the 25-year date; the owner had it removed (Oct. 2026) because the option was confusing.
 - **COLA:** without full escalation, the pension gets the greater of escalation or COLA. COLA is half of CPI (minimum 1%, maximum 3%) on the first $18,000 only, starting at age 62 after 5 years retired or age 55 after 10 years retired. COLA reduces the VSF until 62.
-- **VSF and banked variable:** the Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. Each year worked past 20 banks one payment, paid as a lump sum at retirement.
+- **VSF and banked variable:** the Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. Each year worked past 20 banks one payment, paid as a lump sum at retirement. The $12,000 is fixed in the code; the owner had the editable assumption removed.
 - **Social Security offset:** at 62 the pension drops by 50% of the primary Social Security benefit.
-- **Service slider:** 20 to 35 years, with quick stops at 20, 22, 22½, 25, 30 and 35.
+- **Service slider:** 20 to 35 years, with quick stops at 20, 22, 22½, 25, 30 and 35. The readout shows years on one line and months underneath ("0 months" on whole years), so its width doesn't change as the slider moves.
 
 ### 25-year longevity bonus (proposed, not law)
 

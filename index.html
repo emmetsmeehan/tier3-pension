@@ -68,6 +68,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--steel);outline-offs
 /* service slider with positioned stops */
 .svc{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .svc b{font-size:24px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.svcval{flex:none;display:grid;justify-items:end;gap:4px;white-space:nowrap}
+.svcval span{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
 .slider{--thumb:26px;position:relative;padding-bottom:104px}
 .slider input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:var(--thumb);background:transparent;margin:0;cursor:pointer;position:relative;z-index:2}
 .slider input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
@@ -276,7 +278,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       </div>
 
       <div class="field">
-        <div class="svc"><label for="svc">Years of service when you retire</label><b id="svcOut">22½</b></div>
+        <div class="svc"><label for="svc">Years of service when you retire</label><div class="svcval"><b id="svcOut">22 years</b><span id="svcMo">6 months</span></div></div>
         <div class="hint" id="svcDate"></div>
         <div class="slider" id="slider">
           <input type="range" id="svc" min="240" max="420" step="1" value="270" aria-describedby="svcDate">
@@ -284,14 +286,6 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
         </div>
       </div>
 
-      <div class="field">
-        <span class="flabel" id="whenLbl">Start collecting</span>
-        <div class="seg" role="group" aria-labelledby="whenLbl">
-          <button type="button" id="nowBtn" aria-pressed="true">When I retire</button>
-          <button type="button" id="defBtn" aria-pressed="false">At my 25-year mark</button>
-        </div>
-        <div class="hint">Deferring to the 25-year date gets full escalation, but no pension checks or health coverage until then.</div>
-      </div>
 
       <div class="bonusbox">
         <label class="chk" for="bonusOn"><input type="checkbox" id="bonusOn" checked> Include the 25-year longevity bonus</label>
@@ -319,10 +313,6 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
           <div class="field">
             <label for="cpi">Inflation (CPI) per year</label>
             <div class="inp"><input class="pl" id="cpi" inputmode="decimal" value="3"><span>%</span></div>
-          </div>
-          <div class="field">
-            <label for="vsf">Variable Supplements Fund</label>
-            <div class="inp"><span>$</span><input id="vsf" inputmode="numeric" value="12,000"><span>/yr</span></div>
           </div>
         </div>
       </details>
@@ -377,7 +367,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <details><summary>Who is this for?</summary><p>FDNY uniformed members in Tier 3, which means anyone appointed on or after July 1, 2009. If you were appointed before that, you are generally in Tier 2, which has different rules.</p></details>
       <details><summary>Why doesn't my pension percentage go up after 20 years?</summary><p>Tier 3 pays 50% of your final average salary at 20 years and stays at 50% however long you work. Extra years still help in three ways: a higher final average salary, a better escalation rate, and one banked VSF payment for each year past 20.</p></details>
       <details><summary>What is final average salary?</summary><p>The average of your best 3 calendar years in a row, overtime included. A year only counts up to 110% of the average of the two years before it. The FAS calculator above works yours out from your yearly earnings.</p></details>
-      <details><summary>Why does everyone talk about 25 years?</summary><p>If you start collecting at 25 years, your whole pension rises with inflation every year, up to 3%. Start earlier and that rate is cut by 1/36 for each month you are short, so at 22 years or less there is none. You can also retire earlier and wait until your 25-year date to start collecting.</p></details>
+      <details><summary>Why does everyone talk about 25 years?</summary><p>If you start collecting at 25 years, your whole pension rises with inflation every year, up to 3%. Start earlier and that rate is cut by 1/36 for each month you are short, so at 22 years or less there is none.</p></details>
       <details><summary>What happens to my pension at 62?</summary><p>It drops by half of your Social Security benefit. Enter your own estimate from ssa.gov to see the effect on your numbers.</p></details>
       <details><summary>Is the 25-year longevity bonus real?</summary><p>Not yet. It is a bill in Albany (A10438/S9306) that has not passed. Uncheck the box in the calculator to see your numbers without it.</p></details>
       <details><summary>What are the VSF and the banked variable?</summary><p>The Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. For each year you work past 20, one payment is banked and paid to you as a lump sum when you retire.</p></details>
@@ -391,9 +381,9 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
     <p><strong>Pension:</strong> 50% of final average salary at 20+ years of service, under S4727 (Chapter 692 of the Laws of 2025, signed Dec. 19, 2025). Tier 3 is capped at 50%, so the percentage does not grow past 20 years.</p>
     <p><strong>25-year longevity bonus:</strong> for members retiring with 25+ years, 5% of the top base pay for their rank is added to final average salary, rising to 10% at 30 years and 15% at 35. The years in between stay at the lower step. For Tier 3 it is added straight to FAS and is not limited by the 10% anti-spiking cap. This is a proposed bill (A10438/S9306). It was still in committee as of October 2026 and is not law, so the terms may change. Rank pay is the top-step annual base salary from the UFA schedule effective Aug. 1, 2024 (firefighter) and the UFOA schedule effective July 31, 2025 (lieutenant, captain, battalion chief), with no longevity, night differential or overtime. The bill says “highest grade of pay” without defining it, so the figure used could end up higher than base salary.</p>
     <p><strong>FAS:</strong> average of the highest 3 consecutive years. Any year that exceeds the average of the prior two years by more than 10% counts only up to that 110% line. Unpaid leave (e.g. suspension) inside the FAS period is swapped for earlier time; the worksheet doesn't model that.</p>
-    <p><strong>Escalation:</strong> the lesser of CPI or 3%, applied to the whole pension each April and compounding every year. Full escalation requires collecting at the 25-year mark. The rate is reduced 1/36 for each month payment starts before then, so collecting at 22 years or earlier gets none.</p>
+    <p><strong>Escalation:</strong> the lesser of CPI or 3%, applied to the whole pension each April and compounding every year. Full escalation requires retiring at 25 years or more. The rate is reduced 1/36 for each month short of 25 years, so retiring at 22 years or earlier gets none. This calculator assumes payments start when you retire.</p>
     <p><strong>COLA:</strong> without full escalation, the pension gets the greater of escalation or the city COLA: half of CPI (1% to 3%) on the first $18,000 only, starting at age 62 after 5 years retired, or age 55 after 10 years retired. COLA reduces the VSF until 62.</p>
-    <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF each year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement (rollover-eligible). This calculator starts the VSF when pension payments start.</p>
+    <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF, $12,000 a year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement (rollover-eligible).</p>
     <p><strong>Not included:</strong> salary earned during extra years worked, retirement options that reduce the pension for a survivor, taxes (service pensions are federally taxable, exempt from NYS/NYC tax), disability pensions, and Tier 2 rules.</p>
     <p><strong>Disclaimer:</strong> this is an unofficial planning tool. It is not affiliated with or endorsed by the FDNY or the NYC Fire Pension Fund, and your actual numbers may vary. Your benefit is set by the NYC Fire Pension Fund (929-436-0099). Confirm with the Fund before making retirement decisions.</p>
   </section>
@@ -405,13 +395,16 @@ const num=v=>{const n=parseFloat(String(v).replace(/[^0-9.\-]/g,''));return isFi
 const usd=n=>(n<0?'-':'')+'$'+Math.round(Math.abs(n)).toLocaleString('en-US');
 const k=n=>'$'+(Math.round(n/1000)).toLocaleString('en-US')+'k';
 const fmtSvc=m=>{const y=Math.floor(m/12),mo=m%12;return mo===6?y+'½':(y+(mo?' yrs '+mo+' mo':''))};
+const plural=(n,w)=>n+' '+w+(n===1?'':'s');
+const fmtSvcLong=m=>{const y=Math.floor(m/12),mo=m%12;return plural(y,'year')+(mo?' '+plural(mo,'month'):'')};
 const addM=(d,m)=>new Date(d.getFullYear(),d.getMonth()+m,d.getDate());
 const yrsBetween=(a,b)=>(b-a)/(365.2425*864e5);
 const fmtD=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 const fmtMY=d=>d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
 const NOW_Y=new Date().getFullYear();
 const EX_FAS=150000;
-let deferred=false, source='type';
+let source='type';
+const VSF=12000;
 
 /* Top-step annual base salary by rank: UFA schedule eff. Aug 1, 2024 (FF); UFOA schedule eff. Jul 31, 2025 (LT, CAPT, BC). */
 const RANKS=[{id:'FF',pay:109352},{id:'LT',pay:140212},{id:'CAPT',pay:160941},{id:'BC',pay:209563}];
@@ -489,10 +482,10 @@ function params(){
   const d=dates();const typed=num($('fas').value);
   return {fas:typed||EX_FAS,fasExample:!typed,age:d.age,dob:d.dob,appt:d.appt,ss:num($('ss').value),
     bonusOn:$('bonusOn').checked,topPay:num($('topPay').value),
-    grow:num($('grow').value)/100,cpi:num($('cpi').value)/100,vsf:num($('vsf').value)};
+    grow:num($('grow').value)/100,cpi:num($('cpi').value)/100,vsf:VSF};
 }
 
-function scenario(months,defer,p){
+function scenario(months,p){
   const S=months/12;
   const retDate=addM(p.appt,months);
   let fas;
@@ -504,9 +497,8 @@ function scenario(months,defer,p){
   const bonusAdd=bonusPct*p.topPay;
   fas+=bonusAdd;
   const base=0.5*fas;
-  const collectS=(defer&&S<25)?25:S;
-  const retAge=p.age+S, collectAge=p.age+collectS;
-  const before=Math.max(0,Math.round((25-collectS)*12));
+  const retAge=p.age+S;
+  const before=Math.max(0,Math.round((25-S)*12));
   const frac=before>=36?0:(36-before)/36;
   const escRate=frac*Math.min(p.cpi,0.03);
   let colaRate=Math.ceil(p.cpi*100/2*10-1e-9)/10/100; colaRate=Math.min(0.03,Math.max(0.01,colaRate));
@@ -515,22 +507,19 @@ function scenario(months,defer,p){
   const rows=[]; let pen=base, colaTot=0, offApplied=false, life=drop;
   for(let t=0;;t++){
     const age=retAge+t; if(age>90.0001) break;
-    let pay=0, v=0;
-    if(age>=collectAge-1e-9){
-      if(age-collectAge>=1-1e-9){
-        const yr=age-retAge;
-        const colaOk=(age>=62&&yr>=5)||(age>=55&&yr>=10);
-        const incE=pen*escRate, incC=colaOk?Math.min(pen,18000)*colaRate:0;
-        if(incC>incE){pen+=incC;colaTot+=incC}else pen+=incE;
-      }
-      if(age>=62&&!offApplied){pen=Math.max(0,pen-offset);offApplied=true}
-      pay=pen; v=age<62?Math.max(0,p.vsf-colaTot):p.vsf;
+    if(t>=1){
+      const yr=t;
+      const colaOk=(age>=62&&yr>=5)||(age>=55&&yr>=10);
+      const incE=pen*escRate, incC=colaOk?Math.min(pen,18000)*colaRate:0;
+      if(incC>incE){pen+=incC;colaTot+=incC}else pen+=incE;
     }
+    if(age>=62&&!offApplied){pen=Math.max(0,pen-offset);offApplied=true}
+    const pay=pen, v=age<62?Math.max(0,p.vsf-colaTot):p.vsf;
     if(age<85+1e-9) life+=pay+v;
     rows.push({age,pay,v});
   }
   const at=a=>rows.find(x=>x.age>=a-1e-9)||null;
-  return {months,S,fas,baseFas,bonusPct,bonusAdd,base,retDate,retAge,collectAge,frac,escRate,offset,drop,rows,at,life};
+  return {months,S,fas,baseFas,bonusPct,bonusAdd,base,retDate,retAge,frac,escRate,offset,drop,rows,at,life};
 }
 
 function escPill(f){
@@ -545,13 +534,14 @@ function render(){
   const p=params(); const m=+$('svc').value;
   $('tierWarn').hidden=!(p.appt<new Date(2009,6,1));
 
-  $('svcOut').textContent=fmtSvc(m)+(m%12===0||m%12===6?' years':'');
+  $('svcOut').textContent=plural(Math.floor(m/12),'year');
+  $('svcMo').textContent=plural(m%12,'month');
   $('fill').style.width=`calc((100% - var(--thumb)) * ${(m-240)/SVC_SPAN})`;
   $('slider').querySelectorAll('.stop').forEach(el=>{const b=el.querySelector('button');const on=+b.dataset.m===m;b.setAttribute('aria-pressed',on);el.classList.toggle('on',on)});
   const tp=num($('topPay').value);
   $('ranks').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===tp));
 
-  const you=scenario(m,deferred,p);
+  const you=scenario(m,p);
   $('svcDate').textContent='Retire '+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1);
 
   if(source==='ws'){$('fas').value=you.fas?Math.round(you.baseFas).toLocaleString('en-US'):'';$('fas').disabled=true;$('fasHint').textContent='Calculated from your yearly earnings for each retirement date.'}
@@ -561,10 +551,9 @@ function render(){
   const tier2=p.appt<new Date(2009,6,1)?'<p class="warn"><strong>Tier 2 appointment date.</strong> These Tier 3 numbers won\'t match your pension.</p>':'';
   const ex=(source==='type'&&p.fasExample)?'<p class="example">Using an example FAS of $150,000. Type your own estimate to make this yours.</p>':'';
   const noFas=!you.fas?'<p class="warn">No FAS yet. Enter at least 3 years of earnings in the FAS calculator.</p>':'';
-  const gap=you.collectAge>you.retAge+0.01?`<div class="stat"><span class="k">Gap before checks</span><span class="v">${(you.collectAge-you.retAge).toFixed(1)} yrs</span><span class="s">Pension starts ${fmtMY(addM(p.appt,300))}</span></div>`:'';
   const at62=you.at(62);
   $('head').innerHTML=`
-    <div class="eyebrow">Your plan · retire ${fmtMY(you.retDate)} at ${fmtSvc(m)} years, age ${you.retAge.toFixed(1)}</div>
+    <div class="eyebrow">Your plan · retire ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
     <div class="big">
       <div><div class="n">${usd(you.base/12)}</div><div class="u">per month to start (${usd(you.base)}/yr)</div></div>
       <div>${escPill(you.frac)}</div>
@@ -577,11 +566,10 @@ function render(){
       <div class="stat"><span class="k">Banked variable</span><span class="v">${usd(you.drop)}</span><span class="s">Lump sum at retirement</span></div>
       <div class="stat"><span class="k">Escalation</span><span class="v">${(you.escRate*100).toFixed(2)}%/yr</span><span class="s">At ${(p.cpi*100).toFixed(1)}% CPI</span></div>
       <div class="stat"><span class="k">Pension at 62</span><span class="v">${at62&&at62.pay>0?usd(at62.pay):'–'}</span><span class="s">After ${usd(you.offset)}/yr SS offset</span></div>
-      ${gap}
     </div>`;
 
-  const sc=[scenario(240,false,p),scenario(270,false,p),scenario(300,false,p)];
-  const isBench=[240,270,300].includes(m)&&!deferred;
+  const sc=[scenario(240,p),scenario(270,p),scenario(300,p)];
+  const isBench=[240,270,300].includes(m);
   const cols=sc.map((s,i)=>({s,name:['20 yrs','22½ yrs','25 yrs'][i],c:COLORS[i]}));
   if(!isBench) cols.push({s:you,name:'Your plan',c:COLORS[3],you:true});
   const val=(s,a)=>{const r=s.at(a);return r&&r.pay>0?usd(r.pay):'–'};
@@ -760,12 +748,9 @@ function setSource(s,jump){source=s;$('srcType').setAttribute('aria-pressed',s==
 }
 $('srcType').addEventListener('click',()=>setSource('type'));
 $('srcWs').addEventListener('click',()=>{setSource('ws');if($('fasw').hidden)openFas()});
-['fas','ss','grow','cpi','vsf','topPay','bonusOn'].forEach(id=>$(id).addEventListener('input',render));
+['fas','ss','grow','cpi','topPay','bonusOn'].forEach(id=>$(id).addEventListener('input',render));
 $('svc').addEventListener('input',render);
-function setDef(v){deferred=v;$('nowBtn').setAttribute('aria-pressed',!v);$('defBtn').setAttribute('aria-pressed',v);render()}
-$('nowBtn').addEventListener('click',()=>setDef(false));
-$('defBtn').addEventListener('click',()=>setDef(true));
-['fas','ss','vsf','topPay'].forEach(id=>$(id).addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?n.toLocaleString('en-US'):''}));
+['fas','ss','topPay'].forEach(id=>$(id).addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?n.toLocaleString('en-US'):''}));
 $('form').addEventListener('submit',e=>e.preventDefault());
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',render);
 new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
