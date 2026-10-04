@@ -42,7 +42,7 @@ These are the rules the page implements. They are the owner's decisions; do not 
 
 ### Proposed bills (not law)
 
-The form has a "Proposed bills, not yet law" box, and a "Bills in Albany" side section (a right-hand column at 1360px and wider, after the results on smaller screens) summarizes each bill with a progress bar and status. Bill text for the Senate versions was read from PDFs the owner downloaded on Oct. 4, 2026.
+The form has a "Proposed bills, not yet law" box. "Bills in Albany" is a separate view in the same file, opened by a button under the intro (and a link in the proposed-bills box) at `#bills`, with a back link to the calculator; the browser back button works too. It summarizes each bill with a progress bar, status, and a "Try it in the calculator" link that sets that option. The owner asked for it to be off the main page so the calculator isn't overwhelming. Bill text for the Senate versions was read from PDFs the owner downloaded on Oct. 4, 2026.
 
 - **Full escalation at** (default 25 years, current law). Options:
   - 23 years, S9204 (Jackson) / A11269 (Pheffer Amato): full escalation at 23 years, 1/36 less for each month short, so partial after 20 years and none at 20 or less.
@@ -52,11 +52,11 @@ The form has a "Proposed bills, not yet law" box, and a "Bills in Albany" side s
   - +1% a year, S9202 / A10392: 5% at 25 plus 1% for each year past 25, capped at 15% at 35.
 - The fiscal notes apply the bonus straight to FAS for Tier 3, without the 110% limit. The page does the same.
 - **Status when last checked (Oct. 4, 2026), from nysenate.gov screenshots:** S9202, S9203, S9204 and S9306 are in Senate Civil Service and Pensions; A11269 is in Assembly Governmental Employees. None has passed either house. A10438 was referred to Assembly Governmental Employees on Mar. 6, 2026 (earlier check). The Assembly status of A10254 and A10392 has not been confirmed from a primary source, so the page does not state it.
-- When any status changes, update the side section (bar, status line, "last checked" date), the hints in the form, the FAQ and "How it's calculated". If a bill becomes law, its option becomes the default and the wording changes from proposed to law.
+- When any status changes, update the Bills in Albany view (bar, status line, "last checked" date), the hints in the form, the FAQ and "How it's calculated". If a bill becomes law, its option becomes the default and the wording changes from proposed to law.
 
 ### S4727
 
-50% at 20 years: Chapter 692 of the Laws of 2025, signed Dec. 19, 2025. Shown in the side section as law.
+50% at 20 years: Chapter 692 of the Laws of 2025, signed Dec. 19, 2025. Shown in Bills in Albany as law.
 
 ### Rank top pay
 
