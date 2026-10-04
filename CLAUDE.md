@@ -37,6 +37,7 @@ These are the rules the page implements. They are the owner's decisions; do not 
 - **COLA:** without full escalation, the pension gets the greater of escalation or COLA. COLA is half of CPI (minimum 1%, maximum 3%) on the first $18,000 only, starting at age 62 after 5 years retired or age 55 after 10 years retired. COLA reduces the VSF until 62.
 - **VSF and banked variable:** the Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. Each year worked past 20 banks one payment, paid as a lump sum at retirement. The $12,000 is fixed in the code; the owner had the editable assumption removed.
 - **Social Security offset:** at 62 the pension drops by 50% of the primary Social Security benefit.
+- **Earnings import:** the FAS worksheet takes a copy-and-paste of the NYCAPS ESS "Tax Summary for All Years" table (Pay and Tax Information tile, then Pay and Tax Information > Tax Summary (W-2, 1127 & 1095C)). It uses the Medicare Wages column (the third number after the year), skips the current unfinished year, and runs entirely in the browser. Lines with a year and one number are also accepted. If ESS changes its menu names or columns, update the steps on the page and the parser.
 - **Service slider:** 20 to 35 years, with quick stops at 20, 22, 22½, 25, 30 and 35. The readout shows years on one line and months underneath ("0 months" on whole years), so its width doesn't change as the slider moves.
 
 ### 25-year longevity bonus (proposed, not law)
