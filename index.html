@@ -27,6 +27,27 @@ img{max-width:100%}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
 .wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:grid;gap:28px}
+.bills{display:grid;gap:12px;min-width:0;align-content:start}
+.bills-in{display:grid;gap:12px;align-content:start}
+.bills .intro{margin:0}
+.bill{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:14px;display:grid;gap:8px}
+.bill h3{margin:0;font-size:16.5px;line-height:1.3}
+.bill p{margin:0;font-size:14.5px}
+.bill .ids{font-size:14px;color:var(--muted)}
+.bill .ids a{color:var(--steel)}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.steps i{height:6px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--steel)}
+.bill.law .steps i.on{background:var(--sage)}
+.bill .path{font-size:13px;color:var(--muted);line-height:1.5}
+.bill .path b{color:var(--ink);font-weight:600}
+.bill .now{font-weight:600}
+.bill .try{color:var(--muted);font-size:13.5px}
+@media (min-width:1360px){
+  .wrap{max-width:1460px;grid-template-columns:minmax(0,1fr) 300px;column-gap:28px}
+  .wrap>*{grid-column:1}
+  .wrap>.bills{grid-column:2;grid-row:1 / span 7}
+}
 .hero{display:grid;gap:8px;border-bottom:1px solid var(--line);padding-bottom:20px}
 .eyebrow{font-size:14px;font-weight:600;color:var(--muted)}
 h1{font-weight:700;font-size:clamp(30px,5vw,44px);line-height:1.1;margin:0;text-wrap:balance;max-width:20ch}
@@ -108,6 +129,12 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--steel);outline-offs
 .ranks button[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:var(--surface)}
 .ranks button[aria-pressed="true"] small{color:var(--surface)}
 .bonusbox{border:1px solid var(--line);border-radius:4px;padding:14px;display:grid;gap:10px}
+.opts{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:6px}
+.opts button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px;padding:8px 4px;font:700 15px var(--body);cursor:pointer;display:grid;gap:1px;line-height:1.25}
+.opts button small{font:400 12.5px var(--body);color:var(--muted)}
+.opts button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.opts button[aria-pressed="true"] small{color:var(--bg)}
+.propbox h3{margin:0;font-size:16px}
 .chk{display:flex;gap:8px;align-items:center;font-weight:600;font-size:15.5px;cursor:pointer}
 .chk input{width:18px;height:18px;accent-color:var(--sage)}
 .bonus-on{color:var(--sage);font-weight:600}
@@ -316,9 +343,21 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       </div>
 
 
-      <div class="bonusbox">
+      <div class="bonusbox propbox">
+        <h3>Proposed bills, not yet law</h3>
+        <span class="flabel" id="escLbl">Full escalation at</span>
+        <div class="opts" role="group" aria-labelledby="escLbl" id="escOpts">
+          <button type="button" data-f="25" aria-pressed="true">25 years<small>Current law</small></button>
+          <button type="button" data-f="23" aria-pressed="false">23 years<small>S9204</small></button>
+          <button type="button" data-f="20" aria-pressed="false">20 years<small>S9203</small></button>
+        </div>
+        <div class="hint" id="escHint"></div>
         <label class="chk" for="bonusOn"><input type="checkbox" id="bonusOn" checked> Include the 25-year longevity bonus</label>
-        <div class="hint">Proposed bill, not yet law. 5% of your rank's top base pay is added to your FAS at 25 years, 10% at 30 and 15% at 35.</div>
+        <div class="opts" role="group" aria-label="Longevity bonus version" id="bonusOpts" style="--n:2">
+          <button type="button" data-v="steps" aria-pressed="true">Steps<small>S9306</small></button>
+          <button type="button" data-v="yearly" aria-pressed="false">+1% a year<small>S9202</small></button>
+        </div>
+        <div class="hint" id="bonusHint"></div>
         <span class="flabel" id="rankLbl">Your rank at retirement</span>
         <div class="ranks" role="group" aria-labelledby="rankLbl" id="ranks"></div>
         <div class="inp"><span>$</span><input id="topPay" inputmode="numeric" aria-label="Top base pay for your rank"></div>
@@ -353,6 +392,58 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <p class="swipe" id="swipe">Swipe the table to see Your plan →</p>
     </div>
   </div>
+
+  <aside class="bills" aria-labelledby="billsTitle">
+   <div class="bills-in">
+    <h2 id="billsTitle">Bills in Albany</h2>
+    <p class="hint intro">Proposed changes to Tier 3 FDNY pensions and where each one stands. A bill becomes law only after it passes the Senate and the Assembly and the governor signs it. Status last checked Oct. 4, 2026.</p>
+    <article class="bill">
+      <h3>Full escalation at 23 years</h3>
+      <p class="ids"><a href="https://www.nysenate.gov/legislation/bills/2025/S9204">S9204</a> / <a href="https://www.nysenate.gov/legislation/bills/2025/A11269">A11269</a></p>
+      <p>Full escalation if you start collecting at 23 years, not 25. Partial escalation would start after 20 years, not 22.</p>
+      <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
+      <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
+      <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Assembly: Governmental Employees. Introduced Feb. 13, 2026.</p>
+      <p class="try">Try it in the calculator: Full escalation at 23 years.</p>
+    </article>
+    <article class="bill">
+      <h3>Full escalation at 20 years</h3>
+      <p class="ids"><a href="https://www.nysenate.gov/legislation/bills/2025/S9203">S9203</a> / A10254</p>
+      <p>Full escalation as soon as you can retire, at 20 years.</p>
+      <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
+      <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
+      <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Introduced Feb. 13, 2026.</p>
+      <p class="try">Try it in the calculator: Full escalation at 20 years.</p>
+    </article>
+    <article class="bill">
+      <h3>Longevity bonus in steps</h3>
+      <p class="ids"><a href="https://www.nysenate.gov/legislation/bills/2025/S9306">S9306</a> / <a href="https://www.nysenate.gov/legislation/bills/2025/A10438">A10438</a></p>
+      <p>Adds part of your rank&rsquo;s top pay to your final average salary: 5% at 25 years, 10% at 30, 15% at 35, nothing extra in between.</p>
+      <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
+      <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
+      <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Assembly: Governmental Employees. Introduced Feb. 27, 2026.</p>
+      <p class="try">This is the calculator&rsquo;s default bonus.</p>
+    </article>
+    <article class="bill">
+      <h3>Longevity bonus, +1% a year</h3>
+      <p class="ids"><a href="https://www.nysenate.gov/legislation/bills/2025/S9202">S9202</a> / <a href="https://www.nysenate.gov/legislation/bills/2025/A10392">A10392</a></p>
+      <p>Same idea, but 5% at 25 years plus 1% for each year after, up to 15% at 35. Both bonus bills add the same section of law, so only one could pass as written.</p>
+      <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div>
+      <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; Passed Senate &rarr; Passed Assembly &rarr; Signed by governor</p>
+      <p><span class="now">In committee.</span> Senate: Civil Service and Pensions. Introduced Feb. 13, 2026.</p>
+      <p class="try">Try it in the calculator: Longevity bonus, +1% a year.</p>
+    </article>
+    <article class="bill law">
+      <h3>50% at 20 years</h3>
+      <p class="ids"><a href="https://www.nysenate.gov/legislation/bills/2025/S4727">S4727</a></p>
+      <p>Tier 3 pays 50% of final average salary at 20 years.</p>
+      <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+      <p class="path"><b>Introduced</b> &rarr; <b>In committee</b> &rarr; <b>Passed Senate</b> &rarr; <b>Passed Assembly</b> &rarr; <b>Signed by governor</b></p>
+      <p><span class="now">Law.</span> Chapter 692 of the Laws of 2025, signed Dec. 19, 2025. The calculator uses it.</p>
+      
+    </article>
+   </div>
+  </aside>
 
   <section class="panel fasw" id="fasw" hidden aria-labelledby="fasTitle">
     <div class="fasw-top">
@@ -394,7 +485,7 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
 
   <section class="chartbox" aria-labelledby="escTitle">
     <div style="display:grid;gap:6px">
-      <div class="eyebrow">Why 25 years matters</div>
+      <div class="eyebrow" id="escEyebrow">Why 25 years matters</div>
       <h2 id="escTitle">The power of escalation</h2>
       <p class="esc-lede" id="escLede"></p>
     </div>
@@ -412,9 +503,9 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
       <details><summary>Who is this for?</summary><p>FDNY uniformed members in Tier 3, which means anyone appointed on or after July 1, 2009. If you were appointed before that, you are generally in Tier 2, which has different rules.</p></details>
       <details><summary>Why doesn't my pension percentage go up after 20 years?</summary><p>Tier 3 pays 50% of your final average salary at 20 years and stays at 50% however long you work. Extra years still help in three ways: a higher final average salary, a better escalation rate, and one banked VSF payment for each year past 20.</p></details>
       <details><summary>What is final average salary?</summary><p>The average of your best 3 calendar years in a row, overtime included. A year only counts up to 110% of the average of the two years before it. The FAS calculator above works yours out from your yearly earnings.</p></details>
-      <details><summary>Why does everyone talk about 25 years?</summary><p>If you start collecting at 25 years, your whole pension rises with inflation every year, up to 3%. Start earlier and that rate is cut by 1/36 for each month you are short, so at 22 years or less there is none.</p></details>
+      <details><summary>Why does everyone talk about 25 years?</summary><p>If you start collecting at 25 years, your whole pension rises with inflation every year, up to 3%. Start earlier and that rate is cut by 1/36 for each month you are short, so at 22 years or less there is none. Two bills in Albany would move full escalation to 23 years (S9204) or 20 years (S9203). Neither is law yet; see Bills in Albany.</p></details>
       <details><summary>What happens to my pension at 62?</summary><p>It drops by half of your Social Security benefit. Enter your own estimate from ssa.gov to see the effect on your numbers.</p></details>
-      <details><summary>Is the 25-year longevity bonus real?</summary><p>Not yet. It is a bill in Albany (A10438/S9306) that has not passed. Uncheck the box in the calculator to see your numbers without it.</p></details>
+      <details><summary>Is the 25-year longevity bonus real?</summary><p>Not yet. There are two versions in Albany, both still in committee. S9306/A10438 adds 5% of your rank's top pay at 25 years, 10% at 30 and 15% at 35. S9202/A10392 adds 5% at 25 plus 1% for each year after, up to 15% at 35. You can pick either one in the calculator, or uncheck the box to see your numbers without it.</p></details>
       <details><summary>What are the VSF and the banked variable?</summary><p>The Variable Supplements Fund pays $12,000 a year to service retirees with 20 or more years. For each year you work past 20, one payment is banked and paid to you as a lump sum when you retire.</p></details>
       <details><summary>Is anything I type saved or sent anywhere?</summary><p>No. The math runs in your browser, and this page does not store or send the numbers you enter. The only thing ever sent is a question or suggestion you choose to submit in the box below.</p></details>
       <details><summary>Is this official?</summary><p>No. It is an unofficial planning tool and is not affiliated with the FDNY or the NYC Fire Pension Fund. For an official estimate, call the Fund at 929-436-0099.</p></details>
@@ -443,9 +534,9 @@ summary:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-r
   <section class="notes">
     <h2>How it's calculated</h2>
     <p><strong>Pension:</strong> 50% of final average salary at 20+ years of service, under S4727 (Chapter 692 of the Laws of 2025, signed Dec. 19, 2025). Tier 3 is capped at 50%, so the percentage does not grow past 20 years.</p>
-    <p><strong>25-year longevity bonus:</strong> for members retiring with 25+ years, 5% of the top base pay for their rank is added to final average salary, rising to 10% at 30 years and 15% at 35. The years in between stay at the lower step. For Tier 3 it is added straight to FAS and is not limited by the 10% anti-spiking cap. This is a proposed bill (A10438/S9306). It was still in committee as of October 2026 and is not law, so the terms may change. Rank pay is the top-step annual base salary from the UFA schedule effective Aug. 1, 2024 (firefighter) and the UFOA schedule effective July 31, 2025 (lieutenant, captain, battalion chief), with no longevity, night differential or overtime. The bill says “highest grade of pay” without defining it, so the figure used could end up higher than base salary.</p>
+    <p><strong>25-year longevity bonus:</strong> for members retiring with 25+ years, part of the top base pay for their rank is added to final average salary. Under S9306/A10438 (the default here) it is 5% at 25 years, 10% at 30 and 15% at 35, with the years in between at the lower step. Under S9202/A10392 it is 5% at 25 plus 1% for each year after, capped at 15% at 35. For Tier 3 it is added straight to FAS and is not limited by the 10% anti-spiking cap. Both are proposed bills, still in committee as of October 2026 and not law, so the terms may change. Rank pay is the top-step annual base salary from the UFA schedule effective Aug. 1, 2024 (firefighter) and the UFOA schedule effective July 31, 2025 (lieutenant, captain, battalion chief), with no longevity, night differential or overtime. The bill says “highest grade of pay” without defining it, so the figure used could end up higher than base salary.</p>
     <p><strong>FAS:</strong> average of the highest 3 consecutive years. Any year that exceeds the average of the prior two years by more than 10% counts only up to that 110% line. Unpaid leave (e.g. suspension) inside the FAS period is swapped for earlier time; the worksheet doesn't model that.</p>
-    <p><strong>Escalation:</strong> the lesser of CPI or 3%, applied to the whole pension each April and compounding every year. Full escalation requires retiring at 25 years or more. The rate is reduced 1/36 for each month short of 25 years, so retiring at 22 years or earlier gets none. This calculator assumes payments start when you retire.</p>
+    <p><strong>Escalation:</strong> the lesser of CPI or 3%, applied to the whole pension each April and compounding every year. Full escalation requires retiring at 25 years or more. The rate is reduced 1/36 for each month short of 25 years, so retiring at 22 years or earlier gets none. This calculator assumes payments start when you retire. Proposed bills would move full escalation to 23 years, with partial escalation after 20 (S9204/A11269), or to 20 years (S9203); you can try either in the calculator.</p>
     <p><strong>COLA:</strong> without full escalation, the pension gets the greater of escalation or the city COLA: half of CPI (1% to 3%) on the first $18,000 only, starting at age 62 after 5 years retired, or age 55 after 10 years retired. COLA reduces the VSF until 62.</p>
     <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF, $12,000 a year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement (rollover-eligible).</p>
     <p><strong>Not included:</strong> salary earned during extra years worked, retirement options that reduce the pension for a survivor, taxes (service pensions are federally taxable, exempt from NYS/NYC tax), disability pensions, and Tier 2 rules.</p>
@@ -467,7 +558,7 @@ const fmtD=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'nu
 const fmtMY=d=>d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
 const NOW_Y=new Date().getFullYear();
 const EX_FAS=150000;
-let source='type';
+let source='type', escFull=25, bonusVer='steps';
 const VSF=12000;
 
 /* Top-step annual base salary by rank: UFA schedule eff. Aug 1, 2024 (FF); UFOA schedule eff. Jul 31, 2025 (LT, CAPT, BC). */
@@ -545,7 +636,7 @@ function fasFromEarnings(retDate,p){
 function params(){
   const d=dates();const typed=num($('fas').value);
   return {fas:typed||EX_FAS,fasExample:!typed,age:d.age,dob:d.dob,appt:d.appt,ss:num($('ss').value),
-    bonusOn:$('bonusOn').checked,topPay:num($('topPay').value),
+    bonusOn:$('bonusOn').checked,bonusVer,escFull,topPay:num($('topPay').value),
     grow:num($('grow').value)/100,cpi:num($('cpi').value)/100,vsf:VSF};
 }
 
@@ -556,13 +647,15 @@ function scenario(months,p){
   if(source==='ws'){const r=fasFromEarnings(retDate,p);fas=r.best?r.best.fas:0}
   else fas=p.fas*Math.pow(1+p.grow,S-20);
   const baseFas=fas;
-  /* A10438/S9306: 5% at 25 years, 10% at 30, 15% at 35. Steps, no per-year increase in between. */
-  const bonusPct=!p.bonusOn?0:S>=35-1e-9?0.15:S>=30-1e-9?0.10:S>=25-1e-9?0.05:0;
+  /* S9306/A10438: 5% at 25 years, 10% at 30, 15% at 35, no increase in between.
+     S9202/A10392: 5% at 25 plus 1% for each year past 25, capped at 15% at 35. */
+  const bonusPct=!p.bonusOn||S<25-1e-9?0:p.bonusVer==='yearly'?Math.min(0.15,0.05+0.01*Math.floor(S-25+1e-9)):S>=35-1e-9?0.15:S>=30-1e-9?0.10:0.05;
   const bonusAdd=bonusPct*p.topPay;
   fas+=bonusAdd;
   const base=0.5*fas;
   const retAge=p.age+S;
-  const before=Math.max(0,Math.round((25-S)*12));
+  /* Full escalation from p.escFull years (25 under current law); 1/36 less for each month short. */
+  const before=Math.max(0,Math.round((p.escFull-S)*12));
   const frac=before>=36?0:(36-before)/36;
   const escRate=frac*Math.min(p.cpi,0.03);
   let colaRate=Math.ceil(p.cpi*100/2*10-1e-9)/10/100; colaRate=Math.min(0.03,Math.max(0.01,colaRate));
@@ -602,6 +695,10 @@ function render(){
   $('svcMo').textContent=plural(m%12,'month');
   $('fill').style.width=`calc((100% - var(--thumb)) * ${(m-240)/SVC_SPAN})`;
   $('slider').querySelectorAll('.stop').forEach(el=>{const b=el.querySelector('button');const on=+b.dataset.m===m;b.setAttribute('aria-pressed',on);el.classList.toggle('on',on)});
+  $('escOpts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.f===escFull));
+  $('bonusOpts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===bonusVer));
+  $('escHint').textContent=escFull===25?'Current law: full escalation at 25 years, partial after 22.':escFull===23?'S9204/A11269, in committee: full escalation at 23 years, partial after 20.':'S9203, in committee: full escalation at 20 years.';
+  $('bonusHint').textContent=bonusVer==='steps'?'S9306/A10438, in committee: 5% of your rank\'s top base pay is added to your FAS at 25 years, 10% at 30 and 15% at 35.':'S9202/A10392, in committee: 5% of your rank\'s top base pay at 25 years, plus 1% for each year after, up to 15% at 35.';
   const tp=num($('topPay').value);
   $('ranks').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===tp));
 
@@ -663,16 +760,18 @@ let chartState=null;
 function renderEscalation(cols,p){
   const cpi=(Math.min(p.cpi,0.03)*100).toFixed(1);
   const f=s=>s.rows.find(r=>r.pay>0);
-  $('escLede').textContent=`At 25 years your whole pension grows with inflation, up to 3% a year, compounding for life. Retire earlier and it barely moves, apart from a small COLA on the first $18,000 later on. At ${cpi}% inflation the gap widens every year you're retired.`;
+  const F=p.escFull;
+  $('escEyebrow').textContent=F===20?'Why escalation matters':`Why ${F} years matters`;
+  $('escLede').textContent=(F===20?`With full escalation at 20 years (S9203, proposed), every retirement here gets`:`At ${F} years${F===25?'':' (S9204, proposed)'} you get`)+` full escalation: your whole pension grows with inflation, up to 3% a year, compounding for life.`+(F>20?` Retire earlier and the rate is cut by 1/36 for each month short of ${F} years; at ${F-3} years or less there is none, only a small COLA on the first $18,000 later on.`:'')+` At ${cpi}% inflation the gap widens every year you're retired.`;
   const pct=r=>String(+(r*100).toFixed(2));
   $('escCards').innerHTML=cols.filter(c=>!c.you).map(c=>{
     const s=c.s,a=f(s),e=s.at(85);if(!a||!e) return '';
-    const g=e.pay-a.pay, short=Math.max(0,Math.round((25-s.S)*12));
+    const g=e.pay-a.pay, short=Math.max(0,Math.round((F-s.S)*12));
     const lead=Math.abs(g)<1?'Pays about the same at 85 as in year one':`Pays ${usd(Math.abs(g))} a year ${g>0?'more':'less'} at 85 than in year one`;
     const why=[];
     if(s.frac>=1) why.push(`<b>Full escalation.</b> The whole pension rises ${pct(s.escRate)}% every year, and each raise builds on the last.`);
-    else if(s.frac>0) why.push(`<b>Partial escalation.</b> Retiring ${short} months short of 25 years keeps ${36-short}/36 of the full rate, so the pension rises only ${pct(s.escRate)}% a year.`);
-    else why.push(`<b>No escalation.</b> Retiring 3 or more years short of 25 years gets none.`);
+    else if(s.frac>0) why.push(`<b>Partial escalation.</b> Retiring ${short} months short of ${F} years keeps ${36-short}/36 of the full rate, so the pension rises ${pct(s.escRate)}% a year.`);
+    else why.push(`<b>No escalation.</b> Retiring 3 or more years short of ${F} years gets none.`);
     if(s.frac<1) why.push(`<b>Small COLA later.</b> From about age ${Math.ceil(Math.min(Math.max(62,s.retAge+5),Math.max(55,s.retAge+10)))}, a COLA on the first $18,000 only adds about ${usd(18000*s.colaRate)} a year${s.frac>0?' when it beats escalation':''}.`);
     if(s.offset>0) why.push(`<b>Social Security offset.</b> At 62, ${usd(s.offset)} a year comes off.`);
     return `<div class="esc" style="--c:var(${c.c})"><span class="t">Retire at ${c.name.replace('yrs','years')}</span>
@@ -746,7 +845,8 @@ function renderWorksheet(p,m){
   const showTo=Math.max(retDate.getFullYear(),addM(p.appt,300).getFullYear());
   const d=(lab,date)=>`<div class="date"><span class="k">${lab}</span><span class="v">${fmtD(date)}</span><span class="s">Age ${yrsBetween(p.dob,date).toFixed(1)}</span></div>`;
   const mand=new Date(p.dob.getFullYear()+62,p.dob.getMonth(),p.dob.getDate());
-  $('dates').innerHTML=d('20 years',addM(p.appt,240))+d('22 years',addM(p.appt,264))+d('25 years · full escalation',addM(p.appt,300))+d('Your plan',retDate)+`<div class="date"><span class="k">Mandatory retirement</span><span class="v">${fmtD(mand)}</span><span class="s">Age 62</span></div>`;
+  const fe=y=>y===p.escFull?' · full escalation':'';
+  $('dates').innerHTML=d('20 years'+fe(20),addM(p.appt,240))+d('22 years',addM(p.appt,264))+(p.escFull===23?d('23 years'+fe(23),addM(p.appt,276)):'')+d('25 years'+fe(25),addM(p.appt,300))+d('Your plan',retDate)+`<div class="date"><span class="k">Mandatory retirement</span><span class="v">${fmtD(mand)}</span><span class="s">Age 62</span></div>`;
 
   const key=apptY+'-'+showTo;
   if(key!==wsKey){
@@ -853,6 +953,8 @@ $('srcType').addEventListener('click',()=>setSource('type'));
 $('srcWs').addEventListener('click',()=>{setSource('ws');if($('fasw').hidden)openFas()});
 ['fas','ss','grow','cpi','topPay','bonusOn'].forEach(id=>$(id).addEventListener('input',render));
 $('svc').addEventListener('input',render);
+$('escOpts').addEventListener('click',e=>{const b=e.target.closest('button[data-f]');if(!b)return;escFull=+b.dataset.f;render()});
+$('bonusOpts').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;bonusVer=b.dataset.v;if(!$('bonusOn').checked)$('bonusOn').checked=true;render()});
 ['fas','ss','topPay'].forEach(id=>$(id).addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?n.toLocaleString('en-US'):''}));
 $('form').addEventListener('submit',e=>e.preventDefault());
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',render);
