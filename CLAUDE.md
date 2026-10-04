@@ -9,6 +9,7 @@ This repository is the source of truth. The calculator used to live on a claude.
 - The whole site is `index.html`: markup, CSS and JavaScript in one file. The only outside resource is the Source Sans 3 font from Google Fonts.
 - GitHub Pages serves the `main` branch from the repository root. A push to `main` goes live in a minute or two at https://emmetsmeehan.github.io/tier3-pension/
 - `.nojekyll` stops GitHub from processing the files. Leave it in place.
+- The owner's standing instruction (Oct. 2026): once a change he asked for is tested, merge it to `main` so it goes live, unless he says otherwise.
 
 ## How to work on it
 
