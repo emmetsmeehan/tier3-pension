@@ -419,8 +419,8 @@ const VSF=12000;
 /* Top-step annual base salary by rank: UFA schedule eff. Aug 1, 2024 (FF); UFOA schedule eff. Jul 31, 2025 (LT, CAPT, BC). */
 const RANKS=[{id:'FF',pay:109352},{id:'LT',pay:140212},{id:'CAPT',pay:160941},{id:'BC',pay:209563}];
 
-/* Example earnings for the sample member (appointed Jul 2012, promoted in 2024). */
-const earn={2012:38000,2013:58000,2014:74000,2015:89000,2016:99000,2017:112000,2018:119000,2019:126000,2020:133000,2021:139000,2022:146000,2023:153000,2024:182000,2025:176000};
+/* Example earnings for the sample member (appointed May 2019). */
+const earn={2019:38000,2020:58000,2021:74000,2022:89000,2023:99000,2024:112000,2025:119000};
 
 /* ---- date pickers: month, day, year chosen together ---- */
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -435,8 +435,8 @@ function setupDate(pre,y0,y1,def){
   m.addEventListener('change',()=>{days(+d.value);render()}); y.addEventListener('change',()=>{days(+d.value);render()}); d.addEventListener('change',render);
 }
 const getDate=pre=>new Date(+$(pre+'Y').value,+$(pre+'M').value,+$(pre+'D').value);
-setupDate('dob',1945,NOW_Y-18,new Date(1989,3,22));
-setupDate('ap',1985,NOW_Y,new Date(2012,6,23));
+setupDate('dob',1945,NOW_Y-18,new Date(1991,5,6));
+setupDate('ap',1985,NOW_Y,new Date(2019,4,13));
 
 /* ---- rank buttons ---- */
 $('ranks').innerHTML=RANKS.map(r=>`<button type="button" data-r="${r.id}" aria-pressed="false">${r.id}<small>${k(r.pay)}</small></button>`).join('');
