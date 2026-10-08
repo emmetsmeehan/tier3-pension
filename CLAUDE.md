@@ -88,6 +88,6 @@ The rate schedule PDFs are not in this repository. When a new contract or schedu
 
 ## Open items
 
-- **Question box.** Live: "What would you like to see here?" on the home screen posts to Web3Forms (`ASK_KEY` near the end of the script; the key is public by design). Messages go to the address the owner registered with Web3Forms. The Pension basics answer about saving says numbers stay on the device and only the question box sends anything.
+- **Question box.** Live: "What else would you like to see here?" on the home screen posts to Web3Forms (`ASK_KEY` near the end of the script; the key is public by design). Messages go to the address the owner registered with Web3Forms. The Pension basics answer about saving says numbers stay on the device and only the question box sends anything.
 - **Credit.** Whether the page names him or stays anonymous is undecided. Do not add his name to the page until he says so.
 - **Phone check.** The live site has not been checked on an actual phone since the move to GitHub Pages.
