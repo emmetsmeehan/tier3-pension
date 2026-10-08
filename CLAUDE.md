@@ -8,7 +8,8 @@ This repository is the source of truth. The calculator used to live on a claude.
 
 - The whole site is `index.html`: markup, CSS and JavaScript in one file. Outside resources: the Source Sans 3 font from Google Fonts, and Tesseract.js 5.1.1 from cdn.jsdelivr.net, loaded only when someone uploads a screenshot (it also fetches its worker, core and English data from jsdelivr). The owner approved Tesseract (Oct. 2026).
 - Members' numbers are saved in the browser's localStorage under `fdny-tier3-v2`, on their own device only. "Clear my numbers" at the bottom of the personal calculator erases them. Nothing is sent anywhere except the question box.
-- GitHub Pages serves the `main` branch from the repository root. A push to `main` goes live in a minute or two at https://emmetsmeehan.github.io/tier3-pension/
+- GitHub Pages serves the `main` branch from the repository root. A push to `main` goes live in a minute or two at https://tier3pension.com (custom domain since Oct. 8, 2026, set by the `CNAME` file; the old https://emmetsmeehan.github.io/tier3-pension/ address forwards there). Leave `CNAME` in place.
+- The domain was bought through Cloudflare Registrar, with DNS at Cloudflare: four A records for `@` (185.199.108.153, .109.153, .110.153, .111.153) and a CNAME `www` → `emmetsmeehan.github.io`, all "DNS only" (grey cloud), which GitHub needs to issue the HTTPS certificate. Saved numbers in localStorage don't carry over from the old address, since browsers store them per address.
 - `.nojekyll` stops GitHub from processing the files. Leave it in place.
 - The owner's standing instruction (Oct. 2026): once a change he asked for is tested, merge it to `main` so it goes live, unless he says otherwise.
 
@@ -88,6 +89,5 @@ The rate schedule PDFs are not in this repository. When a new contract or schedu
 ## Open items
 
 - **Question box.** Live: "What would you like to see here?" on the home screen posts to Web3Forms (`ASK_KEY` near the end of the script; the key is public by design). Messages go to the address the owner registered with Web3Forms. The Pension basics answer about saving says numbers stay on the device and only the question box sends anything.
-- **Domain name.** He wants a cleaner address than the github.io one. Not bought yet.
 - **Credit.** Whether the page names him or stays anonymous is undecided. Do not add his name to the page until he says so.
 - **Phone check.** The live site has not been checked on an actual phone since the move to GitHub Pages.
