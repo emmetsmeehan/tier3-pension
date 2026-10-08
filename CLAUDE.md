@@ -31,7 +31,7 @@ The disclaimer appears under the home intro and in the footer on every screen: u
 
 ## Page structure
 
-Home (headline "Your FDNY Tier 3 pension", sub "Everything you need to know, and what you'll collect in retirement.") with four big buttons, then the question box. Each section opens as its own screen at a hash address with a sticky "Home" back button; the browser back button works:
+Home (headline "Learn about your pension.", sub "Everything you need to know, and what you'll collect in retirement.") with four big buttons, then the question box. Each section opens as its own screen at a hash address with a sticky "Home" back button; the browser back button works:
 
 - `#basics` Pension basics: four key-number tiles, tap-to-open questions in plain English (this replaced the old FAQ), and "The fine print: how the calculators work".
 - `#bills` Bills in Albany: cards built from the `BILLS` array in the script. Each card: title, introduced date, summary, a vertical status track (green checks for done steps, an amber pulsing clock for the step in progress, grey dashed circles for later steps; a law gets a gold pen on "Signed into law"), "Read the full bill" links at the bottom, and "See what it means for you" which turns that bill on in the personal calculator.
