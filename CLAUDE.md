@@ -1,4 +1,4 @@
-# FDNY Tier 3 Pension Calculator (and Tier 2)
+# My Fire Pension: FDNY Tier 2 and Tier 3 pension calculators
 
 A public, single-page guide and pension calculator for FDNY uniformed members in Tier 3 (appointed on or after July 1, 2009). The owner is the GitHub user `emmetsmeehan`. He built it to share with fellow members, who will use it when thinking about real retirement decisions, so the numbers and the wording have to be right.
 
@@ -6,7 +6,9 @@ This repository is the source of truth. The calculator used to live on a claude.
 
 ## How the site is published
 
-- The whole site is `index.html`: markup, CSS and JavaScript in one file. Outside resources: the Source Sans 3 font from Google Fonts, and Tesseract.js 5.1.1 from cdn.jsdelivr.net, loaded only when someone uploads a screenshot (it also fetches its worker, core and English data from jsdelivr). The owner approved Tesseract (Oct. 2026).
+- Site layout (Oct. 11, 2026): `index.html` at the root is a small tier chooser (two big boxes, Tier 2 and Tier 3, then "How to tell" by appointment date, and the disclaimer). It also sends old Tier 3 links (`/#basics`, `/#bills`, `/#quick`, `/#personal`) to `tier3/`. The Tier 3 calculator is `tier3/index.html`; the Tier 2 calculator is `tier2/index.html`. Each calculator page is one file: markup, CSS and JavaScript. The rest of this file describes the Tier 3 page unless it says Tier 2.
+- Domain move (in progress, Oct. 11, 2026): the owner bought `myfirepension.com` and wants the site there. `CNAME` still says `tier3pension.com` until the owner has set up DNS for the new domain; then change `CNAME`, and have `tier3pension.com` redirect at Cloudflare (`/tier2*` to `https://myfirepension.com/tier2/`, everything else to `https://myfirepension.com/tier3/`). Saved numbers don't carry over to a new domain.
+- Each calculator page's outside resources: the Source Sans 3 font from Google Fonts, and Tesseract.js 5.1.1 from cdn.jsdelivr.net, loaded only when someone uploads a screenshot (it also fetches its worker, core and English data from jsdelivr). The owner approved Tesseract (Oct. 2026).
 - Members' numbers are saved in the browser's localStorage under `fdny-tier3-v2`, on their own device only. "Clear my numbers" at the bottom of the personal calculator erases them. Nothing is sent anywhere except the question box.
 - GitHub Pages serves the `main` branch from the repository root. A push to `main` goes live in a minute or two at https://tier3pension.com (custom domain since Oct. 8, 2026, set by the `CNAME` file; the old https://emmetsmeehan.github.io/tier3-pension/ address forwards there). Leave `CNAME` in place.
 - The domain was bought through Cloudflare Registrar, with DNS at Cloudflare: four A records for `@` (185.199.108.153, .109.153, .110.153, .111.153) and a CNAME `www` → `emmetsmeehan.github.io`, all "DNS only" (grey cloud), which GitHub needs to issue the HTTPS certificate. There is also a TXT record `_github-pages-challenge-emmetsmeehan` that verifies the domain to the owner's GitHub account, so no one else can point it at their own GitHub site; leave it in place. "Enforce HTTPS" is on in the repository's Pages settings. Saved numbers in localStorage don't carry over from the old address, since browsers store them per address.
