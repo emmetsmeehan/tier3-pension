@@ -105,5 +105,6 @@ Sources: the Fire Pension Fund's Annual Comprehensive Financial Report for FY202
 ## Open items
 
 - **Question box.** Live: "What else would you like to see here?" on the home screen posts to Web3Forms (`ASK_KEY` near the end of the script; the key is public by design). Messages go to the address the owner registered with Web3Forms. The Pension basics answer about saving says numbers stay on the device and only the question box sends anything.
+- **AI question box (planned, not started).** The owner wants to try it later (Oct. 11, 2026). Plan discussed: a Cloudflare Worker holds the Anthropic API key (never in the page or the repo; the owner enters it himself), the page sends only the question (not the member's numbers), the prompt carries that page's calculation rules, answers are labeled as AI with "check with the Fund", with a monthly spending cap and per-visitor limits. Before building, ask him: OK to label it as AI (it changes the no-AI-mention rule), which pages, and the cap. The "saved or sent" answers would need updating.
 - **Credit.** Whether the page names him or stays anonymous is undecided. Do not add his name to the page until he says so.
 - **Phone check.** The live site has not been checked on an actual phone since the move to GitHub Pages.
