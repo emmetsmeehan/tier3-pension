@@ -1,4 +1,4 @@
-# FDNY Tier 3 Pension Calculator
+# FDNY Tier 3 Pension Calculator (and Tier 2)
 
 A public, single-page guide and pension calculator for FDNY uniformed members in Tier 3 (appointed on or after July 1, 2009). The owner is the GitHub user `emmetsmeehan`. He built it to share with fellow members, who will use it when thinking about real retirement decisions, so the numbers and the wording have to be right.
 
@@ -85,6 +85,22 @@ The bonus uses top-step annual **base** salary for the rank, with no longevity p
 The bill's fiscal note uses higher figures (FF $140,392, LT $157,751, CAPT $179,842, Chiefs $255,863), which are 2024 salaries increased for assumed inflation. The owner chose to keep base-only figures because he does not want to assume inflation. The page says the bill's wording could come out higher than base salary, and members can type over the figure.
 
 The rate schedule PDFs are not in this repository. When a new contract or schedule comes out, ask the owner for it and update the table above along with the page.
+
+## Tier 2 page (`tier2/index.html`)
+
+Added Oct. 11, 2026 at the owner's request, for members appointed July 1, 1973 to June 30, 2009. Served at https://tier3pension.com/tier2/. It is a separate single file with the same look, CSS and earnings import as the Tier 3 page; a fix to shared code (import parser, slider, question box) usually needs making in both files. It saves to localStorage under `fdny-tier2-v1`, separate from Tier 3. The Tier 3 home disclaimer, its "Am I in Tier 3?" answer and its Tier 2 warning link to it; the Tier 2 home has a card back to Tier 3. Same disclaimer rules. No Bills section (the owner chose to skip bills until he confirms which matter; S5058 of 2025, 1/60th to 1/40th, status unknown). Question box subject: "Tier 2 calculator: new question".
+
+Sources: the Fire Pension Fund's Annual Comprehensive Financial Report for FY2025 (in the owner's Google Drive as `fire-pension-fund-cafr.pdf`; summary of Tier I and II benefits and the notes), and page 27 of the Tiers 1 & 2 Summary Plan Description dated Sept. 12, 2014 (vesting only; PDF from the owner). Rules the page implements, all owner decisions (Oct. 11, 2026):
+
+- **Service pension:** 50% of final salary at 20 years, plus 1/60th of total earnings after the 20th anniversary, plus a pension from ITHP contributions after 20 years, plus an annuity from excess contributions. No cap. Slider 20 to 40 years (stops 20, 25, 30, 35, 40; 25 and 35 on the lower row).
+- **Final salary:** earnings in the 12 months before retirement, overtime included, no cap. **Not confirmed**: the ACFR doesn't define it (its only example is the Kingston Law 12-month final year), and it says Chapter 372 of the Laws of 2000 revised the Tier 2 salary base. The owner will confirm with his union rep. The personal calculator splits calendar years evenly by month for the final 12 months and for the 1/60th; the quick calculator assumes each year past 20 paid about the final salary.
+- **ITHP:** estimated as 5% of pay after the 20th anniversary (whole career on a 3/4s), credited 8.25% a year to retirement, then paid level to age 85 at 7%. The 7%/age-85 payout is our own assumption, labeled rough. An optional box ("Your ITHP and annuity from the Fund", per month) replaces the estimate for every plan. Excess contributions are not estimated.
+- **COLA only, no escalation; no Social Security offset** (the ACFR lists the offset only for Tier 3). COLA same rule as Tier 3; it reduces the VSF until 62.
+- **VSF $12,000 and banked variable** as in Tier 3 (ACFR notes: max $12,000 since 2008 for firefighters and officers).
+- **3/4s:** 75% of final salary + 1/60th after 20 + ITHP reserve + annuity of accumulated deductions; the 75% is federally tax-free, the rest federally taxed, all free of NYS/NYC tax. No VSF. COLA after 5 years retired.
+- **Comparison:** "Retire soon or work longer?": the soonest date ahead (20 years or next month), then +1, +3 and +5 years, plus "Your plan". No escalation chart.
+- **Age limit:** the page warns past 65 and the goal search stops at 65 or 40 years. The Tier 2 mandatory retirement age has not been verified.
+- Not modeled: ordinary disability, vested retirement, other credited service (1/80th), loans and shortages, Tier 1, options.
 
 ## Open items
 
