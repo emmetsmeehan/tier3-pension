@@ -75,7 +75,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .hero .sub{font-size:clamp(19px,3.6vw,23px);color:var(--muted);max-width:34ch}
 .hero .disc{font-size:14.5px;color:var(--muted);max-width:60ch}
 .navgrid{display:grid;gap:14px}
-@media (min-width:720px){.navgrid{grid-template-columns:1fr 1fr}}
+@media (min-width:720px){.navgrid{grid-template-columns:1fr 1fr}.navgrid>a:last-child:nth-child(odd){grid-column:1/-1}}
 .navcard{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);min-height:108px;transition:transform .15s,border-color .15s}
 .navcard:hover{border-color:color-mix(in srgb,var(--c) 55%,var(--line));transform:translateY(-1px)}
 .navcard .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 13%,var(--surface));color:var(--c)}
@@ -456,12 +456,7 @@ body.has-pbar .app{padding-bottom:110px}
     </a>
     <a class="navcard" href="#personal" style="--c:var(--accent)">
       <span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="7.5" r="3.5"/><path d="M2.5 20.5v-1a5.5 5.5 0 0 1 5.5-5.5h2.5"/><path d="M15 20.5v-3M18.5 20.5v-7M22 20.5v-5"/></svg></span>
-      <span><h2>Your personal calculator</h2><p>Use your real earnings to see what you'll collect, and what another year gets you.</p></span>
-      <svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
-    </a>
-    <a class="navcard" href="../tier3/" style="--c:var(--gold)">
-      <span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></span>
-      <span><h2>Tier 3 calculator</h2><p>Appointed on or after July 1, 2009? Your rules are different.</p></span>
+      <span><h2>Your personal numbers</h2><p>Use your real earnings to see what you'll collect, and what another year gets you.</p></span>
       <svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
     </a>
   </nav>
@@ -520,7 +515,7 @@ body.has-pbar .app{padding-bottom:110px}
     <details><summary>What is ITHP, and the annuity?</summary><div class="ans">
       <p><b>ITHP</b> (Increased-Take-Home-Pay) is money the City pays into your pension account for you, currently 5% of your pay, so less comes out of your check. What the City pays in <b>after 20 years</b>, with interest, becomes an extra pension when you retire.</p>
       <p>If you've paid in more than the required amount, for example by keeping your contributions going after 20 years, the extra can be paid as an <b>annuity</b> or taken as a lump sum. Withdrawals can be taxed, and there can be a 10% penalty if you're under 50.</p>
-      <p>Both depend on your own account. The personal calculator gives a rough estimate of the ITHP piece, and you can type in the exact number from your Fund estimate instead.</p></div></details>
+      <p>Both depend on your own account. The personal numbers page gives a rough estimate of the ITHP piece, and you can type in the exact number from your Fund estimate instead.</p></div></details>
     <details><summary>What is the 50% indicator?</summary><div class="ans">
       <p>It's a setting that puts <b>extra money into your pension account</b>, on top of what's required: an additional 50% of your required contribution, taken from each paycheck. It's voluntary.</p>
       <ul>
@@ -529,7 +524,7 @@ body.has-pbar .app{padding-bottom:110px}
         <li>When you retire for service or 3/4s, you can take it as a <b>lump sum</b> or as an <b>extra annuity</b> added to your pension. On an ordinary disability it has to be a lump sum.</li>
       </ul>
       <p class="ex">Example: if your required contribution is 2.5% of your pay, the 50% indicator adds about 1.25% more.</p>
-      <p>The calculators don't estimate this money. If your Fund estimate shows an annuity from it, add it in the "Your ITHP and annuity from the Fund" box in the personal calculator. Ask the Fund or a tax professional before taking a lump sum, especially if you're under 50.</p></div></details>
+      <p>The calculators don't estimate this money. If your Fund estimate shows an annuity from it, add it in the "Your ITHP and annuity from the Fund" box in the personal numbers page. Ask the Fund or a tax professional before taking a lump sum, especially if you're under 50.</p></div></details>
     <details><summary>Does my pension go up after I retire?</summary><div class="ans">
       <p>Only a little. Tier 2 has <b>no escalation</b>. You get the COLA: half of inflation (between 1% and 3%) on the first $18,000 of your pension, about $270 a year when inflation is 3%.</p>
       <p>It starts at age 62 once you've been retired 5 years, or at 55 once you've been retired 10 years.</p></div></details>
@@ -558,7 +553,7 @@ body.has-pbar .app{padding-bottom:110px}
       <p>From the NYC Fire Pension Fund: <a href="tel:9294360099">929-436-0099</a>. On e-UPS, from any firehouse computer, you can download your Annual Pension Statement and get a current estimate of your pension.</p>
       <p>This site is an unofficial planning tool. It isn't affiliated with the FDNY or the Pension Fund, and your actual numbers may vary. Confirm with the Fund before you make retirement decisions.</p></div></details>
     <details><summary>Is anything I type saved or sent anywhere?</summary><div class="ans">
-      <p>Your numbers are saved only on your own phone or computer, so they're still there next time. They're never sent anywhere. To erase them, tap "Clear my numbers" at the bottom of the personal calculator.</p>
+      <p>Your numbers are saved only on your own phone or computer, so they're still there next time. They're never sent anywhere. To erase them, tap "Clear my numbers" at the bottom of the personal numbers page.</p>
       <p>The only thing that ever leaves your device is a question or suggestion you choose to send from the home page.</p></div></details>
   </div>
 
@@ -566,8 +561,8 @@ body.has-pbar .app{padding-bottom:110px}
     <summary style="cursor:pointer;font-weight:700;font-size:18px">The fine print: how the calculators work</summary>
     <div class="fineprint" style="margin-top:14px">
       <p><strong>Pension:</strong> 50% of final salary at 20+ years of uniformed service, plus 1/60th of total earnings after the 20th anniversary, plus a pension from ITHP contributions made after 20 years with interest, plus an annuity from any contributions above the required amount. Source: the Fire Pension Fund's Annual Comprehensive Financial Report for fiscal 2025 (summary of Tier I and II benefits).</p>
-      <p><strong>Final salary:</strong> the calculators use earnings in the 12 months before retirement, overtime included, following the Fund's example of how the final year is counted. The Fund's summary doesn't define final salary, and Chapter 372 of the Laws of 2000 revised the Tier 2 salary base; we haven't confirmed the exact rule. The personal calculator splits calendar-year earnings evenly by month to estimate those 12 months.</p>
-      <p><strong>1/60th:</strong> the personal calculator adds up your earnings from your 20th anniversary to retirement, splitting calendar years evenly by month. The quick calculator assumes you earn about your final salary in each year past 20.</p>
+      <p><strong>Final salary:</strong> the calculators use earnings in the 12 months before retirement, overtime included, following the Fund's example of how the final year is counted. The Fund's summary doesn't define final salary, and Chapter 372 of the Laws of 2000 revised the Tier 2 salary base; we haven't confirmed the exact rule. The personal numbers page splits calendar-year earnings evenly by month to estimate those 12 months.</p>
+      <p><strong>1/60th:</strong> the personal numbers page adds up your earnings from your 20th anniversary to retirement, splitting calendar years evenly by month. The quick calculator assumes you earn about your final salary in each year past 20.</p>
       <p><strong>ITHP in the quick calculator:</strong> the same rough estimate, figured on your final salary and assuming you were appointed at 25. Type the amount from your Fund estimate to use it instead.</p>
       <p><strong>ITHP estimate:</strong> the City's 5% of pay after your 20th anniversary, credited 8.25% interest a year until you retire, then paid out evenly to age 85 assuming 7% interest. On a 3/4s it uses your whole career in the table. The Fund's real conversion uses its own tables, so this is rough. If you type the amount from your Fund estimate, that's used instead. Extra contributions you've made aren't estimated; type them in with the ITHP amount if your estimate shows them.</p>
       <p><strong>Your earnings:</strong> imported numbers come from the Medicare Wages column of your NYCAPS Tax Summary: all taxable pay, overtime included. That's close to what the Pension Fund counts, but not exact; it can include pay the Fund leaves out, such as uniform allowance. Future years repeat your last known year unless you choose a yearly raise.</p>
@@ -581,7 +576,7 @@ body.has-pbar .app{padding-bottom:110px}
 
   <div class="nextrow">
     <a class="navcard" href="#quick" style="--c:var(--sage)"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h3.5"/></svg></span><span><h2>Quick calculator</h2><p>Your monthly pension in seconds.</p></span><svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
-    <a class="navcard" href="#personal" style="--c:var(--accent)"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="7.5" r="3.5"/><path d="M2.5 20.5v-1a5.5 5.5 0 0 1 5.5-5.5h2.5"/><path d="M15 20.5v-3M18.5 20.5v-7M22 20.5v-5"/></svg></span><span><h2>Your personal calculator</h2><p>Your real earnings, your real numbers.</p></span><svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+    <a class="navcard" href="#personal" style="--c:var(--accent)"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="7.5" r="3.5"/><path d="M2.5 20.5v-1a5.5 5.5 0 0 1 5.5-5.5h2.5"/><path d="M15 20.5v-3M18.5 20.5v-7M22 20.5v-5"/></svg></span><span><h2>Your personal numbers</h2><p>Your real earnings, your real numbers.</p></span><svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
   </div>
 </main>
 
@@ -594,7 +589,7 @@ body.has-pbar .app{padding-bottom:110px}
       <div class="field">
         <label for="qFas">Your final salary</label>
         <div class="inp big"><span>$</span><input id="qFas" inputmode="numeric" placeholder="150,000" autocomplete="off"></div>
-        <div class="hint">What you expect to earn in your last 12 months, overtime included. Not sure? A guess is fine, or use the personal calculator.</div>
+        <div class="hint">What you expect to earn in your last 12 months, overtime included. Not sure? A guess is fine, or use the personal numbers page.</div>
       </div>
       <div class="field" id="qSlider"></div>
       <div class="field" id="qAnnBox">
@@ -611,9 +606,9 @@ body.has-pbar .app{padding-bottom:110px}
 </main>
 
 <!-- ===================== PERSONAL ===================== -->
-<main class="view" id="v-personal" data-title="Your personal calculator · FDNY Tier 2" hidden>
-  <div class="topbar"><a class="backbtn" href="#home"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Home</a><span class="tb-title">Your personal calculator</span></div>
-  <div class="vhead"><h1>Your personal calculator</h1><p>Use your real earnings to see what you'll collect, and what working longer gets you. Your numbers stay on this device.</p></div>
+<main class="view" id="v-personal" data-title="Your personal numbers · FDNY Tier 2" hidden>
+  <div class="topbar"><a class="backbtn" href="#home"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Home</a><span class="tb-title">Your personal numbers</span></div>
+  <div class="vhead"><h1>Your personal numbers</h1><p>Use your real earnings to see what you'll collect, and what working longer gets you. Your numbers stay on this device.</p></div>
 
   <div class="pgrid">
     <div class="pmain">
@@ -850,7 +845,7 @@ function renderQuick(){
       ${showAnn?`<div class="brow"><div class="bl"><b>${typed?'ITHP and annuity':'ITHP pension (estimate)'}</b><small>${typed?'The amount you typed from your Fund estimate':dis?'Rough estimate from the City’s 5% over your career':'Rough estimate from the City’s 5% after 20 years'}</small></div><div class="amt"><b>${usd(ann/12)}/mo</b></div></div>`:''}
     </div>
     <div class="note" style="--c:${note.c}"><span class="ni">${note.i}</span><div><b>${note.t}</b><p>${note.p}</p></div></div>
-    <p class="fine">${dis?'':`This is your pension alone. You’d also get the $12,000 a year VSF${past>=1?`, and a ${usd(VSF*Math.floor(past))} banked variable lump sum when you retire`:''}. `}The personal calculator covers all of it, with your real earnings.</p>
+    <p class="fine">${dis?'':`This is your pension alone. You’d also get the $12,000 a year VSF${past>=1?`, and a ${usd(VSF*Math.floor(past))} banked variable lump sum when you retire`:''}. `}The personal numbers page covers all of it, with your real earnings.</p>
     <a class="btn" href="#personal">Get your exact numbers ${ICON.arrow}</a>`;
 }
 
