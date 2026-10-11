@@ -1,6 +1,7 @@
-# tier3-pension
-Help calculate your FDNY tier 3 pension
+# myfirepension
+Unofficial FDNY Tier 2 and Tier 3 pension calculators.
 
-Live at https://tier3pension.com
+Live at https://tier3pension.com (moving to https://myfirepension.com)
 
-Tier 2 calculator: https://tier3pension.com/tier2/
+- Tier 3: /tier3/
+- Tier 2: /tier2/
