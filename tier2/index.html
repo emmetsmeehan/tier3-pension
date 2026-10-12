@@ -488,7 +488,7 @@ body.has-pbar .app{padding-bottom:110px}
 
   <div class="tiles">
     <div class="tile" style="--c:var(--accent)"><b>50%</b><span>of your final salary once you have 20 years</span></div>
-    <div class="tile" style="--c:var(--steel)"><b>12 months</b><span>of pay before you retire, overtime included, set your final salary</span></div>
+    <div class="tile" style="--c:var(--steel)"><b>Best 3 or last year</b><span>of pay, whichever is higher, sets your final salary</span></div>
     <div class="tile" style="--c:var(--sage)"><b>1/60th</b><span>of everything you earn after 20 years is added on top</span></div>
     <div class="tile" style="--c:var(--gold)"><b>$12,000</b><span>a year from the VSF, on top of your pension</span></div>
   </div>
@@ -507,8 +507,14 @@ body.has-pbar .app{padding-bottom:110px}
       </ul>
       <p>Unlike Tier 3, there's no 50% cap: every year past 20 adds to your pension.</p></div></details>
     <details><summary>What is my final salary?</summary><div class="ans">
-      <p>The calculators use what you earned in the <b>12 months before you retire</b>, overtime, holiday pay and night differential included.</p>
-      <p>That's how the Pension Fund's own example counts the final year. We're still confirming the exact rule with the Fund, so treat these numbers as estimates and check your official estimate before you decide.</p></div></details>
+      <p>It's the <b>higher</b> of two numbers, overtime, holiday pay and night differential included:</p>
+      <ul>
+        <li>what you earned in the <b>12 months before you retire</b>, or</li>
+        <li>the average of your <b>best 3 calendar years in a row</b>.</li>
+      </ul>
+      <p>There's a <b>20% limit</b>: a year counts only up to 20% more than the average of the 2 years before it. Anything above that is cut. (Tier 3's limit is 10%.)</p>
+      <p class="ex">Example: you made $120,000 and then $130,000. Their average is $125,000, so the next year counts only up to $150,000.</p>
+      <p>We're still confirming the exact rule with the Pension Fund, so treat these numbers as estimates and check your official estimate before you decide.</p></div></details>
     <details><summary>What is the 1/60th?</summary><div class="ans">
       <p>Add up everything you earn after your 20th anniversary and divide by 60. That amount is added to your yearly pension.</p>
       <p class="ex">Example: you stay 5 years past 20 and earn $150,000 each year. That's $750,000, and 1/60th of it is <b>$12,500 a year</b> more pension, about $1,040 a month.</p></div></details>
@@ -561,7 +567,7 @@ body.has-pbar .app{padding-bottom:110px}
     <summary style="cursor:pointer;font-weight:700;font-size:18px">The fine print: how the calculators work</summary>
     <div class="fineprint" style="margin-top:14px">
       <p><strong>Pension:</strong> 50% of final salary at 20+ years of uniformed service, plus 1/60th of total earnings after the 20th anniversary, plus a pension from ITHP contributions made after 20 years with interest, plus an annuity from any contributions above the required amount. Source: the Fire Pension Fund's Annual Comprehensive Financial Report for fiscal 2025 (summary of Tier I and II benefits).</p>
-      <p><strong>Final salary:</strong> the calculators use earnings in the 12 months before retirement, overtime included, following the Fund's example of how the final year is counted. The Fund's summary doesn't define final salary, and Chapter 372 of the Laws of 2000 revised the Tier 2 salary base; we haven't confirmed the exact rule. The personal numbers page splits calendar-year earnings evenly by month to estimate those 12 months.</p>
+      <p><strong>Final salary:</strong> the higher of earnings in the 12 months before retirement or the average of the best 3 consecutive calendar years, overtime included. A 20% limit applies: each of the best 3 years counts only up to 120% of the average of the 2 years before it, and the last 12 months count only up to 120% of the average of the two 12-month periods before them. The Fund's summary doesn't define final salary, and Chapter 372 of the Laws of 2000 revised the Tier 2 salary base; we haven't confirmed the exact rule with the Fund. The personal numbers page splits calendar-year earnings evenly by month to estimate the last 12 months, and uses full calendar years before the year you retire for the best 3. The quick calculator uses the final salary exactly as you type it.</p>
       <p><strong>1/60th:</strong> the personal numbers page adds up your earnings from your 20th anniversary to retirement, splitting calendar years evenly by month. The quick calculator assumes you earn about your final salary in each year past 20.</p>
       <p><strong>ITHP in the quick calculator:</strong> the same rough estimate, figured on your final salary and assuming you were appointed at 25. Type the amount from your Fund estimate to use it instead.</p>
       <p><strong>ITHP estimate:</strong> the City's 5% of pay after your 20th anniversary, credited 8.25% interest a year until you retire, then paid out evenly to age 85 assuming 7% interest. On a 3/4s it uses your whole career in the table. The Fund's real conversion uses its own tables, so this is rough. If you type the amount from your Fund estimate, that's used instead. Extra contributions you've made aren't estimated; type them in with the ITHP amount if your estimate shows them.</p>
@@ -589,7 +595,7 @@ body.has-pbar .app{padding-bottom:110px}
       <div class="field">
         <label for="qFas">Your final salary</label>
         <div class="inp big"><span>$</span><input id="qFas" inputmode="numeric" placeholder="150,000" autocomplete="off"></div>
-        <div class="hint">What you expect to earn in your last 12 months, overtime included. Not sure? A guess is fine, or use the personal numbers page.</div>
+        <div class="hint">The higher of your last 12 months or your best 3 years in a row, overtime included. Not sure? A guess is fine, or use the personal numbers page.</div>
       </div>
       <div class="field" id="qSlider"></div>
       <div class="field" id="qAnnBox">
@@ -627,7 +633,7 @@ body.has-pbar .app{padding-bottom:110px}
 
       <section class="card step" aria-labelledby="s2h">
         <div class="stephead"><span class="n">2</span><h2 id="s2h">Your earnings</h2></div>
-        <p class="hint" style="margin-top:-8px">Your pension comes from what you earn in your last 12 months and after your 20th anniversary. Pick one way to give us your numbers.</p>
+        <p class="hint" style="margin-top:-8px">Your pension comes from your best years of pay and what you earn after your 20th anniversary. Pick one way to give us your numbers.</p>
         <div class="modes" role="group" aria-label="How to enter your earnings">
           <button type="button" class="mode" data-mode="manual" aria-pressed="true"><span class="tick"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="mi"><svg class="i" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/></svg></span><b>Type in each year</b><small>Enter what you made, year by year</small></button>
           <button type="button" class="mode" data-mode="import" aria-pressed="false"><span class="tick"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="mi"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg></span><b>Import from NYCAPS</b><small>Your exact numbers from ESS</small></button>
@@ -894,28 +900,44 @@ function yearValues(firstY,lastY){
   return {vals,kind};
 }
 /* Month by month from appointment: each month gets 1/12 of its calendar year's earnings.
-   Final salary = the 12 months before retirement. 1/60th = months from the 20th anniversary to retirement.
+   Final salary = the higher of (a) the 12 months before retirement, capped at 120% of the average of the two 12-month periods before them,
+   and (b) the best 3 consecutive full calendar years before the retirement year, each capped at 120% of the average of the 2 years before it
+   (the owner's reading of Tier 2's 20% lookback, Oct. 12, 2026; not yet confirmed with the Fund).
+   1/60th = months from the 20th anniversary to retirement.
    ITHP = 5% of pay in those months (whole career on a 3/4s), credited 8.25% a year to retirement. */
-function earnings(months,c,firstY){
-  const retDate=addM(c.appt,months),{vals,kind}=yearValues(firstY,retDate.getFullYear());
-  const fsBy={},a20By={},missing=new Set();let fs=0,a20=0,ithp=0;
-  const ithpFrom=c.dis?0:240;
-  for(let k=Math.min(months-12,ithpFrom);k<months;k++){
-    if(k<0) continue;
-    const y=addM(c.appt,k).getFullYear(),v=(vals[y]||0)/12;
-    const inFs=k>=months-12,in20=k>=240,inI=k>=ithpFrom;
-    if((inFs||in20)&&!(vals[y]>0)) missing.add(y);
-    if(inFs){fs+=v;fsBy[y]=(fsBy[y]||0)+v}
-    if(in20){a20+=v;a20By[y]=(a20By[y]||0)+v}
-    if(inI) ithp+=ITHP_RATE*v*Math.pow(1+ACCT_INT,(months-k-0.5)/12);
+const LOOKBACK=1.2;
+function earnings(months,c){
+  const apptY=c.appt.getFullYear(),retDate=addM(c.appt,months),retY=retDate.getFullYear(),{vals,kind}=yearValues(apptY,retY);
+  const yOf=k=>addM(c.appt,k).getFullYear(),mv=k=>k<0?0:(vals[yOf(k)]||0)/12;
+  const sumM=(a,b)=>{if(a<0) return null;let t=0;for(let k=a;k<b;k++){const v=mv(k);if(!(v>0)) return null;t+=v}return t};
+  const raw12=sumM(months-12,months)||0,p1=sumM(months-24,months-12),p2=sumM(months-36,months-24);
+  const lim12=p1&&p2?LOOKBACK*(p1+p2)/2:null,fs12=lim12!==null?Math.min(raw12,lim12):raw12;
+  const cnt=y=>{const v=vals[y]||0;return vals[y-1]>0&&vals[y-2]>0?Math.min(v,LOOKBACK*(vals[y-1]+vals[y-2])/2):v};
+  let best=null;
+  for(let y=apptY;y+2<=retY-1;y++){
+    if(![y,y+1,y+2].every(x=>vals[x]>0)) continue;
+    const avg=(cnt(y)+cnt(y+1)+cnt(y+2))/3;
+    if(!best||avg>best.fas) best={fas:avg,start:y,end:y+2};
   }
-  return {retDate,vals,kind,fs,a20,ithp,fsBy,a20By,missing:[...missing].sort((a,b)=>a-b)};
+  const useBest=!!best&&best.fas>fs12,fs=useBest?best.fas:fs12;
+  const fsBy={},capBy={};
+  if(useBest) for(let y=best.start;y<=best.end;y++){fsBy[y]=cnt(y);capBy[y]=(vals[y]||0)-cnt(y)}
+  else for(let k=Math.max(0,months-12);k<months;k++) fsBy[yOf(k)]=(fsBy[yOf(k)]||0)+mv(k);
+  const a20By={},missing=new Set();let a20=0,ithp=0;
+  const ithpFrom=c.dis?0:240;
+  for(let k=Math.max(0,Math.min(months-12,ithpFrom));k<months;k++){
+    const y=yOf(k),v=mv(k),inFs=k>=months-12,in20=k>=240;
+    if((inFs||in20)&&!(vals[y]>0)) missing.add(y);
+    if(in20){a20+=v;a20By[y]=(a20By[y]||0)+v}
+    if(k>=ithpFrom) ithp+=ITHP_RATE*v*Math.pow(1+ACCT_INT,(months-k-0.5)/12);
+  }
+  return {retDate,vals,kind,fs,fs12,raw12,lim12,best,useBest,fsBy,capBy,a20,ithp,a20By,missing:[...missing].sort((a,b)=>a-b)};
 }
 function firstYear(c,m){const retY=addM(c.appt,m).getFullYear();return c.dis?c.appt.getFullYear():Math.max(c.appt.getFullYear(),Math.min(addM(c.appt,240).getFullYear(),retY-1)-1)}
 function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,ann:num(p.ann)*12,cpi:num(p.cpi)/100}}
 
 function scenario(months,c){
-  const S=months/12,first=firstYear(c,months),e=earnings(months,c,first),retAge=c.age+S;
+  const S=months/12,e=earnings(months,c),first=Math.min(firstYear(c,months),e.useBest?e.best.start:Infinity),retAge=c.age+S;
   const ok=e.fs>0&&!e.missing.length;
   const half=(c.dis?0.75:0.5)*e.fs,sixty=e.a20/60,ithpEst=e.ithp/annuityFactor(retAge);
   const typed=c.ann>0,ann=typed?c.ann:ithpEst,base=ok?half+sixty+ann:0;
@@ -961,7 +983,7 @@ function renderWorksheet(c,m,you){
   for(let y=firstY;y<=showTo;y++){
     const row=$('r-'+y),inp=$('e-'+y),v=vals[y],fsP=you.fsBy[y]||0,a20P=you.a20By[y]||0,after=y>retY||(y===retY&&!fsP&&!a20P);
     row.className=(fsP?'win ':'')+(kind[y]==='est'?'est ':'')+(after?'after ':'')+(y>NOW_Y?'fut':'');
-    row.querySelector('.bslot').innerHTML=fsP?' <span class="bdg best">Final 12</span>':'';
+    row.querySelector('.bslot').innerHTML=fsP?` <span class="bdg best">${you.useBest?'Best 3':'Final 12'}</span>`:'';
     let tag='',orange=false;
     if(after) tag='After you retire';
     else if(y===retY) tag='Year you retire';
@@ -972,13 +994,13 @@ function renderWorksheet(c,m,you){
     const t=$('t-'+y);t.textContent=tag;t.className='tg'+(orange?' orange':'');
     if(inp&&document.activeElement!==inp) inp.placeholder=kind[y]==='est'?commas(v):'';
     const parts=[];
-    if(fsP&&v>0) parts.push(`${usd(fsP)}<span class="cut">final salary</span>`);
+    if(fsP&&v>0) parts.push(`${usd(fsP)}<span class="cut">${you.useBest?'best 3':'final salary'}</span>`+((you.capBy[y]||0)>0.5?`<span class="cut">${usd(you.capBy[y])} over 20% limit</span>`:''));
     if(a20P&&v>0) parts.push(`${usd(a20P)}<span class="cut">1/60th</span>`);
     $('c-'+y).innerHTML=parts.length?parts.join(''):'–';
   }
   const futN=showTo-NOW_Y,fb=$('futBtn');
   fb.hidden=futN<1;document.querySelector('.ws').classList.toggle('hidefut',!showFut);fb.setAttribute('aria-expanded',showFut);
-  fb.textContent=showFut?'Hide future years':`Show future years (${NOW_Y+1===showTo?showTo:(NOW_Y+1)+'–'+showTo})${retY>NOW_Y?' · your final 12 months are there':''}`;
+  fb.textContent=showFut?'Hide future years':`Show future years (${NOW_Y+1===showTo?showTo:(NOW_Y+1)+'–'+showTo})${Object.keys(you.fsBy).some(y=>+y>NOW_Y)?' · your final salary years are there':''}`;
   const k=known(),ks=Object.keys(k).map(Number).filter(y=>k[y]>0).sort((a,b)=>a-b),last=ks[ks.length-1];
   $('growAmt').hidden=!p.growOn;
   $('growHint').textContent=last==null?'Future years repeat your last year once you enter one.':p.growOn?`Future years start from your ${last} pay (${usd(k[last])}) and rise ${num(p.grow)}% a year.`:`Future years repeat your ${last} pay: ${usd(k[last])}. Type over any year to change it.`;
@@ -1020,7 +1042,8 @@ function renderP(){
     head.innerHTML=`<div class="eyebrow">Your results</div><div class="empty"><span>Your monthly pension shows up here once we have your earnings for your last 12 months${c.dis?'':' and every year after your 20th anniversary'}. ${miss}</span></div>`;
     $('goalOut').innerHTML='';updateBar(null);return;
   }
-  const brk=`<div class="brow"><div class="bl"><b>${c.dis?'75%':'50%'} of final salary</b><small>${c.dis?'75%':'50%'} of ${usd(you.fs)}, your last 12 months</small></div><div class="amt"><b>${usd(you.half/12)}/mo</b><small>${usd(you.half)}/yr</small></div></div>
+  const brk=`<div class="brow"><div class="bl"><b>${c.dis?'75%':'50%'} of final salary</b><small>${c.dis?'75%':'50%'} of ${usd(you.fs)}, ${you.useBest?`your best 3 years (${you.best.start}–${you.best.end})`:'your last 12 months'}</small></div><div class="amt"><b>${usd(you.half/12)}/mo</b><small>${usd(you.half)}/yr</small></div></div>
+        <div class="incl">${ICON.check}<span>The higher of your <b>last 12 months</b> (${usd(you.fs12)}${you.lim12!==null&&you.raw12>you.lim12+0.5?`, cut from ${usd(you.raw12)} by the 20% limit`:''}) and your <b>best 3 years in a row</b> (${you.best?usd(you.best.fas):'not enough years yet'}).</span></div>
         <div class="brow"><div class="bl"><b>1/60th after 20 years</b><small>${you.a20?`${usd(you.a20)} earned since ${fmtMY(addM(c.appt,240))}, ÷ 60`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(you.sixty/12)}/mo</b><small>${usd(you.sixty)}/yr</small></div></div>
         ${annRow(you,c.dis)}`;
   const colaS=you.colaAge?`From about age ${Math.ceil(you.colaAge)}, a COLA on the first $18,000 adds about ${usd(18000*you.colaRate)} a year.`:'';
@@ -1072,19 +1095,19 @@ function renderGoal(c,m,you){
   const pct=c.dis?0.75:0.5,need=Math.max(0,(g*12-you.sixty-you.ann)/pct);
   if(c.dis){
     const ok=you.base/12>=g-0.5;
-    o.innerHTML=`<p>For ${usd(g)} a month on a 3/4s, your last 12 months need to add up to about <b>${usd(need)}</b>, with the rest of your pension as it is now.</p><p>${ok?`<b style="color:var(--sage)">Your numbers get you there:</b> ${usd(you.base/12)} a month.`:`Yours is ${usd(you.fs)}, which pays ${usd(you.base/12)} a month in all.`}</p>`;return;
+    o.innerHTML=`<p>For ${usd(g)} a month on a 3/4s, your final salary needs to be about <b>${usd(need)}</b>, with the rest of your pension as it is now.</p><p>${ok?`<b style="color:var(--sage)">Your numbers get you there:</b> ${usd(you.base/12)} a month.`:`Yours is ${usd(you.fs)}, which pays ${usd(you.base/12)} a month in all.`}</p>`;return;
   }
   const lo=soonest(c),hi=maxMonths(c);
   let hit=null,bestM=lo,bestB=0;
   for(let mm=lo;mm<=hi;mm++){const s=scenario(mm,c);if(!s.ok) continue;if(s.base>bestB){bestB=s.base;bestM=mm}if(s.base/12>=g-0.5){hit=s;break}}
-  let h=`<p>To get <b>${usd(g)} a month</b> retiring at ${fmtSvcLong(m)}, your last 12 months need to add up to about <span class="big2">${usd(need)}</span>, with your 1/60th and ITHP as they are now.</p>`;
+  let h=`<p>To get <b>${usd(g)} a month</b> retiring at ${fmtSvcLong(m)}, your final salary needs to be about <span class="big2">${usd(need)}</span>, with your 1/60th and ITHP as they are now.</p>`;
   if(hit){
     h+=hit.months<=m
       ?`<p><b style="color:var(--sage)">Your plan already gets you there.</b> You'd reach it at ${fmtSvcLong(hit.months)} (${fmtMY(hit.retDate)}, age ${hit.retAge.toFixed(1)}), and your plan pays ${usd(you.base/12)} a month.</p>`
       :`<p><b>On your earnings, you'd reach it by retiring at ${fmtSvcLong(hit.months)}</b>: ${fmtMY(hit.retDate)}, at age ${hit.retAge.toFixed(1)}.</p><div><button type="button" class="btn small green" id="goalUse">Show me that plan</button></div>`;
   } else if(bestB>0){
     h+=`<p><b style="color:var(--accent)">Your current earnings don't get there</b> by ${hi<MAXM?'age 65':'40 years'}. The most you'd get is ${usd(bestB/12)} a month, at ${fmtSvcLong(bestM)}.</p>
-      <p>To retire at ${fmtSvcLong(m)} with ${usd(g)} a month, that's ${usd(Math.max(0,need-you.fs))} more in your last 12 months than your numbers show.</p>
+      <p>To retire at ${fmtSvcLong(m)} with ${usd(g)} a month, that's ${usd(Math.max(0,need-you.fs))} more final salary than your numbers show.</p>
       ${ST.p.growOn?'':'<p class="hint">Right now your future years just repeat your last year of pay. To see when raises would get you there, check "Fill in future years assuming a raise each year" in step 2.</p>'}`;
   }
   h+=`<p class="hint">The $1,000 a month VSF comes on top.</p>`;
