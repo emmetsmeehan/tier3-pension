@@ -740,15 +740,15 @@ body.has-pbar .app{padding-bottom:110px}
           <div class="inp"><span>$</span><input id="ss" inputmode="numeric"><span class="after">/month</span></div>
           <div class="hint">From ssa.gov/myaccount. Half of this comes off your pension at 62.</div>
         </div>
-        <details>
+        <details id="moreOpts">
           <summary style="cursor:pointer;font-weight:700">More options</summary>
           <div class="field" style="margin-top:12px">
             <label for="cpi">Inflation each year</label>
             <div class="inp" style="max-width:170px"><input class="pl" id="cpi" inputmode="decimal"><span class="after">%</span></div>
             <div class="hint">Used for escalation and the COLA. 3% is a common assumption.</div>
           </div>
+          <div class="billchecks" id="pBills" style="margin-top:18px"></div>
         </details>
-        <div class="billchecks" id="pBills"></div>
       </section>
     </div>
 
@@ -1042,6 +1042,8 @@ const apPick=setupDate('ap',1985,NOW_Y,ST.p.appt,v=>{ST.p.appt=v;wsKey='';render
 
 const pSlider=Slider($('pSlider'),{id:'pSvc',label:'Years on the job when you retire',value:ST.p.svc,onInput:v=>{ST.p.svc=v;renderP()}});
 const pChecks=BillChecks($('pBills'),()=>ST.p,()=>renderP(),()=>false);
+/* Pending bills sit under More options; keep it open when one is checked so the box isn't hidden. */
+if(ST.p.esc===20||ST.p.b40) $('moreOpts').open=true;
 const pRank=RankBox($('pRank'),()=>ST.p,()=>renderP(),()=>!ST.p.dis);
 /* Current rank: the rank at retirement follows it until the member picks a different one there. */
 (()=>{const box=$('curRanks');
@@ -1540,7 +1542,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-try]');if(
   const bill=BILLS.find(x=>x.id===b.dataset.try);
   if(bill.kind==='esc') ST.p.esc=bill.val; else ST.p[bill.id]=true;
   ST.p.dis=false;$('pDis').checked=false;pSlider.range(false);
-  jumpTo=document.querySelector('#pBills');location.hash='#personal';
+  $('moreOpts').open=true;jumpTo=document.querySelector('#pBills');location.hash='#personal';
 });
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(current==='personal')renderP()});
 let rz,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(()=>{if(current==='personal')renderP()},150)});
