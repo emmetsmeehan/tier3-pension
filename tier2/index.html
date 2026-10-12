@@ -283,6 +283,8 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .review td{padding:6px 4px;border-bottom:1px solid var(--line)}
 .review td:first-child{font-weight:700;width:30%}
 .verbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-radius:var(--r-sm);padding:12px 14px;background:color-mix(in srgb,var(--sage) 11%,var(--surface));border:1px solid color-mix(in srgb,var(--sage) 35%,transparent)}
+.growbtn.wstog{border:1px solid var(--line);border-radius:var(--r-sm)}
+.wstog small{display:block}
 .verbar .vt{display:flex;gap:10px;align-items:center;font-weight:700;color:var(--sage)}
 .vcheck{width:26px;height:26px;border-radius:50%;background:var(--sage);color:#fff;display:inline-grid;place-items:center;flex:none}
 .vcheck svg{width:16px;height:16px;stroke-width:3.2}
@@ -741,6 +743,8 @@ body.has-pbar .app{padding-bottom:110px}
             <div class="btnrow"><button type="button" class="btn green" id="lockBtn">These are right, lock them in</button><button type="button" class="btn ghost" id="cancelReview">Cancel</button></div>
           </div>
           <div class="verbar" id="verBar" hidden><span class="vt"><span class="vcheck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span id="verTxt"></span></span><button type="button" class="btn ghost small" id="startOver">Start over</button></div>
+          <div class="tierbox" id="needDates" role="alert" hidden><b>Add your dates to see your results</b><span>Your earnings are saved. Fill in your date of birth and appointment date in step 1, and your pension shows up.</span><button type="button" class="btn small" id="needGo">Go to step 1</button></div>
+          <button type="button" class="growbtn wstog" id="wsTog" aria-expanded="false" aria-controls="wsBox" hidden><span><b>Your earnings, year by year</b><small id="wsTogS"></small></span><span class="chev"></span></button>
         </div>
 
         <p class="empty" id="wsNeed" hidden>Enter your dates in step 1 and your earnings table shows up here, starting with the year you were appointed.</p>
@@ -1143,7 +1147,7 @@ function scenario(months,c){
 }
 
 /* ---------- earnings table ---------- */
-let wsKey='',showFut=false;
+let wsKey='',showFut=false,wsOpen=false;
 document.addEventListener('click',e=>{if(e.target.id==='futBtn'){showFut=!showFut;renderP()}});
 function renderWorksheet(c,m,you){
   const p=ST.p,retY=you.retDate.getFullYear(),firstY=you.first;
@@ -1209,7 +1213,13 @@ function renderP(){
     $('wsBox').hidden=!hasImp&&!reviewing?true:reviewing;
     if(hasImp){const ys=Object.keys(p.imported).map(Number).sort((a,b)=>a-b);$('verTxt').textContent=`${ys.length} years verified from NYCAPS (${ys[0]}–${ys[ys.length-1]})`}
   } else $('wsBox').hidden=false;
-  $('wsNeed').hidden=c.ok;if(!c.ok) $('wsBox').hidden=true;
+  /* After an import is locked in, the earnings table folds away behind a button. */
+  const folded=p.mode==='import'&&hasImp&&$('impReview').hidden;
+  $('wsTog').hidden=!folded||!c.ok;$('wsTog').setAttribute('aria-expanded',wsOpen);
+  $('wsTogS').textContent=wsOpen?'Tap to hide':'Tap to see which years count';
+  if(folded&&!wsOpen) $('wsBox').hidden=true;
+  $('needDates').hidden=!folded||c.ok;
+  $('wsNeed').hidden=c.ok||folded;if(!c.ok) $('wsBox').hidden=true;
   document.querySelector('.growrow').hidden=$('wsBox').hidden;
   $('tierWarn').hidden=!(c.appt&&c.appt>=new Date(2009,6,1));
   $('tierGo').href=`../tier3/?dob=${p.dob}&appt=${p.appt}#personal`;
@@ -1417,9 +1427,11 @@ $('cancelReview').addEventListener('click',()=>{closeReview();renderP()});
 $('lockBtn').addEventListener('click',()=>{
   const vals={};$('reviewRows').querySelectorAll('input').forEach(i=>{const n=num(i.value);if(n>0) vals[+i.dataset.ry]=n});
   if(!Object.keys(vals).length) return;
-  ST.p.imported=vals;ST.p.extra={};closeReview();$('impTxt').value='';wsKey='';renderP();
+  ST.p.imported=vals;ST.p.extra={};closeReview();$('impTxt').value='';wsKey='';wsOpen=false;renderP();
   $('verBar').scrollIntoView({behavior:'smooth',block:'start'});
 });
+$('wsTog').addEventListener('click',()=>{wsOpen=!wsOpen;renderP()});
+$('needGo').addEventListener('click',()=>{const t=ST.p.dob?$('apM'):$('dobM');$('s1h').scrollIntoView({behavior:'smooth',block:'start'});t.focus({preventScroll:true})});
 $('startOver').addEventListener('click',()=>{
   if(!confirm('Remove your imported numbers and start over?')) return;
   ST.p.imported={};ST.p.extra={};wsKey='';renderP();
