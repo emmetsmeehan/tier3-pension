@@ -253,6 +253,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .pside{display:grid;gap:16px;align-content:start;min-width:0}
 @media (min-width:980px){.pgrid{grid-template-columns:minmax(0,1fr) 390px;align-items:start}.pside{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;padding-bottom:4px}}
 .tierbox{background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:2px solid var(--accent);border-radius:var(--r-sm);padding:10px 12px;display:grid;gap:2px}
+.tierbox .btn{margin-top:8px;justify-self:start;min-height:48px}
 .tierbox b{color:var(--accent)}
 .tierbox span{font-size:15px}
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -655,7 +656,7 @@ body.has-pbar .app{padding-bottom:110px}
         <div class="field">
           <span class="flabel" id="apLbl">Appointment date</span>
           <div class="dsel" role="group" aria-labelledby="apLbl"><span><select id="apM" aria-label="Appointment month"></select></span><span><select id="apD" aria-label="Appointment day"></select></span><span><select id="apY" aria-label="Appointment year"></select></span></div>
-          <div class="tierbox" id="tierWarn" role="alert" hidden><b>You're in Tier 2</b><span>Members appointed before July 1, 2009 are generally Tier 2, which has different rules. These numbers won't match your pension. <a href="../tier2/#personal">Use the Tier 2 calculator.</a></span></div>
+          <div class="tierbox" id="tierWarn" role="alert" hidden><b>You're probably in Tier 2</b><span>Members appointed before July 1, 2009 are generally Tier 2, which has different rules. These Tier 3 numbers won't match your pension.</span><a class="btn small" id="tierGo" href="../tier2/#personal">Switch to Tier 2 <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         </div>
       </section>
 
@@ -883,6 +884,13 @@ function loadState(){
 let saveT;
 function save(){clearTimeout(saveT);saveT=setTimeout(()=>{if(noSave)return;try{localStorage.setItem(KEY,JSON.stringify(ST))}catch{}},300)}
 loadState();
+/* The other tier's "Switch" button passes the member's dates in the address. They fill in only dates still blank here. */
+(()=>{try{
+  const q=new URLSearchParams(location.search),yr=v=>/^\d{4}-\d{2}-\d{2}$/.test(v||'')?+v.slice(0,4):0,d=q.get('dob'),a=q.get('appt');
+  if(!ST.p.dob&&yr(d)>=1945&&yr(d)<=NOW_Y-18) ST.p.dob=d;
+  if(!ST.p.appt&&yr(a)>=1985&&yr(a)<=NOW_Y) ST.p.appt=a;
+  if(d||a) history.replaceState(null,'',location.pathname+location.hash);
+}catch{}})();
 
 /* ---------- pension rules ---------- */
 /* Longevity bonus (law since May 27, 2026, FY2027 budget; originally S9202/A10392): 5% at 25 plus 1% per year past 25, capped at 15%.
@@ -1151,6 +1159,7 @@ function renderP(){
   $('wsNeed').hidden=c.ok;if(!c.ok) $('wsBox').hidden=true;
   document.querySelector('.growrow').hidden=$('wsBox').hidden;
   $('tierWarn').hidden=!(c.appt&&c.appt<new Date(2009,6,1));
+  $('tierGo').href=`../tier2/?dob=${p.dob}&appt=${p.appt}#personal`;
   $('pBills').hidden=c.dis;$('ssField').hidden=c.dis;
   pChecks.sync();
   if(!c.ok){
