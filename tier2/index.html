@@ -521,6 +521,11 @@ body.has-pbar .app{padding-bottom:110px}
       <p>The 3-year periods line up with your retirement date. Retiring Oct. 1, for example, the years run Oct. 1 to Sept. 30.</p>
       <p class="ex">Example: you made $130,000 in your second-to-last year. Your last 12 months count only up to $156,000, so if you made $170,000, $14,000 of it doesn't count.</p>
       <p>We're still confirming the exact rule with the Pension Fund, so treat these numbers as estimates and check your official estimate before you decide.</p></div></details>
+    <details><summary>What is the longevity bonus?</summary><div class="ans">
+      <p>If you retire with <b>25 years or more</b>, part of your rank's top pay is added to your final salary: <b>5% at 25 years, plus 1% for each year after, up to 15% at 35</b>. It became law in the 2026 state budget, signed May 27, 2026.</p>
+      <p>The bill as written covers any member "under the plan in which they are enrolled," and its cost estimate uses a Tier 2 firefighter as the example, so the calculators apply it to Tier 2.</p>
+      <p class="ex">Example: a firefighter retiring at 28 years gets 8% of the top firefighter pay ($109,352), which is $8,748. That's added to their final salary, so their pension goes up about $4,374 a year.</p>
+      <p>It doesn't apply to a 3/4s disability pension in these calculators.</p></div></details>
     <details><summary>Does longevity pay count?</summary><div class="ans">
       <p>Yes, but only up to a set level:</p>
       <ul>
@@ -593,6 +598,7 @@ body.has-pbar .app{padding-bottom:110px}
       <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF, $12,000 a year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement.</p>
       <p><strong>Social Security:</strong> no offset. The Fund's summary lists the offset only for Tier 3.</p>
       <p><strong>3/4s disability:</strong> 75% of final salary with no minimum service, plus 1/60th of earnings after 20 years, plus a pension from the ITHP reserve and an annuity from your accumulated contributions. No VSF or banked variable. The COLA starts after 5 years retired, regardless of age. The calculators estimate the ITHP piece only; type your Fund estimate to include your contributions.</p>
+      <p><strong>Longevity bonus:</strong> at 25+ years of service, part of the top base pay for your rank is added to final salary: 5% at 25 years plus 1% for each year after, up to 15% at 35 (FY2027 state budget, signed May 27, 2026; originally S9202/A10392). The bills as written cover members of any plan in the Fire Pension Fund, and their fiscal note gives a Tier 2 example; we haven't read the budget's own text. Rank pay is the top-step annual base salary from the UFA schedule effective Aug. 1, 2024 (firefighter) and the UFOA schedule effective July 31, 2025 (lieutenant, captain, battalion chief), with no longevity, night differential or overtime; the law says "highest grade of pay" without defining it, so the figure used could be higher. Not applied to 3/4s.</p>
       <p><strong>Proposed bills:</strong> S5058A would change the 1/60th to 1/40th for service and 3/4s pensions. You can switch it on in either calculator to see what it would mean "if it passes".</p>
       <p><strong>Not included:</strong> retirement options that reduce the pension for a survivor, taxes, loans and account shortages, other credited service (1/80th), ordinary (non-line-of-duty) disability, vested retirement, and Tier 1 rules.</p>
     </div>
@@ -638,6 +644,11 @@ body.has-pbar .app{padding-bottom:110px}
     <div class="card qres" id="qOut" aria-live="polite"></div>
     <div class="card calc qa2">
       <label class="bigcheck" for="qDis"><input type="checkbox" id="qDis"><b>3/4s (Disabled)</b><span class="hint">Hurt on the job: 75% of your final salary at any length of service.</span></label>
+      <div class="rankbox" id="qRank" hidden><span class="flabel" style="font-size:16px">Your rank when you retire</span>
+          <span class="hint" style="margin-top:-4px">For the longevity bonus: at 25+ years, 5% to 15% of your rank's top pay is added to your final salary.</span>
+          <div class="ranks" role="group" aria-label="Rank"></div>
+          <div class="inp"><span>$</span><input inputmode="numeric" aria-label="Top base pay for your rank"></div>
+          <span class="hint">Top-step base pay from the UFA (Aug. 2024) and UFOA (July 2025) schedules. Type over it if yours is different.</span></div>
       <div class="billchecks" id="qBills"></div>
     </div>
   </div>
@@ -723,6 +734,11 @@ body.has-pbar .app{padding-bottom:110px}
         <div class="stephead"><span class="n">3</span><h2 id="s3h">Your retirement</h2></div>
         <label class="bigcheck" for="pDis"><input type="checkbox" id="pDis"><b>3/4s (Disabled)</b><span class="hint">Hurt on the job: 75% of your final salary at any length of service, mostly tax-free.</span></label>
         <div class="field" id="pSlider"></div>
+        <div class="rankbox" id="pRank" hidden><span class="flabel" style="font-size:16px">Your rank when you retire</span>
+          <span class="hint" style="margin-top:-4px">For the longevity bonus: at 25+ years, 5% to 15% of your rank's top pay is added to your final salary.</span>
+          <div class="ranks" role="group" aria-label="Rank"></div>
+          <div class="inp"><span>$</span><input inputmode="numeric" aria-label="Top base pay for your rank"></div>
+          <span class="hint">Top-step base pay from the UFA (Aug. 2024) and UFOA (July 2025) schedules. Type over it if yours is different.</span></div>
         <div class="billchecks" id="pBills"></div>
         <div class="field" id="exBox">
           <span class="flabel">Your excess contributions (optional)</span>
@@ -801,6 +817,22 @@ const ICON={
 };
 /* A sample pay curve for the "example numbers" button: the last 12 years before this one. */
 const SAMPLE=[118000,124000,129000,133000,138000,142000,147000,151000,156000,160000,165000,170000];
+/* Longevity bonus (FY2027 budget, signed May 27, 2026; S9202/A10392 as written cover any member "under the plan in which they are enrolled", Tier 2 included):
+   at 25+ years, 5% of the rank's top pay plus 1% per year past 25, capped at 15%, added to final salary. Service retirements only, as on the Tier 3 page.
+   Top-step annual base salary by rank: UFA schedule eff. Aug 1, 2024 (FF); UFOA schedule eff. Jul 31, 2025 (LT, CAPT, BC). */
+const RANKS=[{id:'FF',pay:109352},{id:'LT',pay:140212},{id:'CAPT',pay:160941},{id:'BC',pay:209563}];
+const kfmt=n=>'$'+(Math.round(n/1000)).toLocaleString('en-US')+'k';
+function bonusPct(S){return S<25-1e-9?0:Math.min(0.15,0.05+0.01*Math.floor(S-25+1e-9))}
+function RankBox(rb,state,onChange,show){
+  const ranks=rb.querySelector('.ranks'),tp=rb.querySelector('input');
+  ranks.innerHTML=RANKS.map(r=>`<button type="button" data-r="${r.id}">${r.id}<small>${kfmt(r.pay)}</small></button>`).join('');
+  function sync(){const s=state();rb.hidden=!show();if(document.activeElement!==tp) tp.value=commas(s.topPay);
+    ranks.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===num(s.topPay)))}
+  ranks.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RANKS.find(x=>x.id===b.dataset.r);state().rank=r.id;state().topPay=r.pay;sync();onChange()});
+  tp.addEventListener('input',()=>{state().topPay=num(tp.value);sync();onChange()});
+  tp.addEventListener('blur',()=>{tp.value=commas(state().topPay)});
+  sync();return {sync};
+}
 
 /* ---------- bills: one place for every bill shown on the page ---------- */
 const SEN='https://www.nysenate.gov/legislation/bills/';
@@ -809,6 +841,9 @@ const BILLS=[
   {id:'b40',title:'1/40th instead of 1/60th after 20 years',check:'1/40th after 20 years',nums:['S5058'],yr:2025,intro:'Feb. 18, 2025',
    what:'For each year you work past 20, your pension would add 1/40th of your earnings instead of 1/60th, for service and 3/4s pensions. It would also give Tier 3 members an extra 1/40th of final salary for each year past 20.',
    note:'Amended in 2026 (S5058A). An earlier version, S9593, died in committee in 2024.',committee:'Senate Civil Service and Pensions',step:2},
+  {id:'yearly',law:true,title:'Longevity bonus at 25 years',nums:['S9202'],yr:2025,intro:'Feb. 13, 2026',signed:'May 27, 2026',chapter:'in the FY2027 state budget',
+   what:'If you retire with 25 years or more, part of your rank’s top pay is added to the salary your pension is based on: 5% at 25 years, plus 1% more for each year after, up to 15% at 35. The bill covers members of any plan, Tier 2 included.',
+   note:'This passed as part of the state budget, so the bill’s own page on nysenate.gov still says “in committee.” Its Assembly version is A10392.',step:5},
   {id:'ch540',law:true,title:'Best 3 years for all Tier 2',nums:['S6405'],yr:2021,intro:'April 27, 2021',signed:'2021',chapter:'Chapter 540',
    what:'Members appointed on or after July 1, 2000 get the same final salary as earlier members: the higher of the last 12 months or the best 3 years in a row. Before this law, they got the last 12 months only.',step:5}
 ];
@@ -820,7 +855,7 @@ function billCard(b){
   const steps=STEP_LABELS.map((lab,i)=>{
     let cls,icon,sub='';
     if(b.law&&i===4){cls='done law';icon=ICON.pen;lab='Signed into law';sub=`${b.signed} · ${b.chapter}`}
-    else if(i<b.step){cls='done';icon=ICON.check;if(i===0)sub=b.intro.length>4?b.intro:'In '+b.intro;if(i===1&&b.committee)sub=b.committee}
+    else if(i<b.step){cls='done';icon=ICON.check;if(i===0)sub=b.intro.length>4?b.intro:'In '+b.intro;if(i===1&&b.committee)sub=b.committee;if((i===2||i===3)&&/budget/.test(b.chapter||''))sub='As part of the state budget'}
     else if(i===b.step){cls='now';icon=ICON.clock;sub='In progress: waiting on a committee vote'}
     else {cls='todo';icon='';sub='Not yet'}
     return `<li class="${cls}"><span class="dot">${icon}</span><span><span class="lbl">${lab}</span>${sub?`<span class="sub" style="display:block">${sub}</span>`:''}</span></li>`;
@@ -856,8 +891,8 @@ const billNote=st=>st.b40?'<p class="billnote">Includes a bill that hasn’t pas
 /* ---------- saved state (this device only; separate from the Tier 3 page's numbers) ---------- */
 const KEY='fdny-tier2-v1';
 const DEF={
-  q:{fas:'',svc:300,dis:false,exT:'',exN:'',b40:false},
-  p:{dob:'1978-06-06',appt:'2004-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:300,dis:false,exT:'',exN:'',cpi:3,goal:'',b40:false}
+  q:{fas:'',svc:300,dis:false,exT:'',exN:'',b40:false,rank:'LT',topPay:140212},
+  p:{dob:'1978-06-06',appt:'2004-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:300,dis:false,exT:'',exN:'',cpi:3,goal:'',b40:false,rank:'LT',topPay:140212}
 };
 let ST;
 function loadState(){
@@ -915,6 +950,7 @@ $('qDis').addEventListener('change',e=>{ST.q.dis=e.target.checked;qSlider.range(
 if(ST.q.dis) qSlider.range(true);
 qSlider.set(ST.q.svc);
 const qChecks=BillChecks($('qBills'),()=>ST.q,()=>renderQuick());
+const qRank=RankBox($('qRank'),()=>ST.q,()=>renderQuick(),()=>!ST.q.dis&&qSlider.value>=300);
 bindMoney('qExT',ST.q,'exT',()=>renderQuick());bindMoney('qExN',ST.q,'exN',()=>renderQuick());
 
 /* Quick: 50% (or 75%) of final salary, plus 1/60th of earnings after 20, assuming each year past 20 paid about the final salary.
@@ -932,8 +968,9 @@ function renderQuick(){
   save();
   const o=$('qOut');
   if(!fas){o.innerHTML=`<div class="k">Your pension in your first year of retirement</div><div class="empty">Type your final salary to see your monthly pension.</div>`;return}
-  qChecks.sync();
-  const dv=sixtyDiv(q),past=Math.max(0,m-240)/12,half=(dis?0.75:0.5)*fas,sixty=fas*past/dv;
+  qChecks.sync();qRank.sync();
+  const bp=dis?0:bonusPct(m/12),add=fas?bp*num(q.topPay):0;
+  const dv=sixtyDiv(q),past=Math.max(0,m-240)/12,half=(dis?0.75:0.5)*(fas+add),sixty=fas*past/dv;
   const ithp=showIthp?quickIthp(fas,m,dis):0,exAnn=excessAnnuity(exT+exN,qAge),ann=ithp+exAnn,base=half+sixty+ann,mon=base/12;
   $('qExHint').textContent=exHintText(exT,exN,exT+exN,exAnn/12,dis);
   const note=dis
@@ -942,9 +979,9 @@ function renderQuick(){
   o.innerHTML=`<div class="k">Your pension in your first year of retirement</div>
     <div class="bignum">${usd(mon)}<span>/month</span></div>
     <div class="u">${usd(base)} a year</div>
-    ${billNote(q)}
+    ${billNote(q)}${add?`<p class="billnote">Includes ${usd(add/2)} a year from the longevity bonus: ${Math.round(bp*100)}% of your rank’s top pay added to your final salary.</p>`:''}
     <div class="brk">
-      <div class="brow"><div class="bl"><b>${dis?'75%':'50%'} of final salary</b><small>${dis?'75%':'50%'} of ${usd(fas)}</small></div><div class="amt"><b>${usd(half/12)}/mo</b></div></div>
+      <div class="brow"><div class="bl"><b>${dis?'75%':'50%'} of final salary</b><small>${dis?'75%':'50%'} of ${usd(fas+add)}${add?' (with the bonus)':''}</small></div><div class="amt"><b>${usd(half/12)}/mo</b></div></div>
       <div class="brow"><div class="bl"><b>1/${dv}th after 20 years</b><small>${sixty?`About ${usd(fas*past)} earned after 20 years, ÷ ${dv}`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(sixty/12)}/mo</b></div></div>
       ${showIthp?`<div class="brow"><div class="bl"><b>ITHP pension (estimate)</b><small>${dis?'Rough estimate from the City’s 5% over your career':'Rough estimate from the City’s 5% after 20 years'}</small></div><div class="amt"><b>${usd(ithp/12)}/mo</b></div></div>`:''}
       ${exAnn?`<div class="brow"><div class="bl"><b>Excess annuity (estimate)</b><small>From your ${usd(exT+exN)} excess, or take it as a lump sum</small></div><div class="amt"><b>${usd(exAnn/12)}/mo</b></div></div>`:''}
@@ -971,6 +1008,7 @@ setupDate('ap',1973,NOW_Y,ST.p.appt,v=>{ST.p.appt=v;wsKey='';renderP()});
 
 const pSlider=Slider($('pSlider'),{id:'pSvc',label:'Years on the job when you retire',value:ST.p.svc,onInput:v=>{ST.p.svc=v;renderP()}});
 const pChecks=BillChecks($('pBills'),()=>ST.p,()=>renderP());
+const pRank=RankBox($('pRank'),()=>ST.p,()=>renderP(),()=>!ST.p.dis);
 $('pDis').checked=ST.p.dis;if(ST.p.dis) pSlider.range(true);pSlider.set(ST.p.svc);
 $('pDis').addEventListener('change',e=>{ST.p.dis=e.target.checked;pSlider.range(ST.p.dis);ST.p.svc=pSlider.value;wsKey='';renderP()});
 bindMoney('exT',ST.p,'exT',()=>renderP());bindMoney('exN',ST.p,'exN',()=>renderP());$('cpi').value=ST.p.cpi;$('goal').value=ST.p.goal?commas(num(ST.p.goal)):'';
@@ -1035,12 +1073,12 @@ function earnings(months,c){
   }
   return {retDate,vals,kind,fs,fs12,raw12,lim12,best,useBest,fsBy,capBy,a20,ithp,a20By,missing:[...missing].sort((a,b)=>a-b)};
 }
-function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,exT:num(p.exT),exN:num(p.exN),cpi:num(p.cpi)/100,b40:!!p.b40}}
+function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,exT:num(p.exT),exN:num(p.exN),cpi:num(p.cpi)/100,b40:!!p.b40,topPay:num(p.topPay)}}
 
 function scenario(months,c){
   const S=months/12,e=earnings(months,c),first=c.appt.getFullYear(),retAge=c.age+S;
   const ok=e.fs>0&&!e.missing.length;
-  const dv=sixtyDiv(c),half=(c.dis?0.75:0.5)*e.fs,sixty=e.a20/dv,ithpEst=e.ithp/annuityFactor(retAge);
+  const bp=c.dis?0:bonusPct(S),bonusAdd=e.fs?bp*c.topPay:0,dv=sixtyDiv(c),half=(c.dis?0.75:0.5)*(e.fs+bonusAdd),sixty=e.a20/dv,ithpEst=e.ithp/annuityFactor(retAge);
   /* Excess balance from ESS, grown at the Fund's 8.25% from today to the retirement date. */
   const grow=Math.pow(1+ACCT_INT,Math.max(0,yrsBetween(new Date(),e.retDate))),exT=c.exT*grow,exN=c.exN*grow,exBal=exT+exN;
   const exAnn=excessAnnuity(exBal,retAge),ann=ithpEst+exAnn,base=ok?half+sixty+ann:0;
@@ -1057,7 +1095,7 @@ function scenario(months,c){
     rows.push({age,pay:pen,v});
   }
   const at=a=>rows.find(x=>x.age>=a-1e-9)||null;
-  return {months,S,ok,first,...e,dv,half,sixty,ithpEst,exT,exN,exBal,exAnn,ann,base,retAge,colaRate,colaAge,drop,rows,at,life};
+  return {months,S,ok,first,...e,bonusPct:bp,bonusAdd,dv,half,sixty,ithpEst,exT,exN,exBal,exAnn,ann,base,retAge,colaRate,colaAge,drop,rows,at,life};
 }
 
 /* ---------- earnings table ---------- */
@@ -1131,7 +1169,7 @@ function renderP(){
   $('tierWarn').hidden=!(c.appt>=new Date(2009,6,1));
   $('exHint').textContent='';
 
-  pChecks.sync();
+  pChecks.sync();pRank.sync();
   const you=scenario(m,c);
   pSlider.sub((c.dis?'Go out ':'Retire ')+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1));
   $('exHint').textContent=exHintText(c.exT,c.exN,you.exBal,you.exAnn/12,c.dis)+(c.exT+c.exN>0?' Includes 8.25% interest a year until you retire.':'');
@@ -1148,8 +1186,9 @@ function renderP(){
     head.innerHTML=`<div class="eyebrow">Your results</div><div class="empty"><span>Your monthly pension shows up here once we have your earnings for your last 12 months${c.dis?'':' and every year after your 20th anniversary'}. ${miss}</span></div>`;
     $('goalOut').innerHTML='';updateBar(null);return;
   }
-  const brk=`<div class="brow"><div class="bl"><b>${c.dis?'75%':'50%'} of final salary</b><small>${c.dis?'75%':'50%'} of ${usd(you.fs)}, ${you.useBest?`your best 3 years (${fmtMY(you.best.from)} to ${fmtMY(you.best.to)})`:'your last 12 months'}</small></div><div class="amt"><b>${usd(you.half/12)}/mo</b><small>${usd(you.half)}/yr</small></div></div>
+  const brk=`<div class="brow"><div class="bl"><b>${c.dis?'75%':'50%'} of final salary</b><small>${c.dis?'75%':'50%'} of ${usd(you.fs+you.bonusAdd)}${you.bonusAdd?' (with the bonus)':''}, ${you.useBest?`your best 3 years (${fmtMY(you.best.from)} to ${fmtMY(you.best.to)})`:'your last 12 months'}</small></div><div class="amt"><b>${usd(you.half/12)}/mo</b><small>${usd(you.half)}/yr</small></div></div>
         <div class="incl">${ICON.check}<span>The higher of your <b>last 12 months</b> (${usd(you.fs12)}${you.lim12!==null&&you.raw12>you.lim12+0.5?`, cut from ${usd(you.raw12)} by the 20% limit`:''}) and your <b>best 3 years in a row</b> (${you.best?usd(you.best.fas):'not enough years yet'}).</span></div>
+        ${you.bonusAdd>0?`<div class="incl">${ICON.check}<span>Includes the <b>longevity bonus</b>: +${usd(you.bonusAdd*(c.dis?0.75:0.5))} a year (${Math.round(you.bonusPct*100)}% of your rank’s top pay added to your final salary)</span></div>`:''}
         <div class="brow"><div class="bl"><b>1/${you.dv}th after 20 years</b><small>${you.a20?`${usd(you.a20)} earned since ${fmtMY(addM(c.appt,240))}, ÷ ${you.dv}`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(you.sixty/12)}/mo</b><small>${usd(you.sixty)}/yr</small></div></div>
         ${annRow(you,c.dis)}`;
   const colaS=you.colaAge?`From about age ${Math.ceil(you.colaAge)}, a COLA on the first $18,000 adds about ${usd(18000*you.colaRate)} a year.`:'';
@@ -1198,7 +1237,7 @@ function maxMonths(c){return Math.min(MAXM,Math.floor((65-c.age)*12))}
 function renderGoal(c,m,you){
   const g=num(ST.p.goal),o=$('goalOut');
   if(!g){o.innerHTML='<span class="hint">Enter an amount to see the final salary it takes, and when your earnings get you there.</span>';return}
-  const pct=c.dis?0.75:0.5,need=Math.max(0,(g*12-you.sixty-you.ann)/pct);
+  const pct=c.dis?0.75:0.5,need=Math.max(0,(g*12-you.sixty-you.ann)/pct-you.bonusAdd);
   if(c.dis){
     const ok=you.base/12>=g-0.5;
     o.innerHTML=`<p>For ${usd(g)} a month on a 3/4s, your final salary needs to be about <b>${usd(need)}</b>, with the rest of your pension as it is now.</p><p>${ok?`<b style="color:var(--sage)">Your numbers get you there:</b> ${usd(you.base/12)} a month.`:`Yours is ${usd(you.fs)}, which pays ${usd(you.base/12)} a month in all.`}</p>`;return;
@@ -1237,6 +1276,7 @@ function renderCompare(c,m,you){
     ${line('Years',s=>fmtSvc(s.months))}
     ${line('Age',s=>s.retAge.toFixed(1))}
     ${line('Final salary',s=>usd(s.fs))}
+    ${line('Longevity bonus',s=>s.bonusAdd>0?`<span class="bonus-on">+${usd(s.bonusAdd/2)}/yr</span>`:'Starts at 25 yrs')}
     ${line('50% of final salary',s=>usd(s.half))}
     ${line(`1/${you.dv}th after 20`,s=>usd(s.sixty))}
     ${line('ITHP (estimate)',s=>usd(s.ithpEst))}
