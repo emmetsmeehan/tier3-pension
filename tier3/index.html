@@ -660,6 +660,16 @@ body.has-pbar .app{padding-bottom:110px}
           <div class="dsel" role="group" aria-labelledby="apLbl"><span><select id="apM" aria-label="Appointment month"></select></span><span><select id="apD" aria-label="Appointment day"></select></span><span><select id="apY" aria-label="Appointment year"></select></span></div>
           <div class="tierbox" id="tierWarn" role="alert" hidden><b>You're probably in Tier 2</b><span>Members appointed before July 1, 2009 are generally Tier 2, which has different rules. These Tier 3 numbers won't match your pension.</span><a class="btn small" id="tierGo" href="../tier2/#personal">Switch to Tier 2 <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         </div>
+        <div class="field" id="rankStep">
+          <div class="rankbox"><span class="flabel" style="font-size:16px" id="curLbl">Current rank</span>
+            <span class="hint" style="margin-top:-4px">Your rank at retirement starts out the same. Change it if you expect a promotion.</span>
+            <div class="ranks" id="curRanks" role="group" aria-labelledby="curLbl"></div></div>
+          <div class="rankbox" id="pRank" hidden><span class="flabel" style="font-size:16px">Rank at retirement</span>
+            <span class="hint" style="margin-top:-4px">For the longevity bonus: at 25+ years, 5% to 15% of your rank's top pay is added to your final average salary.</span>
+            <div class="ranks" role="group" aria-label="Rank at retirement"></div>
+            <div class="inp"><span>$</span><input inputmode="numeric" aria-label="Top base pay for your rank at retirement"></div>
+            <span class="hint">Top-step base pay from the UFA (Aug. 2024) and UFOA (July 2025) schedules. Type over it if yours is different.</span></div>
+        </div>
       </section>
 
       <section class="card step" aria-labelledby="s2h">
@@ -815,6 +825,16 @@ const ICON={
 
 /* Top-step annual base salary by rank: UFA schedule eff. Aug 1, 2024 (FF); UFOA schedule eff. Jul 31, 2025 (LT, CAPT, BC). */
 const RANKS=[{id:'FF',pay:109352},{id:'LT',pay:140212},{id:'CAPT',pay:160941},{id:'BC',pay:209563}];
+function RankBox(rb,state,onChange,show){
+  const ranks=rb.querySelector('.ranks'),tp=rb.querySelector('input');
+  ranks.innerHTML=RANKS.map(r=>`<button type="button" data-r="${r.id}">${r.id}<small>${kfmt(r.pay)}</small></button>`).join('');
+  function sync(){const s=state();rb.hidden=!show();if(document.activeElement!==tp) tp.value=commas(s.topPay);
+    ranks.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===num(s.topPay)))}
+  ranks.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RANKS.find(x=>x.id===b.dataset.r);state().rank=r.id;state().topPay=r.pay;sync();onChange()});
+  tp.addEventListener('input',()=>{state().topPay=num(tp.value);sync();onChange()});
+  tp.addEventListener('blur',()=>{tp.value=commas(state().topPay)});
+  sync();return {sync};
+}
 /* A sample pay curve for the "example numbers" button, starting in the appointment year. */
 const EX_DOB='1991-06-06',EX_APPT='2019-05-13';
 const SAMPLE=[38000,58000,74000,89000,99000,112000,119000,126000,133000,139000,146000,153000,160000];
@@ -874,12 +894,14 @@ $('billsTag').textContent=`${PENDING.length} being considered · ${BILLS.filter(
 const KEY='fdny-tier3-v2';
 const DEF={
   q:{fas:'',svc:276,dis:false,esc:23,rank:'LT',topPay:140212,b40:false},
-  p:{dob:'',appt:'',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:276,dis:false,esc:23,rank:'LT',topPay:140212,ss:2400,cpi:3,goal:'',b40:false}
+  p:{dob:'',appt:'',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:276,dis:false,esc:23,rank:'LT',topPay:140212,cur:'',rankSet:false,ss:2400,cpi:3,goal:'',b40:false}
 };
 let ST;
 function loadState(){
   let s=null;try{s=JSON.parse(localStorage.getItem(KEY)||'null')}catch{}
   ST={q:{...DEF.q,...(s&&s.q)},p:{...DEF.p,...(s&&s.p)}};
+  /* Saved before current rank was asked: keep a rank at retirement the member had picked. */
+  if(s&&s.p&&!('cur' in s.p)&&(s.p.rank&&s.p.rank!=='LT'||s.p.topPay&&s.p.topPay!==140212)) ST.p.rankSet=true;
   /* Numbers saved before the 2026 budget change: escalation at 23 is now the law, and the bonus is no longer a choice. */
   for(const k of ['q','p']){if(ST[k].esc!==20) ST[k].esc=LAW_ESC;delete ST[k].bonus}
   /* The dates used to start filled in with these example dates. Saved untouched, they aren't the member's own. */
@@ -1019,7 +1041,18 @@ const dobPick=setupDate('dob',1945,NOW_Y-18,ST.p.dob,v=>{ST.p.dob=v;renderP()});
 const apPick=setupDate('ap',1985,NOW_Y,ST.p.appt,v=>{ST.p.appt=v;wsKey='';renderP()});
 
 const pSlider=Slider($('pSlider'),{id:'pSvc',label:'Years on the job when you retire',value:ST.p.svc,onInput:v=>{ST.p.svc=v;renderP()}});
-const pChecks=BillChecks($('pBills'),()=>ST.p,()=>renderP(),()=>!ST.p.dis);
+const pChecks=BillChecks($('pBills'),()=>ST.p,()=>renderP(),()=>false);
+const pRank=RankBox($('pRank'),()=>ST.p,()=>renderP(),()=>!ST.p.dis);
+/* Current rank: the rank at retirement follows it until the member picks a different one there. */
+(()=>{const box=$('curRanks');
+  box.innerHTML=RANKS.map(r=>`<button type="button" data-r="${r.id}">${r.id}<small>${kfmt(r.pay)}</small></button>`).join('');
+  const sync=()=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r===ST.p.cur));
+  box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RANKS.find(x=>x.id===b.dataset.r);
+    ST.p.cur=r.id;if(!ST.p.rankSet){ST.p.rank=r.id;ST.p.topPay=r.pay}sync();renderP()});
+  $('pRank').addEventListener('click',e=>{if(e.target.closest('button'))ST.p.rankSet=true});
+  $('pRank').querySelector('input').addEventListener('input',()=>{ST.p.rankSet=true});
+  sync();})();
+
 $('pDis').checked=ST.p.dis;if(ST.p.dis) pSlider.range(true);pSlider.set(ST.p.svc);
 $('pDis').addEventListener('change',e=>{ST.p.dis=e.target.checked;pSlider.range(ST.p.dis);ST.p.svc=pSlider.value;renderP()});
 $('ss').value=commas(ST.p.ss);$('cpi').value=ST.p.cpi;$('goal').value=ST.p.goal?commas(num(ST.p.goal)):'';
@@ -1171,7 +1204,7 @@ function renderP(){
   $('tierWarn').hidden=!(c.appt&&c.appt<new Date(2009,6,1));
   $('tierGo').href=`../tier2/?dob=${p.dob}&appt=${p.appt}#personal`;
   $('pBills').hidden=c.dis;$('ssField').hidden=c.dis;
-  pChecks.sync();
+  pChecks.sync();pRank.sync();
   if(!c.ok){
     pSlider.sub('Enter your dates in step 1 to see when you’d retire.');
     $('cmpSec').hidden=true;$('escSec').hidden=true;$('preview').hidden=false;
