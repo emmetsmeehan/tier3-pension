@@ -503,7 +503,7 @@ body.has-pbar .app{padding-bottom:110px}
       <p>If you were appointed before that, you're most likely in Tier 2. Tier 2 has different rules, so the numbers on this page won't match your pension: <a href="../tier2/">use the Tier 2 calculator</a>.</p></div></details>
     <details><summary>When can I retire, and how much do I get?</summary><div class="ans">
       <p>Once you have <b>20 years</b> on the job, you can retire and collect <b>50% of your final average salary</b> for the rest of your life. That comes from S4727, signed into law as Chapter 692 of the Laws of 2025.</p>
-      <p>The 50% doesn't go up if you stay longer. Staying can still raise your pension in three ways: your final average salary is usually higher, your pension can grow with inflation (escalation), and you bank extra VSF payments.</p>
+      <p>The 50% doesn't go up if you stay longer. (A bill in Albany, S5058A, would add 1/40th of your final salary for each year past 20. It hasn't passed. See <a href="#bills">Bills in Albany</a>.) Staying can still raise your pension in three ways: your final average salary is usually higher, your pension can grow with inflation (escalation), and you bank extra VSF payments.</p>
       <p>FDNY members must retire by age 62.</p></div></details>
     <details><summary>What is my final average salary?</summary><div class="ans">
       <p>It's the average of your <b>best 3 calendar years in a row</b>, overtime included.</p>
@@ -576,7 +576,7 @@ body.has-pbar .app{padding-bottom:110px}
       <p><strong>Social Security offset:</strong> at 62 the pension drops by 50% of your primary Social Security benefit.</p>
       <p><strong>3/4s disability:</strong> 75% of final average salary with no minimum service, generally not taxable, with no escalation, VSF, banked variable, longevity bonus or Social Security offset. The COLA starts after 5 years retired, regardless of age. Source: the Fire Pension Fund's Tier 3 Enhanced Summary Plan Description.</p>
       <p><strong>Longevity bonus:</strong> at 25+ years of service, part of the top base pay for your rank is added to final average salary: 5% at 25 years plus 1% for each year after, up to 15% at 35 (FY2027 state budget, signed May 27, 2026; originally S9202/A10392). It is added straight to final average salary, as the bill's fiscal note does for Tier 3. Rank pay is the top-step annual base salary from the UFA schedule effective Aug. 1, 2024 (firefighter) and the UFOA schedule effective July 31, 2025 (lieutenant, captain, battalion chief), with no longevity, night differential or overtime. The law says "highest grade of pay" without defining it, so the figure used could end up higher than base salary.</p>
-      <p><strong>Proposed bills:</strong> S9203/A10254 would move full escalation to 20 years. You can switch it on to see what it would mean "if it passes".</p>
+      <p><strong>Proposed bills:</strong> S9203/A10254 would move full escalation to 20 years. S5058A would add 1/40th of final salary for each year of service past 20 (the calculators figure it on your final average salary without the longevity bonus, prorated by month; the Fund's actuary read "final salary" as the last 12 months). You can switch either on to see what it would mean "if it passes".</p>
       <p><strong>Not included:</strong> retirement options that reduce the pension for a survivor, taxes, ordinary (non-line-of-duty) disability, and Tier 2 rules.</p>
     </div>
   </details>
@@ -792,6 +792,9 @@ const BILLS=[
   {id:'esc20',kind:'esc',val:20,title:'Full escalation at 20 years',check:'Full escalation at 20 years',nums:['S9203','A10254'],intro:'Feb. 13, 2026',
    what:'Full escalation as soon as you can retire, at 20 years, instead of 23.',
    committee:'Senate Civil Service and Pensions',step:2},
+  {id:'b40',kind:'flag',title:'Extra 1/40th for each year past 20',check:'Extra 1/40th for each year past 20',nums:['S5058'],intro:'Feb. 18, 2025',
+   what:'For each year you work past 20, your pension would add 1/40th of your final salary on top of the 50%. Five extra years would add 12.5% of your final salary. (Tier 2 members would get 1/40th instead of 1/60th of their earnings after 20.)',
+   note:'Amended in 2026 (S5058A).',committee:'Senate Civil Service and Pensions',step:2},
   {id:'esc23',law:true,title:'Full escalation at 23 years',nums:['S9204','A11269'],intro:'Feb. 13, 2026',signed:'May 27, 2026',chapter:'in the FY2027 state budget',
    what:'Your whole pension grows with inflation (up to 3% a year) if you retire with 23 years instead of 25. Partial escalation now starts after 20 years instead of 22.',
    note:'This passed as part of the state budget, so the bill’s own page on nysenate.gov still says “in committee.”',step:5},
@@ -833,8 +836,8 @@ $('billsTag').textContent=`${PENDING.length} being considered · ${BILLS.filter(
 /* ---------- saved state (this device only) ---------- */
 const KEY='fdny-tier3-v2';
 const DEF={
-  q:{fas:'',svc:276,dis:false,esc:23,rank:'LT',topPay:140212},
-  p:{dob:'1991-06-06',appt:'2019-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:276,dis:false,esc:23,rank:'LT',topPay:140212,ss:2400,cpi:3,goal:''}
+  q:{fas:'',svc:276,dis:false,esc:23,rank:'LT',topPay:140212,b40:false},
+  p:{dob:'1991-06-06',appt:'2019-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:276,dis:false,esc:23,rank:'LT',topPay:140212,ss:2400,cpi:3,goal:'',b40:false}
 };
 let ST;
 function loadState(){
@@ -897,13 +900,13 @@ function BillChecks(root,state,onChange,showRank){
   const rb=root.querySelector('.rankbox'),ranks=rb.querySelector('.ranks'),tp=rb.querySelector('input');
   ranks.innerHTML=RANKS.map(r=>`<button type="button" data-r="${r.id}">${r.id}<small>${kfmt(r.pay)}</small></button>`).join('');
   function sync(){
-    root.querySelectorAll('input[data-b]').forEach(c=>{const b=BILLS.find(x=>x.id===c.dataset.b);c.checked=state().esc===b.val});
+    root.querySelectorAll('input[data-b]').forEach(c=>{const b=BILLS.find(x=>x.id===c.dataset.b);c.checked=b.kind==='esc'?state().esc===b.val:!!state()[b.id]});
     const s=state();rb.hidden=!showRank();
     if(document.activeElement!==tp) tp.value=commas(s.topPay);
     ranks.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',RANKS.find(r=>r.id===b.dataset.r).pay===num(s.topPay)));
   }
   root.addEventListener('change',e=>{const c=e.target.closest('input[data-b]');if(!c)return;const b=BILLS.find(x=>x.id===c.dataset.b),s=state();
-    s.esc=c.checked?b.val:LAW_ESC;
+    if(b.kind==='esc') s.esc=c.checked?b.val:LAW_ESC; else s[b.id]=c.checked;
     sync();onChange()});
   ranks.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RANKS.find(x=>x.id===b.dataset.r);state().rank=r.id;state().topPay=r.pay;sync();onChange()});
   tp.addEventListener('input',()=>{state().topPay=num(tp.value);sync();onChange()});
@@ -931,7 +934,8 @@ function renderQuick(){
   save();
   const o=$('qOut');
   if(!fas){o.innerHTML=`<div class="k">Your pension in your first year of retirement</div><div class="empty">Type your final average salary to see your monthly pension.</div>`;return}
-  const bp=dis?0:bonusPct(S,LAW_BONUS),add=bp*num(q.topPay),base=(dis?0.75:0.5)*(fas+add),mon=base/12;
+  /* S5058A, if checked: an extra 1/40th of final average salary for each year (prorated by month) past 20. */
+  const bp=dis?0:bonusPct(S,LAW_BONUS),add=bp*num(q.topPay),extra=!dis&&q.b40?fas*Math.max(0,m-240)/12/40:0,base=(dis?0.75:0.5)*(fas+add)+extra,mon=base/12;
   const F=q.esc,frac=dis?0:escFrac(S,F),r=frac*0.03;
   const grown=y=>usd(mon*Math.pow(1+r,y));
   const billName=F===20?' (if S9203 passes)':'';
@@ -943,8 +947,8 @@ function renderQuick(){
   const bonusLine=dis||!add?'':`<p class="billnote">Includes ${usd(add/2)} a year from the longevity bonus: ${Math.round(bp*100)}% of your rank’s top pay added to your final average salary.</p>`;
   o.innerHTML=`<div class="k">Your pension in your first year of retirement</div>
     <div class="bignum">${usd(mon)}<span>/month</span></div>
-    <div class="u">${usd(base)} a year · ${dis?'75%':'50%'} of ${usd(fas+add)}${add?' (with the bonus)':''}${dis?' · generally tax-free':''}</div>
-    ${bonusLine}
+    <div class="u">${usd(base)} a year · ${dis?'75%':'50%'} of ${usd(fas+add)}${add?' (with the bonus)':''}${extra?' plus the extra 1/40ths':''}${dis?' · generally tax-free':''}</div>
+    ${bonusLine}${extra?`<p class="billnote">Includes ${usd(extra)} a year from a bill that hasn’t passed: an extra 1/40th of your final average salary for each year past 20 (S5058A).</p>`:''}
     <div class="note" style="--c:${note.c}"><span class="ni">${note.i}</span><div><b>${note.t}</b><p>${note.p}</p></div></div>
     <p class="fine">${dis?'':'This is your pension alone. You’d also get the $12,000 a year VSF, and at 62 your pension drops by half your Social Security. '}The personal numbers page covers all of it, with your real earnings.</p>
     <a class="btn" href="#personal">Get your exact numbers ${ICON.arrow}</a>`;
@@ -1011,13 +1015,13 @@ function fasFromEarnings(retDate,appt){
   }
   return {rows,best,lastY};
 }
-function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,esc:p.dis?LAW_ESC:p.esc,bonus:p.dis?'':LAW_BONUS,topPay:num(p.topPay),ss:num(p.ss),cpi:num(p.cpi)/100}}
+function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,esc:p.dis?LAW_ESC:p.esc,b40:!p.dis&&!!p.b40,bonus:p.dis?'':LAW_BONUS,topPay:num(p.topPay),ss:num(p.ss),cpi:num(p.cpi)/100}}
 
 function scenario(months,c){
   const S=months/12,retDate=addM(c.appt,months);
   const fr=fasFromEarnings(retDate,c.appt),baseFas=fr.best?fr.best.fas:0;
   const bp=c.dis?0:bonusPct(S,c.bonus),bonusAdd=baseFas?bp*c.topPay:0,fas=baseFas+bonusAdd;
-  const base=(c.dis?0.75:0.5)*fas,retAge=c.age+S;
+  const extra=c.b40?baseFas*Math.max(0,months-240)/12/40:0,base=(c.dis?0.75:0.5)*fas+extra,retAge=c.age+S;
   const frac=c.dis?0:escFrac(S,c.esc),escRate=frac*Math.min(c.cpi,0.03),colaRate=colaRateOf(c.cpi);
   const vsf=c.dis?0:VSF,offset=c.dis?0:0.5*c.ss*12,drop=vsf*Math.max(0,Math.floor(months-240))/12;
   const rows=[];let pen=base,colaTot=0,offApplied=false,life=drop;
@@ -1034,7 +1038,7 @@ function scenario(months,c){
     rows.push({age,pay,v});
   }
   const at=a=>rows.find(x=>x.age>=a-1e-9)||null;
-  return {months,S,fas,baseFas,best:fr.best,bonusPct:bp,bonusAdd,base,retDate,retAge,frac,colaRate,escRate,offset,drop,rows,at,life};
+  return {months,S,fas,baseFas,best:fr.best,bonusPct:bp,bonusAdd,extra,base,retDate,retAge,frac,colaRate,escRate,offset,drop,rows,at,life};
 }
 
 /* ---------- earnings table ---------- */
@@ -1090,7 +1094,8 @@ const COLORS=['--steel','--gold','--sage','--accent'];
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function escPill(f){return f<=0?'<span class="pill" style="--c:var(--accent)">No escalation</span>':f>=1?'<span class="pill" style="--c:var(--sage)">Full escalation</span>':`<span class="pill" style="--c:var(--gold)">${Math.round(f*36)}/36 escalation</span>`}
 function billsOnNote(c){
-  return c.esc===20?'<p class="billnote">Includes a bill that hasn’t passed: full escalation at 20 years (S9203).</p>':'';
+  const on=[c.esc===20?'full escalation at 20 years (S9203)':'',c.b40?'an extra 1/40th for each year past 20 (S5058A)':''].filter(Boolean);
+  return on.length?`<p class="billnote">Includes ${on.length>1?'bills that haven’t':'a bill that hasn’t'} passed: ${on.join(' and ')}.</p>`:'';
 }
 
 function renderP(){
@@ -1151,7 +1156,8 @@ function renderP(){
       <div class="sub2">About <b>${usd(totY/12)} a month</b>, pension plus VSF</div>
       ${billsOnNote(c)}${tier2}${warn}
       <div class="brk">
-        <div class="brow"><div class="bl"><b>Pension</b><small>50% of your ${usd(you.fas)} final average salary</small></div><div class="amt"><b>${usd(you.base/12)}/mo</b><small>${usd(you.base)}/yr</small></div></div>
+        <div class="brow"><div class="bl"><b>Pension</b><small>50% of your ${usd(you.fas)} final average salary${you.extra?', plus the extra 1/40ths':''}</small></div><div class="amt"><b>${usd(you.base/12)}/mo</b><small>${usd(you.base)}/yr</small></div></div>
+        ${you.extra>0?`<div class="incl">${ICON.check}<span>Includes <b>${usd(you.extra)} a year</b> from S5058A if it passes: 1/40th of your final average salary for each year past 20</span></div>`:''}
         ${you.bonusAdd>0?`<div class="incl">${ICON.check}<span>Includes the <b>longevity bonus</b>: +${usd(you.bonusAdd/2)} a year (${Math.round(you.bonusPct*100)}% of your rank’s top pay added to your salary)</span></div>`:''}
         <div class="brow"><div class="bl"><b>VSF</b><small>One payment every December or January</small></div><div class="amt"><b>${usd(VSF)}/yr</b><small>about ${usd(VSF/12)}/mo</small></div></div>
         <div class="brow tot"><div class="bl"><b>Total</b></div><div class="amt"><b>${usd(totY/12)}/mo</b><small>${usd(totY)}/yr</small></div></div>
@@ -1425,7 +1431,7 @@ function showView(){
 addEventListener('hashchange',showView);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-try]');if(!b) return;
   const bill=BILLS.find(x=>x.id===b.dataset.try);
-  ST.p.esc=bill.val;
+  if(bill.kind==='esc') ST.p.esc=bill.val; else ST.p[bill.id]=true;
   ST.p.dis=false;$('pDis').checked=false;pSlider.range(false);
   jumpTo=document.querySelector('#pBills');location.hash='#personal';
 });
