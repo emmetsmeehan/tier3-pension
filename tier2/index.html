@@ -368,6 +368,9 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .growtbl td.offn{white-space:normal;text-align:left;font-size:13.5px;font-weight:600;color:var(--accent)}
 .growtbl td small{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
 .growtbl tr.offrow td{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.taxbox{margin-top:10px}
+.taxbody{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:8px;font-size:15px}
+.taxbody p{margin:0}
 .goal{display:grid;gap:12px}
 .goal .gh{display:flex;gap:10px;align-items:center}
 .goal .gh .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--steel) 14%,var(--surface));color:var(--steel)}
@@ -1049,7 +1052,24 @@ function renderQuick(){
     </div>
     <div class="note" style="--c:${note.c}"><span class="ni">${note.i}</span><div><b>${note.t}</b><p>${note.p}</p></div></div>
     <p class="fine">${dis?'':`This is your pension alone. You’d also get the $12,000 a year VSF${past>=1?`, and a ${usd(VSF*Math.floor(past))} banked variable lump sum when you retire`:''}. `}The personal numbers page covers all of it, with your real earnings.</p>
+    ${dis?'':taxBox('qTaxBtn')}
     <a class="btn" href="#personal">Get your exact numbers ${ICON.arrow}</a>`;
+  if(!dis) $('qTaxBtn').addEventListener('click',()=>{taxOpen=!taxOpen;renderQuick()});
+}
+
+/* "Don't forget about taxes": a folded box under the estimated payments, not on a 3/4s. 2026 figures from IRS Rev. Proc. 2025-32. */
+let taxOpen=false;
+function taxBox(id){
+  return `<div class="growbox taxbox">
+    <button type="button" class="growbtn" id="${id}" aria-expanded="${taxOpen}"><span><b>Don’t forget about taxes</b><small>Your pension and VSF count as income for federal tax. Tap for the rates and the states that don’t tax it.</small></span><span class="chev"></span></button>
+    <div class="taxbody"${taxOpen?'':' hidden'}>
+      <p><b>Federal:</b> taxed like a paycheck, and you can have it withheld from each check. In 2026, a married couple filing jointly pays nothing on the first $32,200 of income (the standard deduction). The rest is taxed at 10% up to $24,800, 12% up to $100,800, 22% up to $211,400 and 24% up to $403,550, and 32% to 37% above that. Single filers get a $16,100 deduction and brackets about half as wide.</p>
+      <p><b>New York:</b> New York State and New York City don’t tax your FDNY pension.</p>
+      <p><b>No state income tax:</b> Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington and Wyoming.</p>
+      <p><b>No tax on a pension like yours:</b> Alabama, Illinois, Mississippi, Pennsylvania, and Iowa at 55 or older.</p>
+      <p class="fine">Most other states tax it, at least in part. Rules change, so check with a tax professional before you move.</p>
+    </div>
+  </div>`;
 }
 
 /* ===================== PERSONAL CALCULATOR ===================== */
@@ -1311,8 +1331,10 @@ function renderP(){
       <div class="growbox">
         <button type="button" class="growbtn" id="growBtn" aria-expanded="${growOpen}"><span><b>Your pension stays about the same</b><small>No escalation in Tier 2. ${colaS} Tap to see each year.</small></span><span class="chev"></span></button>
         <div class="growtbl"${growOpen?'':' hidden'}><table><thead><tr><th>Year · age</th><th>Pension/mo</th><th>With VSF/yr</th></tr></thead><tbody>${trows}</tbody></table></div>
-      </div>`;
+      </div>
+      ${taxBox('taxBtn')}`;
     $('growBtn').addEventListener('click',()=>{growOpen=!growOpen;renderP()});
+    $('taxBtn').addEventListener('click',()=>{taxOpen=!taxOpen;renderP()});
   }
   renderGoal(c,m,you);
   updateBar(you,m);
