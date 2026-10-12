@@ -449,6 +449,11 @@ body.has-pbar .app{padding-bottom:110px}
       <span><h2>Pension basics</h2><p>Simple explanations and FAQs.</p></span>
       <svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
     </a>
+    <a class="navcard" href="#bills" style="--c:var(--gold)">
+      <span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21v-9M9.5 21v-9M14.5 21v-9M19 21v-9M2 12h20L12 4z"/></svg></span>
+      <span><h2>Bills in Albany</h2><p>What's proposed, what's moving, and what passed.</p><span class="tag" id="billsTag"></span></span>
+      <svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
     <a class="navcard" href="#quick" style="--c:var(--sage)">
       <span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h3.5"/></svg></span>
       <span><h2>Quick calculator</h2><p>Two numbers, one answer: your monthly pension.</p></span>
@@ -526,7 +531,8 @@ body.has-pbar .app{padding-bottom:110px}
       <p>The calculators use your full pay from your W-2, so between 20 and 25 years their numbers can run a little high. Your Fund estimate will show the exact figure.</p></div></details>
     <details><summary>What is the 1/60th?</summary><div class="ans">
       <p>Add up everything you earn after your 20th anniversary and divide by 60. That amount is added to your yearly pension.</p>
-      <p class="ex">Example: you stay 5 years past 20 and earn $150,000 each year. That's $750,000, and 1/60th of it is <b>$12,500 a year</b> more pension, about $1,040 a month.</p></div></details>
+      <p class="ex">Example: you stay 5 years past 20 and earn $150,000 each year. That's $750,000, and 1/60th of it is <b>$12,500 a year</b> more pension, about $1,040 a month.</p>
+      <p>A bill in Albany, S5058A, would make it <b>1/40th</b> instead. It hasn’t passed. See <a href="#bills">Bills in Albany</a>.</p></div></details>
     <details><summary>What is ITHP, and the annuity?</summary><div class="ans">
       <p><b>ITHP</b> (Increased-Take-Home-Pay) is money the City pays into your pension account for you, currently 5% of your pay, so less comes out of your check. What the City pays in <b>after 20 years</b>, with interest, becomes an extra pension when you retire.</p>
       <p>If you've paid in more than the required amount, for example by keeping your contributions going after 20 years, the extra can be paid as an <b>annuity</b> or taken as a lump sum. Withdrawals can be taxed, and there can be a 10% penalty if you're under 50.</p>
@@ -586,6 +592,7 @@ body.has-pbar .app{padding-bottom:110px}
       <p><strong>VSF and banked variable:</strong> service retirees with 20+ years get the VSF, $12,000 a year. Each year worked past 20 banks one VSF payment, paid as a lump sum at retirement.</p>
       <p><strong>Social Security:</strong> no offset. The Fund's summary lists the offset only for Tier 3.</p>
       <p><strong>3/4s disability:</strong> 75% of final salary with no minimum service, plus 1/60th of earnings after 20 years, plus a pension from the ITHP reserve and an annuity from your accumulated contributions. No VSF or banked variable. The COLA starts after 5 years retired, regardless of age. The calculators estimate the ITHP piece only; type your Fund estimate to include your contributions.</p>
+      <p><strong>Proposed bills:</strong> S5058A would change the 1/60th to 1/40th for service and 3/4s pensions. You can switch it on in either calculator to see what it would mean "if it passes".</p>
       <p><strong>Not included:</strong> retirement options that reduce the pension for a survivor, taxes, loans and account shortages, other credited service (1/80th), ordinary (non-line-of-duty) disability, vested retirement, and Tier 1 rules.</p>
     </div>
   </details>
@@ -594,6 +601,15 @@ body.has-pbar .app{padding-bottom:110px}
     <a class="navcard" href="#quick" style="--c:var(--sage)"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h3.5"/></svg></span><span><h2>Quick calculator</h2><p>Your monthly pension in seconds.</p></span><svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
     <a class="navcard" href="#personal" style="--c:var(--accent)"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="7.5" r="3.5"/><path d="M2.5 20.5v-1a5.5 5.5 0 0 1 5.5-5.5h2.5"/><path d="M15 20.5v-3M18.5 20.5v-7M22 20.5v-5"/></svg></span><span><h2>Your personal numbers</h2><p>Your real earnings, your real numbers.</p></span><svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
   </div>
+</main>
+
+<!-- ===================== BILLS ===================== -->
+<main class="view" id="v-bills" data-title="Bills in Albany · FDNY Tier 2" hidden>
+  <div class="topbar"><a class="backbtn" href="#home"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Home</a><span class="tb-title">Bills in Albany</span></div>
+  <div class="vhead"><h1>Bills in Albany</h1><p>Changes to Tier 2 pensions that are being proposed, voted on, or recently passed. A bill becomes law only after the Senate and the Assembly pass it and the governor signs it.</p><p class="hint">Status from the bill texts; the pending bill was last amended in spring 2026.</p></div>
+  <section class="billgroup" aria-labelledby="bgNow"><h2 id="bgNow">Being considered</h2><div class="bills-list" id="billsNow"></div></section>
+  <section class="billgroup" aria-labelledby="bgLaw"><h2 id="bgLaw">Signed into law</h2><div class="bills-list" id="billsLaw"></div></section>
+  <p class="fine">Unofficial summaries. Read the full bills on nysenate.gov, and confirm anything that affects your retirement with the Pension Fund.</p>
 </main>
 
 <!-- ===================== QUICK ===================== -->
@@ -617,6 +633,7 @@ body.has-pbar .app{padding-bottom:110px}
     <div class="card qres" id="qOut" aria-live="polite"></div>
     <div class="card calc qa2">
       <label class="bigcheck" for="qDis"><input type="checkbox" id="qDis"><b>3/4s (Disabled)</b><span class="hint">Hurt on the job: 75% of your final salary at any length of service.</span></label>
+      <div class="billchecks" id="qBills"></div>
     </div>
   </div>
 </main>
@@ -701,6 +718,7 @@ body.has-pbar .app{padding-bottom:110px}
         <div class="stephead"><span class="n">3</span><h2 id="s3h">Your retirement</h2></div>
         <label class="bigcheck" for="pDis"><input type="checkbox" id="pDis"><b>3/4s (Disabled)</b><span class="hint">Hurt on the job: 75% of your final salary at any length of service, mostly tax-free.</span></label>
         <div class="field" id="pSlider"></div>
+        <div class="billchecks" id="pBills"></div>
         <div class="field">
           <label for="ann">Your ITHP and annuity from the Fund (optional)</label>
           <div class="inp"><span>$</span><input id="ann" inputmode="numeric" placeholder="Estimate"><span class="after">/month</span></div>
@@ -766,16 +784,71 @@ const ICON={
   lock:'<svg class="i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   arrow:'<svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
   up:'<svg class="i" viewBox="0 0 24 24"><path d="M4 17l6-6 4 4 6-7M14 8h6v6"/></svg>',
-  flat:'<svg class="i" viewBox="0 0 24 24"><path d="M4 12h16"/></svg>'
+  flat:'<svg class="i" viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
+  clock:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  pen:'<svg class="i" viewBox="0 0 24 24"><path d="M12 2.8l5 6.2-2.6 8.2H9.6L7 9z" fill="currentColor" fill-opacity=".25"/><path d="M12 9.5v4.3"/><circle cx="12" cy="9" r="1.2" fill="currentColor"/><path d="M9.3 17.2h5.4v3.6H9.3z"/></svg>',
+  cal:'<svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  ext:'<svg class="i" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
 };
 /* A sample pay curve for the "example numbers" button: the last 12 years before this one. */
 const SAMPLE=[118000,124000,129000,133000,138000,142000,147000,151000,156000,160000,165000,170000];
 
+/* ---------- bills: one place for every bill shown on the page ---------- */
+const SEN='https://www.nysenate.gov/legislation/bills/';
+const STEP_LABELS=['Introduced','In committee','Passed the Senate','Passed the Assembly','Signed by the governor'];
+const BILLS=[
+  {id:'b40',title:'1/40th instead of 1/60th after 20 years',check:'1/40th after 20 years',nums:['S5058'],yr:2025,intro:'Feb. 18, 2025',
+   what:'For each year you work past 20, your pension would add 1/40th of your earnings instead of 1/60th, for service and 3/4s pensions. It would also give Tier 3 members an extra 1/40th of final salary for each year past 20.',
+   note:'Amended in 2026 (S5058A). An earlier version, S9593, died in committee in 2024.',committee:'Senate Civil Service and Pensions',step:2},
+  {id:'ch540',law:true,title:'Best 3 years for all Tier 2',nums:['S6405'],yr:2021,intro:'April 27, 2021',signed:'2021',chapter:'Chapter 540',
+   what:'Members appointed on or after July 1, 2000 get the same final salary as earlier members: the higher of the last 12 months or the best 3 years in a row. Before this law, they got the last 12 months only.',step:5}
+];
+const PENDING=BILLS.filter(b=>!b.law);
+/* The 1/60th becomes 1/40th if S5058A passes and the member checks it. */
+const sixtyDiv=st=>st.b40?40:60;
+
+function billCard(b){
+  const steps=STEP_LABELS.map((lab,i)=>{
+    let cls,icon,sub='';
+    if(b.law&&i===4){cls='done law';icon=ICON.pen;lab='Signed into law';sub=`${b.signed} · ${b.chapter}`}
+    else if(i<b.step){cls='done';icon=ICON.check;if(i===0)sub=b.intro.length>4?b.intro:'In '+b.intro;if(i===1&&b.committee)sub=b.committee}
+    else if(i===b.step){cls='now';icon=ICON.clock;sub='In progress: waiting on a committee vote'}
+    else {cls='todo';icon='';sub='Not yet'}
+    return `<li class="${cls}"><span class="dot">${icon}</span><span><span class="lbl">${lab}</span>${sub?`<span class="sub" style="display:block">${sub}</span>`:''}</span></li>`;
+  }).join('');
+  const read=b.nums.map(n=>`<a href="${SEN}${b.yr}/${n}" target="_blank" rel="noopener">${n}${ICON.ext}</a>`).join('');
+  return `<article class="card bill${b.law?' lawcard':''}">
+    <div><h3>${b.title}</h3><div class="when">${ICON.cal}${b.intro.length>4?'Introduced '+b.intro:'Introduced in '+b.intro}</div></div>
+    <p>${b.what}</p>
+    ${b.note?`<p class="hint">${b.note}</p>`:''}
+    <ol class="track" aria-label="Where this bill stands">${steps}</ol>
+    <div class="billfoot">
+      <div class="read"><span class="hint">Read the full bill:</span>${read}</div>
+      ${b.law?'':`<button type="button" class="btn ghost small try" data-try="${b.id}">See what it means for you ${ICON.arrow}</button>`}
+    </div>
+  </article>`;
+}
+$('billsNow').innerHTML=PENDING.map(billCard).join('');
+$('billsLaw').innerHTML=BILLS.filter(b=>b.law).map(billCard).join('');
+$('billsTag').textContent=`${PENDING.length} being considered · ${BILLS.filter(b=>b.law).length} signed into law`;
+
+/* "If this bill passes" checkboxes, used by both calculators. */
+function BillChecks(root,state,onChange){
+  root.innerHTML=`<div class="lead"><span class="flabel">If this bill passes</span><a href="#bills" class="hint" style="font-weight:600">What's in Albany?</a></div>
+    <p class="hint" style="margin-top:-4px">Not law yet. Check it to see what it would mean for you.</p>
+    ${PENDING.map(b=>`<label class="bc"><input type="checkbox" data-b="${b.id}"><b>${b.check}</b><small>${b.nums.join(' / ')} · in committee</small></label>`).join('')}`;
+  const sync=()=>root.querySelectorAll('input[data-b]').forEach(c=>{c.checked=!!state()[c.dataset.b]});
+  root.addEventListener('change',e=>{const c=e.target.closest('input[data-b]');if(!c) return;state()[c.dataset.b]=c.checked;onChange()});
+  sync();
+  return {sync};
+}
+const billNote=st=>st.b40?'<p class="billnote">Includes a bill that hasn’t passed: 1/40th after 20 years (S5058A).</p>':'';
+
 /* ---------- saved state (this device only; separate from the Tier 3 page's numbers) ---------- */
 const KEY='fdny-tier2-v1';
 const DEF={
-  q:{fas:'',svc:300,dis:false,ann:''},
-  p:{dob:'1978-06-06',appt:'2004-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:300,dis:false,ann:'',cpi:3,goal:''}
+  q:{fas:'',svc:300,dis:false,ann:'',b40:false},
+  p:{dob:'1978-06-06',appt:'2004-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:300,dis:false,ann:'',cpi:3,goal:'',b40:false}
 };
 let ST;
 function loadState(){
@@ -827,6 +900,7 @@ $('qFas').addEventListener('blur',e=>{const n=num(e.target.value);e.target.value
 $('qDis').addEventListener('change',e=>{ST.q.dis=e.target.checked;qSlider.range(ST.q.dis);ST.q.svc=qSlider.value;renderQuick()});
 if(ST.q.dis) qSlider.range(true);
 qSlider.set(ST.q.svc);
+const qChecks=BillChecks($('qBills'),()=>ST.q,()=>renderQuick());
 $('qAnn').value=ST.q.ann?commas(num(ST.q.ann)):'';
 $('qAnn').addEventListener('input',e=>{ST.q.ann=num(e.target.value)||'';renderQuick()});
 $('qAnn').addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?commas(n):''});
@@ -847,7 +921,8 @@ function renderQuick(){
   save();
   const o=$('qOut');
   if(!fas){o.innerHTML=`<div class="k">Your pension in your first year of retirement</div><div class="empty">Type your final salary to see your monthly pension.</div>`;return}
-  const past=Math.max(0,m-240)/12,half=(dis?0.75:0.5)*fas,sixty=fas*past/60;
+  qChecks.sync();
+  const dv=sixtyDiv(q),past=Math.max(0,m-240)/12,half=(dis?0.75:0.5)*fas,sixty=fas*past/dv;
   const ann=!showAnn?0:typed?num(q.ann)*12:quickIthp(fas,m,dis),base=half+sixty+ann,mon=base/12;
   const note=dis
     ?{c:'var(--steel)',i:ICON.flat,t:'This number won’t grow with inflation.',p:'A 3/4s pension has no escalation. After 5 years retired you get a small COLA on the first $18,000, about $270 a year. The 75% is free of federal tax.'}
@@ -855,9 +930,10 @@ function renderQuick(){
   o.innerHTML=`<div class="k">Your pension in your first year of retirement</div>
     <div class="bignum">${usd(mon)}<span>/month</span></div>
     <div class="u">${usd(base)} a year</div>
+    ${billNote(q)}
     <div class="brk">
       <div class="brow"><div class="bl"><b>${dis?'75%':'50%'} of final salary</b><small>${dis?'75%':'50%'} of ${usd(fas)}</small></div><div class="amt"><b>${usd(half/12)}/mo</b></div></div>
-      <div class="brow"><div class="bl"><b>1/60th after 20 years</b><small>${sixty?`About ${usd(fas*past)} earned after 20 years, ÷ 60`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(sixty/12)}/mo</b></div></div>
+      <div class="brow"><div class="bl"><b>1/${dv}th after 20 years</b><small>${sixty?`About ${usd(fas*past)} earned after 20 years, ÷ ${dv}`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(sixty/12)}/mo</b></div></div>
       ${showAnn?`<div class="brow"><div class="bl"><b>${typed?'ITHP and annuity':'ITHP pension (estimate)'}</b><small>${typed?'The amount you typed from your Fund estimate':dis?'Rough estimate from the City’s 5% over your career':'Rough estimate from the City’s 5% after 20 years'}</small></div><div class="amt"><b>${usd(ann/12)}/mo</b></div></div>`:''}
     </div>
     <div class="note" style="--c:${note.c}"><span class="ni">${note.i}</span><div><b>${note.t}</b><p>${note.p}</p></div></div>
@@ -881,6 +957,7 @@ setupDate('dob',1935,NOW_Y-18,ST.p.dob,v=>{ST.p.dob=v;renderP()});
 setupDate('ap',1973,NOW_Y,ST.p.appt,v=>{ST.p.appt=v;wsKey='';renderP()});
 
 const pSlider=Slider($('pSlider'),{id:'pSvc',label:'Years on the job when you retire',value:ST.p.svc,onInput:v=>{ST.p.svc=v;renderP()}});
+const pChecks=BillChecks($('pBills'),()=>ST.p,()=>renderP());
 $('pDis').checked=ST.p.dis;if(ST.p.dis) pSlider.range(true);pSlider.set(ST.p.svc);
 $('pDis').addEventListener('change',e=>{ST.p.dis=e.target.checked;pSlider.range(ST.p.dis);ST.p.svc=pSlider.value;wsKey='';renderP()});
 $('ann').value=ST.p.ann?commas(num(ST.p.ann)):'';$('cpi').value=ST.p.cpi;$('goal').value=ST.p.goal?commas(num(ST.p.goal)):'';
@@ -947,12 +1024,12 @@ function earnings(months,c){
   }
   return {retDate,vals,kind,fs,fs12,raw12,lim12,best,useBest,fsBy,capBy,a20,ithp,a20By,missing:[...missing].sort((a,b)=>a-b)};
 }
-function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,ann:num(p.ann)*12,cpi:num(p.cpi)/100}}
+function pParams(){const d=pDates(),p=ST.p;return {...d,dis:p.dis,ann:num(p.ann)*12,cpi:num(p.cpi)/100,b40:!!p.b40}}
 
 function scenario(months,c){
   const S=months/12,e=earnings(months,c),first=c.appt.getFullYear(),retAge=c.age+S;
   const ok=e.fs>0&&!e.missing.length;
-  const half=(c.dis?0.75:0.5)*e.fs,sixty=e.a20/60,ithpEst=e.ithp/annuityFactor(retAge);
+  const dv=sixtyDiv(c),half=(c.dis?0.75:0.5)*e.fs,sixty=e.a20/dv,ithpEst=e.ithp/annuityFactor(retAge);
   const typed=c.ann>0,ann=typed?c.ann:ithpEst,base=ok?half+sixty+ann:0;
   const colaRate=colaRateOf(c.cpi),vsf=c.dis?0:VSF,drop=c.dis?0:vsf*Math.max(0,Math.floor((months-240)/12));
   const rows=[];let pen=base,colaTot=0,life=drop,colaAge=null;
@@ -967,7 +1044,7 @@ function scenario(months,c){
     rows.push({age,pay:pen,v});
   }
   const at=a=>rows.find(x=>x.age>=a-1e-9)||null;
-  return {months,S,ok,first,...e,half,sixty,ithpEst,typed,ann,base,retAge,colaRate,colaAge,drop,rows,at,life};
+  return {months,S,ok,first,...e,dv,half,sixty,ithpEst,typed,ann,base,retAge,colaRate,colaAge,drop,rows,at,life};
 }
 
 /* ---------- earnings table ---------- */
@@ -1040,6 +1117,7 @@ function renderP(){
   $('tierWarn').hidden=!(c.appt>=new Date(2009,6,1));
   $('annHint').textContent=c.ann>0?'Used instead of our estimate, for every plan on this page. Clear it to go back to the estimate.':c.dis?'Leave blank and we’ll estimate the ITHP piece. On a 3/4s, your own contributions also become an annuity; type the total from your Fund estimate to include it.':'Leave blank and we’ll estimate the ITHP piece. If your Fund estimate shows the exact amount, type it here.';
 
+  pChecks.sync();
   const you=scenario(m,c);
   pSlider.sub((c.dis?'Go out ':'Retire ')+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1));
   renderWorksheet(c,m,you);
@@ -1057,14 +1135,14 @@ function renderP(){
   }
   const brk=`<div class="brow"><div class="bl"><b>${c.dis?'75%':'50%'} of final salary</b><small>${c.dis?'75%':'50%'} of ${usd(you.fs)}, ${you.useBest?`your best 3 years (${fmtMY(you.best.from)} to ${fmtMY(you.best.to)})`:'your last 12 months'}</small></div><div class="amt"><b>${usd(you.half/12)}/mo</b><small>${usd(you.half)}/yr</small></div></div>
         <div class="incl">${ICON.check}<span>The higher of your <b>last 12 months</b> (${usd(you.fs12)}${you.lim12!==null&&you.raw12>you.lim12+0.5?`, cut from ${usd(you.raw12)} by the 20% limit`:''}) and your <b>best 3 years in a row</b> (${you.best?usd(you.best.fas):'not enough years yet'}).</span></div>
-        <div class="brow"><div class="bl"><b>1/60th after 20 years</b><small>${you.a20?`${usd(you.a20)} earned since ${fmtMY(addM(c.appt,240))}, ÷ 60`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(you.sixty/12)}/mo</b><small>${usd(you.sixty)}/yr</small></div></div>
+        <div class="brow"><div class="bl"><b>1/${you.dv}th after 20 years</b><small>${you.a20?`${usd(you.a20)} earned since ${fmtMY(addM(c.appt,240))}, ÷ ${you.dv}`:'Starts once you pass 20 years'}</small></div><div class="amt"><b>${usd(you.sixty/12)}/mo</b><small>${usd(you.sixty)}/yr</small></div></div>
         ${annRow(you,c.dis)}`;
   const colaS=you.colaAge?`From about age ${Math.ceil(you.colaAge)}, a COLA on the first $18,000 adds about ${usd(18000*you.colaRate)} a year.`:'';
   if(c.dis){
     head.innerHTML=`<div class="eyebrow">3/4s disability · go out ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
       <div class="bignum">${usd(you.base/12)}<span>/month</span></div>
       <div class="hint">${usd(you.base)} a year</div>
-      ${tier3}${warn}${past}
+      ${billNote(c)}${tier3}${warn}${past}
       <div class="brk">${brk}
         <div class="brow tot"><div class="bl"><b>Total</b></div><div class="amt"><b>${usd(you.base/12)}/mo</b><small>${usd(you.base)}/yr</small></div></div>
       </div>
@@ -1080,7 +1158,7 @@ function renderP(){
       <div class="k2">Your first year of retirement</div>
       <div class="bignum">${usd(totY)}<span>/year</span></div>
       <div class="sub2">About <b>${usd(totY/12)} a month</b>, pension plus VSF</div>
-      ${tier3}${warn}${past}
+      ${billNote(c)}${tier3}${warn}${past}
       <div class="brk">${brk}
         <div class="brow"><div class="bl"><b>VSF</b><small>One payment every December or January</small></div><div class="amt"><b>${usd(VSF)}/yr</b><small>about ${usd(VSF/12)}/mo</small></div></div>
         <div class="brow tot"><div class="bl"><b>Total</b></div><div class="amt"><b>${usd(totY/12)}/mo</b><small>${usd(totY)}/yr</small></div></div>
@@ -1145,7 +1223,7 @@ function renderCompare(c,m,you){
     ${line('Age',s=>s.retAge.toFixed(1))}
     ${line('Final salary',s=>usd(s.fs))}
     ${line('50% of final salary',s=>usd(s.half))}
-    ${line('1/60th after 20',s=>usd(s.sixty))}
+    ${line(`1/${you.dv}th after 20`,s=>usd(s.sixty))}
     ${line(you.typed?'ITHP and annuity':'ITHP (estimate)',s=>usd(s.ann))}
     ${line('Pension a month',s=>usd(s.base/12))}
     ${line('With VSF, a year',s=>usd(s.base+VSF))}
@@ -1268,8 +1346,8 @@ function updateBar(you,m){
 $('pbarGo').addEventListener('click',()=>$('head').scrollIntoView({behavior:'smooth',block:'center'}));
 
 /* ---------- views: home and three sections, each with its own address (#basics, #quick, #personal) ---------- */
-const VIEWS=['home','basics','quick','personal'];
-let current=null;const scrolls={};
+const VIEWS=['home','basics','bills','quick','personal'];
+let current=null;const scrolls={};let jumpTo=null;
 function showView(){
   const h=location.hash.replace('#','')||'home',v=VIEWS.includes(h)?h:'home';
   if(current) scrolls[current]=scrollY;
@@ -1278,10 +1356,15 @@ function showView(){
   document.title=$('v-'+v).dataset.title;
   if(v==='quick') renderQuick();
   if(v==='personal') renderP();
-  scrollTo(0,v==='home'&&prev?scrolls.home||0:0);
+  if(jumpTo){const el=jumpTo;jumpTo=null;requestAnimationFrame(()=>el.scrollIntoView({block:'start'}))}
+  else scrollTo(0,v==='home'&&prev?scrolls.home||0:0);
   updateBar();
 }
 addEventListener('hashchange',showView);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-try]');if(!b) return;
+  ST.p[b.dataset.try]=true;
+  jumpTo=document.querySelector('#pBills');location.hash='#personal';
+});
 let rz,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(()=>{if(current==='personal')renderP()},150)});
 showView();
 
