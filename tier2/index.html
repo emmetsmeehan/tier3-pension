@@ -1057,16 +1057,16 @@ function renderQuick(){
   if(!dis) $('qTaxBtn').addEventListener('click',()=>{taxOpen=!taxOpen;renderQuick()});
 }
 
-/* "Don't forget about taxes": a folded box under the estimated payments, not on a 3/4s. 2026 figures from IRS Rev. Proc. 2025-32. */
+/* "Don't forget about taxes": a folded box under the estimated payments, not on a 3/4s. */
 let taxOpen=false;
 function taxBox(id){
   return `<div class="growbox taxbox">
-    <button type="button" class="growbtn" id="${id}" aria-expanded="${taxOpen}"><span><b>Don’t forget about taxes</b><small>Your pension and VSF count as income for federal tax. Tap for the rates and the states that don’t tax it.</small></span><span class="chev"></span></button>
+    <button type="button" class="growbtn" id="${id}" aria-expanded="${taxOpen}"><span><b>Don’t forget about taxes</b><small>Your pension and VSF are taxed federally. Tap to see which states don’t tax them.</small></span><span class="chev"></span></button>
     <div class="taxbody"${taxOpen?'':' hidden'}>
-      <p><b>Federal:</b> taxed like a paycheck, and you can have it withheld from each check. In 2026, a married couple filing jointly pays nothing on the first $32,200 of income (the standard deduction). The rest is taxed at 10% up to $24,800, 12% up to $100,800, 22% up to $211,400 and 24% up to $403,550, and 32% to 37% above that. Single filers get a $16,100 deduction and brackets about half as wide.</p>
+      <p><b>Federal:</b> taxed like a paycheck. You can have tax taken out of each check.</p>
       <p><b>New York:</b> New York State and New York City don’t tax your FDNY pension.</p>
-      <p><b>No state income tax:</b> Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington and Wyoming.</p>
-      <p><b>No tax on a pension like yours:</b> Alabama, Illinois, Mississippi, Pennsylvania, and Iowa at 55 or older.</p>
+      <p><b>No state income tax at all</b>, so no tax on your pension: Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington and Wyoming.</p>
+      <p><b>Have an income tax, but don’t tax a pension like yours:</b> Alabama, Illinois, Mississippi, Pennsylvania, and Iowa at 55 or older.</p>
       <p class="fine">Most other states tax it, at least in part. Rules change, so check with a tax professional before you move.</p>
     </div>
   </div>`;
