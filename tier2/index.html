@@ -109,6 +109,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .btn.small{min-height:42px;padding:0 16px;font-size:15.5px}
 .btn:disabled{opacity:.55;cursor:default}
 .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+#cmpMore{min-height:44px;font-size:16.5px}
 .linkbtn{background:none;border:0;padding:6px 0;color:var(--steel);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 
 /* big 3/4s checkbox */
@@ -241,6 +242,13 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .stephead .n{width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
 .stephead h2{font-size:22px}
 .pgrid{display:grid;gap:22px}
+.preview{display:grid;gap:10px}
+.preview h2{font-size:19px;margin:0}
+.preview ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:16.5px}
+.preview li{display:flex;gap:10px;align-items:flex-start}
+.preview li .i{color:var(--sage);flex:none;margin-top:2px}
+.pv-dt{display:none}
+@media (min-width:980px){.pv-ph{display:none}.pv-dt{display:inline}}
 .pmain{display:grid;gap:22px;min-width:0}
 .pside{display:grid;gap:16px;align-content:start;min-width:0}
 @media (min-width:980px){.pgrid{grid-template-columns:minmax(0,1fr) 390px;align-items:start}.pside{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;padding-bottom:4px}}
@@ -372,6 +380,7 @@ table{border-collapse:collapse;width:100%}
 #cmp thead th{font-weight:700;vertical-align:bottom}
 #cmp td:first-child{color:var(--muted)}
 #cmp tr:last-child td{border-bottom:0;font-weight:700;color:var(--ink)}
+#cmp:not(.all) tr.more{display:none}
 .you{background:color-mix(in srgb,var(--accent) 7%,var(--surface))!important}
 .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 .swipe{font-size:14px;color:var(--muted);text-align:right;margin-top:-12px}
@@ -421,12 +430,14 @@ body.has-pbar .app{padding-bottom:110px}
   #cmp{min-width:0;table-layout:fixed}
   #cmp th,#cmp td{padding:8px 5px;font-size:13.5px}
   #cmp th:first-child,#cmp td:first-child{width:28%}
-  #cmp.wide{min-width:470px}
+  #cmp.wide{min-width:510px}
   .ws td{padding:8px 8px}
   .ws th{padding:10px 8px}
   .stop button{font-size:16px}
 }
-@media (max-width:360px){.ws th:nth-child(1){width:27%}.ws th:nth-child(2){width:45%}.ws td:nth-child(3){font-size:14px}.ws .inp>span{padding-left:6px}.ws .inp input{font-size:16px}}
+@media (max-width:360px){.ws td,.ws th{padding-left:6px;padding-right:6px}.ws th:nth-child(1){width:29%}.ws th:nth-child(2){width:41%}.ws th:nth-child(3){width:30%}.ws td:nth-child(3){font-size:14px}.ws .inp>span{padding-left:6px}.ws .inp input{font-size:16px}}
+/* On narrow phones the retirement line under the slider can take two lines; keep room for both so the slider doesn't jump. */
+@media (max-width:400px){#pSlider .sub{min-height:3em}}
 @media (max-width:360px){#cmp th,#cmp td{font-size:12px;padding:7px 3px}#cmp th:first-child,#cmp td:first-child{width:25%}.growtbl td,.growtbl th{padding-left:7px;padding-right:7px}}
 </style>
 </head>
@@ -658,6 +669,16 @@ body.has-pbar .app{padding-bottom:110px}
 <main class="view" id="v-personal" data-title="Your personal numbers · FDNY Tier 2" hidden>
   <div class="topbar"><a class="backbtn" href="#home"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Home</a><span class="tb-title">Your personal numbers</span></div>
   <div class="vhead"><h1>Your personal numbers</h1><p>Use your real earnings to see what you'll collect, and what working longer gets you. Your numbers stay on this device.</p></div>
+  <section class="card preview" id="preview" aria-labelledby="pvh" hidden>
+    <h2 id="pvh">What you'll see</h2>
+    <ul>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Your monthly pension and VSF in your first year of retirement</span></li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Your banked variable, paid as a lump sum when you retire</span></li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>What each extra year on the job adds to your pension</span></li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Retiring soon or working longer, side by side</span></li>
+    </ul>
+    <p class="hint">Fill in the three steps below. Your results show up <span class="pv-ph">after step 3</span><span class="pv-dt">on the right</span>.</p>
+  </section>
 
   <div class="pgrid">
     <div class="pmain">
@@ -721,6 +742,7 @@ body.has-pbar .app{padding-bottom:110px}
           <div class="verbar" id="verBar" hidden><span class="vt"><span class="vcheck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span id="verTxt"></span></span><button type="button" class="btn ghost small" id="startOver">Start over</button></div>
         </div>
 
+        <p class="empty" id="wsNeed" hidden>Enter your dates in step 1 and your earnings table shows up here, starting with the year you were appointed.</p>
         <div class="wsbox" id="wsBox"><table class="ws"><thead><tr><th>Year</th><th>Earnings</th><th>Counts toward</th></tr></thead><tbody id="wsRows"></tbody></table>
           <button type="button" class="futbtn" id="futBtn" aria-expanded="false"></button></div>
         <div class="growrow">
@@ -777,6 +799,7 @@ body.has-pbar .app{padding-bottom:110px}
     <div style="display:grid;gap:6px"><h2 id="cmpTitle">Retire soon or work longer?</h2><p class="hint" id="cmpLede"></p></div>
     <div class="tablebox"><table id="cmp"></table></div>
     <p class="swipe" id="swipe" hidden>Swipe the table to see your plan →</p>
+    <div><button type="button" class="linkbtn" id="cmpMore" aria-expanded="false" aria-controls="cmp">Show all rows</button></div>
   </section>
 
   <div class="btnrow"><button type="button" class="btn ghost" id="clearAll">Clear my numbers</button></div>
@@ -795,6 +818,10 @@ const usd=n=>(n<0?'-':'')+'$'+Math.round(Math.abs(n)).toLocaleString('en-US');
 const plural=(n,w)=>n+' '+w+(n===1?'':'s');
 const fmtSvc=m=>{const y=Math.floor(m/12),mo=m%12;return mo===6?y+'½':(y+(mo?' yrs '+mo+' mo':''))};
 const fmtSvcLong=m=>{const y=Math.floor(m/12),mo=m%12;return mo===6?y+'½ years':plural(y,'year')+(mo?' '+plural(mo,'month'):'')};
+/* Ages in whole years and months, e.g. "50 and 11 months"; the short form is for table cells. */
+const ageYM=a=>{const t=Math.floor(a*12+1e-6);return [Math.floor(t/12),t%12]};
+const fmtAge=a=>{const [y,mo]=ageYM(a);return mo?y+' and '+plural(mo,'month'):String(y)};
+const fmtAgeShort=a=>{const [y,mo]=ageYM(a);return mo?y+'&nbsp;yrs '+mo+'&nbsp;mo':y+'&nbsp;yrs'};
 const addM=(d,m)=>new Date(d.getFullYear(),d.getMonth()+m,d.getDate());
 const yrsBetween=(a,b)=>(b-a)/(365.2425*864e5);
 const fmtMY=d=>d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
@@ -816,6 +843,7 @@ const ICON={
   ext:'<svg class="i" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
 };
 /* A sample pay curve for the "example numbers" button: the last 12 years before this one. */
+const EX_DOB='1978-06-06',EX_APPT='2004-05-13';
 const SAMPLE=[118000,124000,129000,133000,138000,142000,147000,151000,156000,160000,165000,170000];
 /* Longevity bonus (FY2027 budget, signed May 27, 2026; S9202/A10392 as written cover any member "under the plan in which they are enrolled", Tier 2 included):
    at 25+ years, 5% of the rank's top pay plus 1% per year past 25, capped at 15%, added to final salary. Service retirements only, as on the Tier 3 page.
@@ -848,6 +876,8 @@ const BILLS=[
    what:'Members appointed on or after July 1, 2000 get the same final salary as earlier members: the higher of the last 12 months or the best 3 years in a row. Before this law, they got the last 12 months only.',step:5}
 ];
 const PENDING=BILLS.filter(b=>!b.law);
+/* Bills that don't pass by the end of the two-year session die and have to be introduced again with new numbers. */
+const SESSION_END='This is a 2025–26 bill. The session ends Dec. 31, 2026. If it hasn’t passed by then, it dies and would have to be introduced again in 2027 under a new number.';
 /* The 1/60th becomes 1/40th if S5058A passes and the member checks it. */
 const sixtyDiv=st=>st.b40?40:60;
 
@@ -865,6 +895,7 @@ function billCard(b){
     <div><h3>${b.title}</h3><div class="when">${ICON.cal}${b.intro.length>4?'Introduced '+b.intro:'Introduced in '+b.intro}</div></div>
     <p>${b.what}</p>
     ${b.note?`<p class="hint">${b.note}</p>`:''}
+    ${b.law?'':`<p class="hint">${SESSION_END}</p>`}
     <ol class="track" aria-label="Where this bill stands">${steps}</ol>
     <div class="billfoot">
       <div class="read"><span class="hint">Read the full bill:</span>${read}</div>
@@ -892,12 +923,14 @@ const billNote=st=>st.b40?'<p class="billnote">Includes a bill that hasn’t pas
 const KEY='fdny-tier2-v1';
 const DEF={
   q:{fas:'',svc:300,dis:false,exT:'',exN:'',b40:false,rank:'LT',topPay:140212},
-  p:{dob:'1978-06-06',appt:'2004-05-13',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:300,dis:false,exT:'',exN:'',cpi:3,goal:'',b40:false,rank:'LT',topPay:140212}
+  p:{dob:'',appt:'',mode:'manual',manual:{},imported:{},extra:{},growOn:false,grow:2.5,svc:300,dis:false,exT:'',exN:'',cpi:3,goal:'',b40:false,rank:'LT',topPay:140212}
 };
 let ST;
 function loadState(){
   let s=null;try{s=JSON.parse(localStorage.getItem(KEY)||'null')}catch{}
   ST={q:{...DEF.q,...(s&&s.q)},p:{...DEF.p,...(s&&s.p)}};
+  /* The dates used to start filled in with these example dates. Saved untouched, they aren't the member's own. */
+  if(ST.p.dob===EX_DOB&&ST.p.appt===EX_APPT){ST.p.dob='';ST.p.appt=''}
 }
 let saveT;
 function save(){clearTimeout(saveT);saveT=setTimeout(()=>{if(noSave)return;try{localStorage.setItem(KEY,JSON.stringify(ST))}catch{}},300)}
@@ -993,18 +1026,21 @@ function renderQuick(){
 
 /* ===================== PERSONAL CALCULATOR ===================== */
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+/* Month, day and year pickers. They start blank; the date counts only once all three are picked. */
 function setupDate(pre,y0,y1,iso,onChange){
-  const m=$(pre+'M'),d=$(pre+'D'),y=$(pre+'Y'),def=fromISO(iso);
-  m.innerHTML=MONTHS.map((n,i)=>`<option value="${i}">${n}</option>`).join('');
-  let ys='';for(let v=y1;v>=y0;v--) ys+=`<option value="${v}">${v}</option>`;y.innerHTML=ys;
-  m.value=def.getMonth();y.value=def.getFullYear();
-  const days=keep=>{const n=new Date(+y.value,+m.value+1,0).getDate();d.innerHTML=Array.from({length:n},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');d.value=Math.min(keep,n)};
-  days(def.getDate());
-  const fire=()=>onChange(toISO(new Date(+y.value,+m.value,+d.value)));
+  const m=$(pre+'M'),d=$(pre+'D'),y=$(pre+'Y');
+  m.innerHTML='<option value="">Month</option>'+MONTHS.map((n,i)=>`<option value="${i}">${n}</option>`).join('');
+  let ys='<option value="">Year</option>';for(let v=y1;v>=y0;v--) ys+=`<option value="${v}">${v}</option>`;y.innerHTML=ys;
+  const days=keep=>{const n=m.value===''?31:new Date(y.value===''?2000:+y.value,+m.value+1,0).getDate();
+    d.innerHTML='<option value="">Day</option>'+Array.from({length:n},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');d.value=keep?Math.min(keep,n):''};
+  const set=iso=>{const def=iso?fromISO(iso):null;m.value=def?def.getMonth():'';y.value=def?def.getFullYear():'';days(def?def.getDate():0)};
+  set(iso);
+  const fire=()=>onChange(m.value!==''&&d.value!==''&&y.value!==''?toISO(new Date(+y.value,+m.value,+d.value)):'');
   m.addEventListener('change',()=>{days(+d.value);fire()});y.addEventListener('change',()=>{days(+d.value);fire()});d.addEventListener('change',fire);
+  return {set};
 }
-setupDate('dob',1935,NOW_Y-18,ST.p.dob,v=>{ST.p.dob=v;renderP()});
-setupDate('ap',1973,NOW_Y,ST.p.appt,v=>{ST.p.appt=v;wsKey='';renderP()});
+const dobPick=setupDate('dob',1935,NOW_Y-18,ST.p.dob,v=>{ST.p.dob=v;renderP()});
+const apPick=setupDate('ap',1973,NOW_Y,ST.p.appt,v=>{ST.p.appt=v;wsKey='';renderP()});
 
 const pSlider=Slider($('pSlider'),{id:'pSvc',label:'Years on the job when you retire',value:ST.p.svc,onInput:v=>{ST.p.svc=v;renderP()}});
 const pChecks=BillChecks($('pBills'),()=>ST.p,()=>renderP());
@@ -1019,7 +1055,7 @@ $('growOn').checked=ST.p.growOn;$('grow').value=ST.p.grow;
 $('growOn').addEventListener('change',e=>{ST.p.growOn=e.target.checked;renderP()});
 $('grow').addEventListener('input',e=>{ST.p.grow=num(e.target.value);renderP()});
 
-function pDates(){const dob=fromISO(ST.p.dob),appt=fromISO(ST.p.appt);return {dob,appt,age:yrsBetween(dob,appt)}}
+function pDates(){const dob=ST.p.dob?fromISO(ST.p.dob):null,appt=ST.p.appt?fromISO(ST.p.appt):null;return {dob,appt,ok:!!(dob&&appt),age:dob&&appt?yrsBetween(dob,appt):0}}
 
 /* Earnings for the chosen mode. In import mode, verified years come from NYCAPS and can't be edited; other years can be typed. */
 function known(){const p=ST.p;return p.mode==='import'?{...p.extra,...p.imported}:{...p.manual}}
@@ -1165,13 +1201,21 @@ function renderP(){
     $('wsBox').hidden=!hasImp&&!reviewing?true:reviewing;
     if(hasImp){const ys=Object.keys(p.imported).map(Number).sort((a,b)=>a-b);$('verTxt').textContent=`${ys.length} years verified from NYCAPS (${ys[0]}–${ys[ys.length-1]})`}
   } else $('wsBox').hidden=false;
+  $('wsNeed').hidden=c.ok;if(!c.ok) $('wsBox').hidden=true;
   document.querySelector('.growrow').hidden=$('wsBox').hidden;
-  $('tierWarn').hidden=!(c.appt>=new Date(2009,6,1));
+  $('tierWarn').hidden=!(c.appt&&c.appt>=new Date(2009,6,1));
   $('exHint').textContent='';
 
   pChecks.sync();pRank.sync();
+  if(!c.ok){
+    pSlider.sub('Enter your dates in step 1 to see when you’d retire.');
+    $('cmpSec').hidden=true;$('preview').hidden=false;
+    $('head').innerHTML=`<div class="eyebrow">Your results</div><div class="empty"><span>Start with your date of birth and appointment date in step 1.</span></div>`;
+    $('goalOut').innerHTML='';updateBar(null);save();return;
+  }
   const you=scenario(m,c);
-  pSlider.sub((c.dis?'Go out ':'Retire ')+fmtMY(you.retDate)+' at age '+you.retAge.toFixed(1));
+  $('preview').hidden=you.ok;
+  pSlider.sub((c.dis?'Go out ':'Retire ')+fmtMY(you.retDate)+' at age '+fmtAge(you.retAge));
   $('exHint').textContent=exHintText(c.exT,c.exN,you.exBal,you.exAnn/12,c.dis)+(c.exT+c.exN>0?' Includes 8.25% interest a year until you retire.':'');
   renderWorksheet(c,m,you);
   save();
@@ -1193,7 +1237,7 @@ function renderP(){
         ${annRow(you,c.dis)}`;
   const colaS=you.colaAge?`From about age ${Math.ceil(you.colaAge)}, a COLA on the first $18,000 adds about ${usd(18000*you.colaRate)} a year.`:'';
   if(c.dis){
-    head.innerHTML=`<div class="eyebrow">3/4s disability · go out ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
+    head.innerHTML=`<div class="eyebrow">3/4s disability · go out ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${fmtAge(you.retAge)}</div>
       <div class="bignum">${usd(you.base/12)}<span>/month</span></div>
       <div class="hint">${usd(you.base)} a year</div>
       ${billNote(c)}${tier3}${warn}${past}
@@ -1208,7 +1252,7 @@ function renderP(){
   } else {
     const totY=you.base+VSF,ry=you.retDate.getFullYear();
     const trows=you.rows.filter(r=>r.age<=85.0001).map((r,t)=>`<tr><td>${ry+t} <span class="ag">· ${Math.floor(r.age+1e-9)}</span></td><td>${usd(r.pay/12)}</td><td>${usd(r.pay+r.v)}</td></tr>`).join('');
-    head.innerHTML=`<div class="eyebrow">Retire ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${you.retAge.toFixed(1)}</div>
+    head.innerHTML=`<div class="eyebrow">Retire ${fmtMY(you.retDate)} at ${fmtSvcLong(m)}, age ${fmtAge(you.retAge)}</div>
       <div class="k2">Your first year of retirement</div>
       <div class="bignum">${usd(totY)}<span>/year</span></div>
       <div class="sub2">About <b>${usd(totY/12)} a month</b>, pension plus VSF</div>
@@ -1248,8 +1292,8 @@ function renderGoal(c,m,you){
   let h=`<p>To get <b>${usd(g)} a month</b> retiring at ${fmtSvcLong(m)}, your final salary needs to be about <span class="big2">${usd(need)}</span>, with your 1/60th and ITHP as they are now.</p>`;
   if(hit){
     h+=hit.months<=m
-      ?`<p><b style="color:var(--sage)">Your plan already gets you there.</b> You'd reach it at ${fmtSvcLong(hit.months)} (${fmtMY(hit.retDate)}, age ${hit.retAge.toFixed(1)}), and your plan pays ${usd(you.base/12)} a month.</p>`
-      :`<p><b>On your earnings, you'd reach it by retiring at ${fmtSvcLong(hit.months)}</b>: ${fmtMY(hit.retDate)}, at age ${hit.retAge.toFixed(1)}.</p><div><button type="button" class="btn small green" id="goalUse">Show me that plan</button></div>`;
+      ?`<p><b style="color:var(--sage)">Your plan already gets you there.</b> You'd reach it at ${fmtSvcLong(hit.months)} (${fmtMY(hit.retDate)}, age ${fmtAge(hit.retAge)}), and your plan pays ${usd(you.base/12)} a month.</p>`
+      :`<p><b>On your earnings, you'd reach it by retiring at ${fmtSvcLong(hit.months)}</b>: ${fmtMY(hit.retDate)}, at age ${fmtAge(hit.retAge)}.</p><div><button type="button" class="btn small green" id="goalUse">Show me that plan</button></div>`;
   } else if(bestB>0){
     h+=`<p><b style="color:var(--accent)">Your current earnings don't get there</b> by ${hi<MAXM?'age 65':'40 years'}. The most you'd get is ${usd(bestB/12)} a month, at ${fmtSvcLong(bestM)}.</p>
       <p>To retire at ${fmtSvcLong(m)} with ${usd(g)} a month, that's ${usd(Math.max(0,need-you.fs))} more final salary than your numbers show.</p>
@@ -1262,36 +1306,44 @@ function renderGoal(c,m,you){
 
 /* ---------- retire soon or work longer: soonest date, then 1, 3 and 5 more years ---------- */
 const COLORS=['--steel','--gold','--sage','--accent'];
+let cmpAll=false;
+$('cmpMore').addEventListener('click',()=>{cmpAll=!cmpAll;renderP()});
 function renderCompare(c,m,you){
   const lo=soonest(c),hi=maxMonths(c);
   const picks=[[lo,lo===240?'At 20 yrs':'Soonest'],[lo+12,'+1 year'],[lo+36,'+3 years'],[lo+60,'+5 years']].filter(([mm])=>mm<=Math.max(hi,lo));
   const cols=picks.map(([mm,name],i)=>({s:mm===m?you:scenario(mm,c),name,c:COLORS[i]}));
   if(!picks.some(([mm])=>mm===m)) cols.push({s:you,name:'Your plan',c:COLORS[3],you:true});
   const val=(s,a)=>{const r=s.at(a);return r&&r.pay>0?usd(r.pay):'–'};
-  const line=(lab,f)=>`<tr><td>${lab}</td>${cols.map(x=>`<td class="${x.you?'you':''}">${x.s.ok?f(x.s):'–'}</td>`).join('')}</tr>`;
+  /* Rows marked "more" stay folded until "Show all rows" is tapped. On phones the lifetime total is in millions so the columns fit. */
+  const line=(lab,f,more)=>`<tr${more?' class="more"':''}><td>${lab}</td>${cols.map(x=>`<td class="${x.you?'you':''}">${x.s.ok?f(x.s):'–'}</td>`).join('')}</tr>`;
+  const big=n=>innerWidth<=560&&n>=1e6?'$'+(n/1e6).toFixed(2)+'M':usd(n);
   $('cmpLede').textContent=`Each year you stay adds 1/60th of that year's pay, a bigger ITHP pension and another banked VSF payment. Your final salary can change too.`;
   $('cmp').classList.toggle('wide',cols.length>3);$('swipe').hidden=!(cols.length>3&&innerWidth<=560);
   $('cmp').innerHTML=`<thead><tr><th>Retire</th>${cols.map(x=>`<th class="${x.you?'you':''}"><span class="sw" style="background:var(${x.c})"></span>${x.name}</th>`).join('')}</tr></thead><tbody>
     ${line('Date',s=>fmtMY(s.retDate))}
     ${line('Years',s=>fmtSvc(s.months))}
-    ${line('Age',s=>s.retAge.toFixed(1))}
-    ${line('Final salary',s=>usd(s.fs))}
-    ${line('Longevity bonus',s=>s.bonusAdd>0?`<span class="bonus-on">+${usd(s.bonusAdd/2)}/yr</span>`:'Starts at 25 yrs')}
-    ${line('50% of final salary',s=>usd(s.half))}
-    ${line(`1/${you.dv}th after 20`,s=>usd(s.sixty))}
-    ${line('ITHP (estimate)',s=>usd(s.ithpEst))}
-    ${you.exAnn?line('Excess annuity (estimate)',s=>usd(s.exAnn)):''}
+    ${line('Age',s=>fmtAgeShort(s.retAge))}
+    ${line('Final salary',s=>usd(s.fs),1)}
+    ${line('Longevity bonus, a year',s=>s.bonusAdd>0?`<span class="bonus-on">+${usd(s.bonusAdd/2)}</span>`:'Starts at 25 yrs',1)}
+    ${line('50% of final salary',s=>usd(s.half),1)}
+    ${line(`1/${you.dv}th after 20`,s=>usd(s.sixty),1)}
+    ${line('ITHP (estimate)',s=>usd(s.ithpEst),1)}
+    ${you.exAnn?line('Excess annuity (estimate)',s=>usd(s.exAnn),1):''}
     ${line('Pension a month',s=>usd(s.base/12))}
     ${line('With VSF, a year',s=>usd(s.base+VSF))}
     ${line('Banked variable',s=>usd(s.drop))}
-    ${line('Yearly at 75',s=>val(s,75))}
-    ${line('Total through age 85',s=>usd(s.life))}
+    ${line('Yearly at 75',s=>val(s,75),1)}
+    ${line('Total through age 85',s=>big(s.life))}
   </tbody>`;
+  $('cmp').classList.toggle('all',cmpAll);
+  $('cmpMore').setAttribute('aria-expanded',cmpAll);$('cmpMore').textContent=cmpAll?'Show fewer rows':'Show all rows';
 }
 
 /* ---------- earnings mode, example numbers, clearing ---------- */
 document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{ST.p.mode=b.dataset.mode;wsKey='';closeReview();renderP()}));
 $('exampleBtn').addEventListener('click',()=>{
+  if(!ST.p.dob){ST.p.dob=EX_DOB;dobPick.set(EX_DOB)}
+  if(!ST.p.appt){ST.p.appt=EX_APPT;apPick.set(EX_APPT)}
   ST.p.manual={};const y0=NOW_Y-SAMPLE.length,ap=pDates().appt.getFullYear();
   SAMPLE.forEach((v,i)=>{if(y0+i>=ap) ST.p.manual[y0+i]=v});
   wsKey='';renderP();
