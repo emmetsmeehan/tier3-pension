@@ -1031,18 +1031,23 @@ function renderQuick(){
     ${bonusLine}${extra?`<p class="billnote">Includes ${usd(extra)} a year from a bill that hasn’t passed: an extra 1/40th of your final average salary for each year past 20 (S5058A).</p>`:''}
     <div class="note" style="--c:${note.c}"><span class="ni">${note.i}</span><div><b>${note.t}</b><p>${note.p}</p></div></div>
     <p class="fine">${dis?'':'This is your pension alone. You’d also get the $12,000 a year VSF, and at 62 your pension drops by half your Social Security. '}The personal numbers page covers all of it, with your real earnings.</p>
-    ${dis?'':taxBox('qTaxBtn')}
+    ${dis?'':taxBox('qTaxBtn',base+VSF)}
     <a class="btn" href="#personal">Get your exact numbers ${ICON.arrow}</a>`;
   if(!dis) $('qTaxBtn').addEventListener('click',()=>{taxOpen=!taxOpen;renderQuick()});
 }
 
 /* "Don't forget about taxes": a folded box under the estimated payments, not on a 3/4s. */
 let taxOpen=false;
-function taxBox(id){
+/* 2026 federal income tax (IRS Rev. Proc. 2025-32): standard deduction, then [top of bracket, rate] on taxable income. */
+const FED={mfj:{ded:32200,b:[[24800,.10],[100800,.12],[211400,.22],[403550,.24],[512450,.32],[768700,.35],[Infinity,.37]]},
+  single:{ded:16100,b:[[12400,.10],[50400,.12],[105700,.22],[201775,.24],[256225,.32],[640600,.35],[Infinity,.37]]}};
+function fedTax(inc,st){let t=0,lo=0;const x=Math.max(0,inc-FED[st].ded);for(const [hi,r] of FED[st].b){if(x>lo)t+=(Math.min(x,hi)-lo)*r;lo=hi}return t}
+function taxBox(id,inc){
+  const pct=st=>Math.round(fedTax(inc,st)/inc*100);
   return `<div class="growbox taxbox">
-    <button type="button" class="growbtn" id="${id}" aria-expanded="${taxOpen}"><span><b>Don’t forget about taxes</b><small>Your pension and VSF are taxed federally. Tap to see which states don’t tax them.</small></span><span class="chev"></span></button>
+    <button type="button" class="growbtn" id="${id}" aria-expanded="${taxOpen}"><span><b>Don’t forget about taxes</b><small>Your pension and VSF are taxed federally. Tap for a ballpark and the states that don’t tax them.</small></span><span class="chev"></span></button>
     <div class="taxbody"${taxOpen?'':' hidden'}>
-      <p><b>Federal:</b> taxed like a paycheck. You can have tax taken out of each check.</p>
+      <p><b>Federal:</b> taxed like a paycheck. On the ${usd(inc)} a year above (pension plus VSF), 2026 federal tax would be about <b>${usd(fedTax(inc,'mfj'))} a year, ${pct('mfj')}% of it</b>, if you’re married, file jointly and have no other income. Single: about ${pct('single')}%.</p>
       <p><b>States that don’t tax your pension:</b> Alabama, Alaska, Florida, Illinois, Iowa (at 55 or older), Mississippi, Nevada, New Hampshire, New York, Pennsylvania, South Dakota, Tennessee, Texas, Washington and Wyoming.</p>
       <p class="fine">Most other states tax it, at least in part. Rules change, so check with a tax professional before you move.</p>
     </div>
@@ -1294,7 +1299,7 @@ function renderP(){
         <button type="button" class="growbtn" id="growBtn" aria-expanded="${growOpen}"><span><b>${growT}</b><small>${growS} Tap to see each year.</small></span><span class="chev"></span></button>
         <div class="growtbl"${growOpen?'':' hidden'}><table><thead><tr><th>Year · age</th><th>Pension/mo</th><th>With VSF/yr</th></tr></thead><tbody>${trows}</tbody></table></div>
       </div>
-      ${taxBox('taxBtn')}`;
+      ${taxBox('taxBtn',totY)}`;
     $('growBtn').addEventListener('click',()=>{growOpen=!growOpen;renderP()});
     $('taxBtn').addEventListener('click',()=>{taxOpen=!taxOpen;renderP()});
   }
