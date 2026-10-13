@@ -1115,6 +1115,18 @@ $('goal').addEventListener('input',e=>{ST.p.goal=num(e.target.value)||'';renderP
 $('goal').addEventListener('blur',e=>{const n=num(e.target.value);e.target.value=n?commas(n):''});
 $('growOn').checked=ST.p.growOn;$('grow').value=ST.p.grow;
 $('growOn').addEventListener('change',e=>{ST.p.growOn=e.target.checked;renderP()});
+
+/* Checking 3/4s, a bill or the yearly raise changes the estimate: bring it into view unless it already starts in the top half of the screen. */
+function toEst(el){requestAnimationFrame(()=>{
+  if(!el||!el.offsetParent||!el.innerHTML.trim())return;
+  const bar=el.closest('.view')?.querySelector('.topbar'),top=(bar?bar.getBoundingClientRect().bottom:0)+10,r=el.getBoundingClientRect();
+  if(r.top>=top-2&&r.top<=innerHeight*0.45)return;
+  scrollBy({top:r.top-top,behavior:'smooth'});
+})}
+document.addEventListener('change',e=>{const c=e.target;if(c.type!=='checkbox')return;
+  if(c.id==='qDis'||$('qBills').contains(c)) toEst($('qOut'));
+  else if(c.id==='pDis'||c.id==='growOn'||$('pBills').contains(c)) toEst($('head'));
+});
 $('grow').addEventListener('input',e=>{ST.p.grow=num(e.target.value);renderP()});
 
 function pDates(){const dob=ST.p.dob?fromISO(ST.p.dob):null,appt=ST.p.appt?fromISO(ST.p.appt):null;return {dob,appt,ok:!!(dob&&appt),age:dob&&appt?yrsBetween(dob,appt):0}}
